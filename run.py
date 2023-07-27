@@ -37,6 +37,30 @@ def establish_user_data():
             print("Please enter either '1' or '2' to continue")
 
 
+def present_login_signup_step(data):
+    """
+    Provide the user with the option to login or signup.\n
+    - If login, check if the user exists in the database and run the login function (if they exist)\n
+    - If signup, check if the user exists in the database and run the signup function (if they don't exist).
+    """
+    while True:
+        login_signup = input(
+            "Would you like to login or signup? Please enter 1 or 2.\n 1. Login\n 2. Signup\n")
+
+        if login_signup == "1":
+            print("Login\n")
+            # TODO: Create login function that checks if the user exists in the database
+            # return data from login function (also breaks the loop)
+            return login(data)
+        elif login_signup == "2":
+            print("Signup\n")
+            # TODO: Create signup function that checks if the user exists in the database and adds them if they don't exist
+            # return data from signup function (also breaks the loop)
+            return signup(data)
+        else:
+            print("Please enter either '1' to Login or '2' to Signup\n")
+
+
 def main():
     """
     Run all program functions
