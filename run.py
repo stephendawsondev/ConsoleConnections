@@ -1,5 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
+import re
 
 # Define the scope
 SCOPE = [
@@ -37,6 +38,44 @@ def establish_user_data():
             print("Please enter either '1' or '2' to continue")
 
 
+def validate_password(password):
+    # check for length between 8 to 32 characters
+    if len(password) < 8 or len(password) > 32:
+        print("Password must be between 8 and 32 characters")
+        return False
+    # regex for at least 1 digit and 1 symbol
+    # https://www.freecodecamp.org/news/how-to-import-a-regular-expression-in-python/#howtousethepythonremodulewithregex
+    if re.search(r"^(?=.*\d)(?=.*\W).*$", password):
+        return True
+
+    print("Password must contain at least 1 digit and 1 symbol")
+    return False
+
+
+def prompt_for_password(new_or_existing_user, row=None):
+    """
+    Prompt the user for a password and validate it.\n
+    - If the user is a new user, prompt them to create a password.\n
+    - If the user is an existing user, prompt them to enter their password.\n
+    - If the password is valid, return the password.\n
+    - If the password is invalid, prompt the user to try again.
+    """
+    password_valid = False
+    while password_valid is False:
+        password_input = input("Please enter your password:\n")
+        password_valid = validate_password(password_input)
+        if password_valid is True:
+            if new_or_existing_user == "new":
+                return password_input
+            elif new_or_existing_user == "existing":
+                if password_input == row[1]:
+                    print("Password correct")
+                    return password_input
+                else:
+                    print("Password incorrect")
+                    password_valid = False
+
+
 def user_login(data):
     """
     Checks if the user exists on the Google Sheet.\n
@@ -51,6 +90,12 @@ def user_login(data):
             if row[0] == str(usercode_input):
                 print("Usercode found")
                 user_exists = True
+
+                # prompt for password
+                password = prompt_for_password("existing", row)
+                if password is not None:
+                    print("Login successful")
+                    print(row)
                 break
         else:
             print("Usercode not found")
