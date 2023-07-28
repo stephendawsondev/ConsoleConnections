@@ -37,6 +37,25 @@ def establish_user_data():
             print("Please enter either '1' or '2' to continue")
 
 
+def user_login(data):
+    """
+    Checks if the user exists on the Google Sheet.\n
+    - If the user exists, prompt them for password.\n
+    - If the user doesn't exist, let them know and ask if they want to signup.\n
+    """
+    user_exists = False
+    while user_exists is False:
+        usercode_input = int(input("Please enter your usercode:\n"))
+        # checks the first column of the data for the usercode
+        for row in data:
+            if row[0] == str(usercode_input):
+                print("Usercode found")
+                user_exists = True
+                break
+        else:
+            print("Usercode not found")
+
+
 def present_login_signup_step(data):
     """
     Provide the user with the option to login or signup.\n
@@ -49,9 +68,8 @@ def present_login_signup_step(data):
 
         if login_signup == "1":
             print("Login\n")
-            # TODO: Create login function that checks if the user exists in the database
             # return data from login function (also breaks the loop)
-            return login(data)
+            return user_login(data)
         elif login_signup == "2":
             print("Signup\n")
             # TODO: Create signup function that checks if the user exists in the database and adds them if they don't exist
@@ -67,7 +85,7 @@ def main():
     """
     print("Welcome to Console Connections\nThere's no cover to judge here!\n")
     user_data = establish_user_data()
-    print(user_data)
+    present_login_signup_step(user_data)
 
 
 main()
