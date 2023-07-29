@@ -18,6 +18,20 @@ GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ConsoleConnections')
 
 
+class User:
+    """
+    A class to represent a user.\n
+    """
+
+    def __init__(self, usercode, password, alias, security_questions_and_answers, age, gender):
+        self.usercode = usercode
+        self.password = password
+        self.alias = alias
+        self.security_questions_and_answers = security_questions_and_answers
+        self.age = age
+        self.gender = gender
+
+
 def establish_user_data():
     """
     Establish if the user is a real user or a test user.\n
