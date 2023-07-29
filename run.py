@@ -1,6 +1,8 @@
+import re
+import random
 import gspread
 from google.oauth2.service_account import Credentials
-import re
+
 
 # Define the scope
 SCOPE = [
@@ -90,7 +92,6 @@ def user_login(data):
             if row[0] == str(usercode_input):
                 print("Usercode found")
                 user_exists = True
-
                 # prompt for password
                 password = prompt_for_password("existing", row)
                 if password is not None:
@@ -98,7 +99,61 @@ def user_login(data):
                     print(row)
                 break
         else:
-            print("Usercode not found")
+            print("Usercode not found.")
+
+
+def generate_random_usercode(data):
+    """
+    - Generates a new 6-digit usercode for the user.\n
+    - Checks if the usercode already exists in the database.\n
+    - If the usercode exists, generate a new one.\n
+    """
+    usercode = random.randint(100000, 999999)
+    # check if the usercode already exists in the database
+    for row in data:
+        if row[0] == str(usercode):
+            # if the usercode exists, generate a new one
+            generate_random_usercode(data)
+    return usercode
+
+
+def create_and_validate_alias(data):
+    """
+    Checks the user's alias against the Google Sheet.\n
+    - Make sure the alias is no more than 16 characters.\n
+    - If the alias exists, prompt the user to come up with a new alias.\n
+    - If the alias doesn't exist, return the alias.
+    """
+    alias = input("You will also need to create an alias, which may be used for in-app communication. The alias must be unique and it is recommended that it does not easily identify you (for security reasons). Please enter your alias:\n")
+    # check if the alias is greater than 3 but fewer than 16 characters
+    while len(alias) < 3 or len(alias) > 16:
+        alias = input(
+            "Alias must be greater than 3 but fewer than 16 characters. Please try again:\n")
+
+    # check if the alias already exists in the database
+    for row in data:
+        if row[2] == alias:
+            # if the alias exists, prompt the user to come up with a new alias
+            print("Alias already exists.")
+            return create_and_validate_alias(data)
+    return alias
+
+
+def user_signup(data):
+    """
+    - Prompts the user to create a password.\n
+    - Prompts the user to create an alias.\n
+    - Checks the alias against the Google sheet.\n
+    - If the alias exists, prompt the user to come up with a new alias.\n
+    - Prompts the user to add 2 security questions and answers.\n
+    - Adds the user to the Google sheet.
+    """
+    usercode = generate_random_usercode(data)
+    print(
+        f"If you complete the signup process, your usercode will be {usercode}. Please keep this safe as you will need it to login.")
+    password = prompt_for_password("new")
+    alias = create_and_validate_alias(data)
+    print(usercode, password, alias)
 
 
 def present_login_signup_step(data):
@@ -117,9 +172,8 @@ def present_login_signup_step(data):
             return user_login(data)
         elif login_signup == "2":
             print("Signup\n")
-            # TODO: Create signup function that checks if the user exists in the database and adds them if they don't exist
             # return data from signup function (also breaks the loop)
-            return signup(data)
+            return user_signup(data)
         else:
             print("Please enter either '1' to Login or '2' to Signup\n")
 
