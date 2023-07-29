@@ -141,10 +141,7 @@ def create_and_validate_alias(data):
 
 def user_signup(data):
     """
-    - Prompts the user to create a password.\n
-    - Prompts the user to create an alias.\n
-    - Checks the alias against the Google sheet.\n
-    - If the alias exists, prompt the user to come up with a new alias.\n
+    Runs generate usercode, password and alias functions.\n
     - Prompts the user to add 2 security questions and answers.\n
     - Adds the user to the Google sheet.
     """
