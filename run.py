@@ -1,4 +1,5 @@
 import re
+import os
 import random
 import gspread
 from google.oauth2.service_account import Credentials
@@ -30,6 +31,17 @@ class User:
         self.security_questions_and_answers = security_questions_and_answers
         self.age = age
         self.gender = gender
+
+
+def clear_terminal():
+    """
+    Clears the terminal window.
+    """
+    # https://www.delftstack.com/howto/python/python-clear-console/
+    command = 'clear'
+    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        command = 'cls'
+    os.system(command)
 
 
 def establish_user_data():
