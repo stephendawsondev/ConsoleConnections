@@ -52,18 +52,19 @@ def establish_user_data():
     """
     while True:
         user_type = input(
-            "Are you just testing the app or here to find a connection?\n 1. Tester\n 2. Real User\n")
+            "\nAre you just testing the app or here to find a connection?\n 1. Tester\t 2. Real User\n")
 
         if user_type == "1":
-            print("Welcome to the test version - feel free to play around and make some connections with imaginary people.")
+            print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
             # return data from test user worksheet (also breaks the loop)
             return SHEET.worksheet('test_users').get_all_values()
         elif user_type == "2":
-            print("Welcome to the real version of the app")
+            print(
+                "\nWelcome to the real version of the app - let\s make some connections!\n")
             # return data from real user worksheet (also breaks the loop)
             return SHEET.worksheet('real_users').get_all_values()
         else:
-            print("Please enter either '1' or '2' to continue")
+            print("Please enter either '1' or '2' to continue\n")
 
 
 def validate_password(password):
@@ -74,14 +75,14 @@ def validate_password(password):
     """
     # check for length between 8 to 32 characters
     if len(password) < 8 or len(password) > 32:
-        print("Password must be between 8 and 32 characters")
+        print("\nPassword must be between 8 and 32 characters.\n")
         return False
     # regex for at least 1 digit and 1 symbol
     # https://www.freecodecamp.org/news/how-to-import-a-regular-expression-in-python/#howtousethepythonremodulewithregex
     if re.search(r"^(?=.*\d)(?=.*\W).*$", password):
         return True
 
-    print("Password must contain at least 1 digit and 1 symbol")
+    print("\nPassword must contain at least 1 digit and 1 symbol.\n")
     return False
 
 
@@ -102,10 +103,10 @@ def prompt_for_password(new_or_existing_user, row=None):
                 return password_input
             elif new_or_existing_user == "existing":
                 if password_input == row[1]:
-                    print("Password correct")
+                    print("\nPassword correct\n")
                     return password_input
                 else:
-                    print("Password incorrect")
+                    print("\nPassword incorrect\n")
                     password_valid = False
 
 
@@ -117,20 +118,20 @@ def user_login(data):
     """
     user_exists = False
     while user_exists is False:
-        usercode_input = int(input("Please enter your usercode:\n"))
+        usercode_input = int(input("\nPlease enter your usercode:\n"))
         # checks the first column of the data for the usercode
         for row in data:
             if row[0] == str(usercode_input):
-                print("Usercode found")
+                print("\nUsercode found\n")
                 user_exists = True
                 # prompt for password
                 password = prompt_for_password("existing", row)
                 if password is not None:
-                    print("Login successful")
+                    print("\nLogin successful\n")
                     print(row)
                 break
         else:
-            print("Usercode not found.")
+            print("\nUsercode not found.\n")
 
 
 def generate_random_usercode(data):
@@ -155,17 +156,17 @@ def create_and_validate_alias(data):
     - If the alias exists, prompt the user to come up with a new alias.\n
     - If the alias doesn't exist, return the alias.
     """
-    alias = input("You will also need to create an alias, which may be used for in-app communication. The alias must be unique and it is recommended that it does not easily identify you (for security reasons). Please enter your alias:\n")
+    alias = input("\nYou will also need to create an alias, which may be used for in-app communication.\nThe alias must be unique and it is recommended that it does not easily identify you (for security reasons).\nPlease enter your alias now:\n")
     # check if the alias is greater than 3 but fewer than 16 characters
     while len(alias) < 3 or len(alias) > 16:
         alias = input(
-            "Alias must be greater than 3 but fewer than 16 characters. Please try again:\n")
+            "\nAlias must be greater than 3 but fewer than 16 characters. Please try again:\n")
 
     # check if the alias already exists in the database
     for row in data:
         if row[2] == alias:
             # if the alias exists, prompt the user to come up with a new alias
-            print("Alias already exists.")
+            print("\nAlias already exists.\n")
             return create_and_validate_alias(data)
     return alias
 
@@ -193,7 +194,7 @@ def prompt_for_security_questions_and_answers():
         "What was the name of your first soft toy or plaything?"
     ]
 
-    print("For usercode/password recovery in the future, you will need to set some security questions.\nPlease choose from the list below:\n")
+    print("\nFor usercode/password recovery in the future, you will need to set some security questions.\nPlease choose from the list below:\n")
     for i, question in enumerate(security_question_list):
         print(f"{i+1}. {question}")
 
@@ -201,12 +202,12 @@ def prompt_for_security_questions_and_answers():
         security_question_input = input(
             "\nPlease select a question by entering its number:\n")
         if not security_question_input.isdigit() or int(security_question_input) < 1 or int(security_question_input) > 10:
-            print("Please enter a number between 1 and 10")
+            print("\nPlease enter a number between 1 and 10\n")
             continue
         security_question_input = int(security_question_input)
         security_question = security_question_list[security_question_input-1]
         security_answer = input(
-            f"Please enter your answer to the question '{security_question}':\n")
+            f"\nPlease enter your answer to the question '{security_question}':\n")
         security_questions_and_answers.append(
             [security_question, security_answer])
         security_question_list.pop(security_question_input-1)
@@ -223,21 +224,42 @@ def prompt_for_age():
     - If the user is under 18, let them know they can't use the app.\n
     - If the user is 18 or over, return their age.
     """
-    age = input("Please enter your age:\n")
+    age = input("\nPlease enter your age:\n")
     if not age.isdigit():
-        print("You must enter a number between 18 and 100.\n")
+        print("\nYou must enter a number between 18 and 100.\n")
         return prompt_for_age()
 
     age = int(age)
     if age < 18:
-        print("Sorry! You must be at least 18 years old to use Console Connections.\n")
+        print("\nSorry! You must be at least 18 years old to use Console Connections.\n")
         return prompt_for_age()
 
     if age >= 100:
-        print("While we admire your vitality, users must between the ages of 18 and 100.\n")
+        print(
+            "\nWhile we admire your vitality, users must between the ages of 18 and 100.\n")
         return prompt_for_age()
 
     return age
+
+
+def prompt_for_gender():
+    """
+    Gets the user's gender.
+    """
+    gender_input = input(
+        "\nPlease input the gender you identify as: \n\n 1. Male\t 2. Female\t 3. Non-binary\n").lower()
+
+    if gender_input == "1" or gender_input == "male":
+        gender = "Male"
+    elif gender_input == "2" or gender_input == "female":
+        gender = "Female"
+    elif gender_input == "3" or gender_input == "non-binary":
+        gender = "Non-binary"
+    else:
+        print("\nPlease enter one of the above genders using 1, 2, or 3.\n")
+        return prompt_for_gender()
+
+    return gender
 
 
 def user_signup(data):
@@ -247,11 +269,18 @@ def user_signup(data):
     """
     usercode = generate_random_usercode(data)
     print(
-        f"If you complete the signup process, your usercode will be {usercode}. Please keep this safe as you will need it to login.")
-    # password = prompt_for_password("new")
-    # alias = create_and_validate_alias(data)
-    # security_questions_and_answers = prompt_for_security_questions_and_answers()
+        f"If you complete the signup process, your usercode will be {usercode}. Please keep this safe as you will need it to login.\n")
+    password = prompt_for_password("new")
+    alias = create_and_validate_alias(data)
+    clear_terminal()
+    print("\Great! We've got your username, password and alias!\n\n")
+    security_questions_and_answers = prompt_for_security_questions_and_answers()
+    clear_terminal()
+    print("\nSecurity questions added!\n")
     age = prompt_for_age()
+    gender = prompt_for_gender()
+
+    print(f"\n{usercode}\n{password}\n{alias}\n{security_questions_and_answers}\n{age}\n{gender}\n")
 
 
 def present_login_signup_step(data):
@@ -262,18 +291,18 @@ def present_login_signup_step(data):
     """
     while True:
         login_signup = input(
-            "Would you like to login or signup? Please enter 1 or 2.\n 1. Login\n 2. Signup\n")
+            "Would you like to login or signup? Please enter 1 or 2.\n 1. Login\t 2. Signup\n")
 
         if login_signup == "1":
-            print("Login\n")
+            print("\nLogin\n")
             # return data from login function (also breaks the loop)
             return user_login(data)
         elif login_signup == "2":
-            print("Signup\n")
+            print("\nSignup\n")
             # return data from signup function (also breaks the loop)
             return user_signup(data)
         else:
-            print("Please enter either '1' to Login or '2' to Signup\n")
+            print("\nPlease enter either '1' to Login or '2' to Signup\n")
 
 
 def main():
