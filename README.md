@@ -8,6 +8,18 @@
 - [Console Connections font](https://patorjk.com/software/taag/#p=display&h=2&v=1&f=NV%20Script&t=Console%20Connections)
 - [Stackoverflow question on generating random numbers](https://stackoverflow.com/questions/2673385/how-to-generate-a-random-number-with-a-specific-amount-of-digits)
 - [Code to clear the console](https://www.delftstack.com/howto/python/python-clear-console/)
+- [Corey Schafer Python Tutorials on Classes](https://www.youtube.com/@coreyms)
+
+## Planning
+
+### Flowchart
+<!-- Flowcharts to be added here -->
+
+### Google sheet headings
+Initial: usercode,	password, alias,	security_question_1,	security_answer_1, security_question_2,	security_answer_2,	bio,	gender,	genders_seeking,	age,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	question_1,	question_2,	question_3,	question_4,	question_5,	question_6,	question_7,	question_8,	question_9,	question_10	
+
+Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	genders_seeking,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	compatibility_answers
+
 
 ## Bugs and issues
 
