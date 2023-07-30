@@ -67,6 +67,11 @@ def establish_user_data():
 
 
 def validate_password(password):
+    """
+    Checks the password length and complexity.\n
+    - If the password is valid, return True.\n
+    - If the password is invalid, return False.
+    """
     # check for length between 8 to 32 characters
     if len(password) < 8 or len(password) > 32:
         print("Password must be between 8 and 32 characters")
@@ -212,18 +217,41 @@ def prompt_for_security_questions_and_answers():
     return security_questions_and_answers
 
 
+def prompt_for_age():
+    """
+    Prompt the user for their age.\n
+    - If the user is under 18, let them know they can't use the app.\n
+    - If the user is 18 or over, return their age.
+    """
+    age = input("Please enter your age:\n")
+    if not age.isdigit():
+        print("You must enter a number between 18 and 100.\n")
+        return prompt_for_age()
+
+    age = int(age)
+    if age < 18:
+        print("Sorry! You must be at least 18 years old to use Console Connections.\n")
+        return prompt_for_age()
+
+    if age >= 100:
+        print("While we admire your vitality, users must between the ages of 18 and 100.\n")
+        return prompt_for_age()
+
+    return age
+
+
 def user_signup(data):
     """
-    Runs generate usercode, password and alias functions.\n
-    - Prompts the user to add 2 security questions and answers.\n
+    Runs generate usercode, password, alias and security question functions.\n
     - Adds the user to the Google sheet.
     """
     usercode = generate_random_usercode(data)
     print(
         f"If you complete the signup process, your usercode will be {usercode}. Please keep this safe as you will need it to login.")
-    password = prompt_for_password("new")
-    alias = create_and_validate_alias(data)
-    print(usercode, password, alias)
+    # password = prompt_for_password("new")
+    # alias = create_and_validate_alias(data)
+    # security_questions_and_answers = prompt_for_security_questions_and_answers()
+    age = prompt_for_age()
 
 
 def present_login_signup_step(data):
@@ -252,10 +280,10 @@ def main():
     """
     Run all program functions
     """
-    # print("Welcome to Console Connections\nThere's no cover to judge here!\n")
-    # user_data = establish_user_data()
-    # present_login_signup_step(user_data)
-    prompt_for_security_questions_and_answers()
+    clear_terminal()
+    print("Welcome to Console Connections\nThere's no cover to judge here!\n")
+    user_data = establish_user_data()
+    present_login_signup_step(user_data)
 
 
 main()
