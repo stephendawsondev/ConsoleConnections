@@ -56,6 +56,96 @@ class User:
         self.compatibility_answers = compatibility_answers if compatibility_answers is not None else []
         self.row_num = row_num
 
+    def set_age_range_seeking(self):
+        """
+        Sets the minimum and maximum age that the user wants to match with.
+        Minimum must be 18 and maximum is 100.
+        """
+        min_age = input(
+            "\nWhat is the minimum age you would like to match with? The age must be 18 or over.\n")
+        if not min_age.isdigit():
+            print("\nPlease enter a number between 18 and 100\n")
+            return self.set_age_range_seeking()
+
+        max_age = input(
+            "\nWhat is the maximum age you would like to match with? The age must be 18 or over.\n")
+        if not max_age.isdigit():
+            print("\nPlease enter a number between 18 and 100\n")
+            return self.set_age_range_seeking()
+
+        return [int(min_age), int(max_age)]
+
+    def set_genders_seeking(self):
+        # TODO: fix this function as it currently outputs each letter of each
+        # gender instead of just the gender.
+        """
+        Lets the user set or update their gender seeking preferences.
+        They are able to choose multiple genders if they wish.
+        """
+        current_genders = self.genders_seeking
+        for index, gender in enumerate(current_genders):
+            print(f"{index}. {gender}")
+
+        available_genders = ["Male", "Female", "Non-binary"]
+
+        genders_to_add = [
+            gender for gender in available_genders if gender not in current_genders]
+
+        if len(genders_to_add) == 0:
+            print("You have already selected all available genders.")
+        else:
+            print("Available genders to add:")
+            for index, gender in enumerate(genders_to_add):
+                print(f"{index}. {gender}")
+
+        if len(current_genders) == 0:
+            print("You have not selected any genders.")
+        else:
+            print("Current genders selected:")
+            for index, gender in enumerate(current_genders):
+                print(f"{index}. {gender}")
+
+        while True:
+            action = input(
+                "Enter the number of the gender you want to add, or '-' followed by the number of the gender you want to remove, or 'q' to quit: ")
+            if action == "q":
+                break
+
+            try:
+                if action.startswith("-"):
+                    gender_index = int(action[1:])
+                    if gender_index < 0 or gender_index >= len(current_genders):
+                        print("Invalid gender index. Please try again.")
+                        continue
+
+                    gender_to_remove = current_genders[gender_index]
+                    self.genders_seeking.remove(gender_to_remove)
+                    print(
+                        f"{gender_to_remove} has been removed from your gender seeking preferences.")
+                    break
+
+                else:
+                    gender_index = int(action)
+                    if gender_index < 0 or gender_index >= len(genders_to_add):
+                        print("Invalid gender index. Please try again.")
+                        continue
+
+                    gender_to_add = genders_to_add[gender_index]
+                    if gender_to_add in current_genders:
+                        print(
+                            "You have already selected this gender. Please choose a different one.")
+                        continue
+
+                    self.genders_seeking.append(gender_to_add)
+                    print(
+                        f"{gender_to_add} has been added to your gender seeking preferences.")
+                    break
+
+            except ValueError:
+                print("Invalid input. Please enter a number or 'q' to quit.")
+
+        return genders_to_add
+
     def present_compatibility_quiz(self, worksheet_selected):
         """
         Runs the compatibility quiz.\n
@@ -140,6 +230,60 @@ class User:
             print("\nPlease enter either '1', '2' or '3'\n")
             return self.present_compatibility_quiz(worksheet_selected)
 
+    def present_edit_profile(self, worksheet_selected):
+        """
+        Allows the user to update their password, security questions, bio,
+        the ages they're interested in and the gender(s) they're interested in.
+        """
+        print("\nEdit profile:\n")
+        print("Here is your current profile information:\n")
+
+        print("Uneditable:\n")
+        print(f"Usercode: {self.usercode}\n")
+        print(f"Alias: {self.alias}\n")
+
+        print("Editable:\n")
+        print(f"1. Password: {self.password}\n")
+        print(
+            f"2. Security questions: {self.security_questions_and_answers}\n")
+        print(f"3. Bio: {self.bio}\n")
+        print(f"4. Age range to match with: {self.age_range_seeking}\n")
+        print(f"5. Genders to match with {self.genders_seeking}\n")
+        print("6. Save and exit\n")
+
+        finsihed_editing = False
+        while finsihed_editing is False:
+            edit_profile_option = input(
+                "Please enter the number of the field you would like to edit:\n")
+            if edit_profile_option == "1":
+                self.password = prompt_for_password("updating")
+            elif edit_profile_option == "2":
+                self.security_questions_and_answers = prompt_for_security_questions_and_answers()
+            elif edit_profile_option == "3":
+                self.bio = input("\nPlease enter your bio:\n")
+            elif edit_profile_option == "4":
+                self.age_range_seeking = self.set_age_range_seeking()
+            elif edit_profile_option == "5":
+                self.genders_seeking = self.set_genders_seeking()
+            elif edit_profile_option == "6":
+                print("\nSaving changes...\n")
+                # update google sheet with new profile information
+                SHEET.worksheet(worksheet_selected).update_cell(
+                    self.row_num, 2, self.password)
+                SHEET.worksheet(worksheet_selected).update_cell(
+                    self.row_num, 4, str(self.security_questions_and_answers))
+                SHEET.worksheet(worksheet_selected).update_cell(
+                    self.row_num, 7, self.bio)
+                SHEET.worksheet(worksheet_selected).update_cell(
+                    self.row_num, 8, str(self.age_range_seeking))
+                SHEET.worksheet(worksheet_selected).update_cell(
+                    self.row_num, 9, str(self.genders_seeking))
+
+                print("\nProfile saved!\n")
+                return present_main_menu(self, worksheet_selected)
+            else:
+                print("\nPlease enter a number between 1 and 6")
+
 
 def clear_terminal():
     """
@@ -218,6 +362,8 @@ def prompt_for_password(new_or_existing_user, row=None):
                 else:
                     print("\nPassword incorrect\n")
                     password_valid = False
+            elif new_or_existing_user == "updating":
+                return password_input
 
 
 def user_login(data, worksheet_selected):
@@ -441,20 +587,20 @@ def present_main_menu(user, worksheet_selected):
 
         if main_menu_input == "1":
             print("\nCompatibility quiz\n")
-            # return data from compatibility quiz function (also breaks the loop)
+            # return data from compatibility quiz function
             return user.present_compatibility_quiz(worksheet_selected)
-        # elif main_menu_input == "2":
-        #     print("\nEdit profile\n")
-        #     # return data from edit profile function (also breaks the loop)
-        #     return present_edit_profile(user)
+        elif main_menu_input == "2":
+            print("\nEdit profile\n")
+            # return data from edit profile function
+            return user.present_edit_profile(worksheet_selected)
         # elif main_menu_input == "3":
         #     print("\nView messages\n")
-        #     # return data from view messages function (also breaks the loop)
-        #     return present_view_messages(user)
+        #     # return data from view messages function
+        #     return present_view_messages(user, worksheet_selected)
         # elif main_menu_input == "4":
         #     print("\nLogout\n")
-        #     # return data from logout function (also breaks the loop)
-        #     return present_logout(user)
+        #     # return data from logout function
+        #     return present_logout(user, worksheet_selected)
         else:
             print("\nPlease enter a number between 1 and 4\n")
 
@@ -463,7 +609,7 @@ def main():
     """
     Run all program functions
     """
-    clear_terminal()
+    # clear_terminal()
     # print(
     #     f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
     [user_data, worksheet_selected] = establish_user_data()
