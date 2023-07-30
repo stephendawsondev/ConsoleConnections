@@ -13,4 +13,5 @@
 
 | Bug/Issue                                                                   | Potential Solution                             | Resolved Y/N  | Additional Comments                                                                                 |
 |-----------------------------------------------------------------------------|------------------------------------------------|---------------|-----------------------------------------------------------------------------------------------------|
-| "Running startup command: python3 run.py" command appearing when app starts | Run command to clear console before app starts | N             | May be able to use the solution here: https://www.delftstack.com/howto/python/python-clear-console/ |
+| "Running startup command: python3 run.py" command appearing when app starts | Run command to clear console before app starts | Y             | Resolved using the solution here: https://www.delftstack.com/howto/python/python-clear-console/     |
+| For age input, any text input was breaking the app                          | Assert the type of the age variable            | Y             | I was able to resolve the issue by returning the function if necessary components were not met.     |
