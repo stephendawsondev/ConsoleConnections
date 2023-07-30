@@ -50,6 +50,7 @@ def establish_user_data():
     - If a test user, pull data from the test user worksheet.\n
     - If a real user, pull data from the real user worksheet.
     """
+
     while True:
         user_type = input(
             "\nAre you just testing the app or here to find a connection?\n 1. Tester\t 2. Real User\n")
@@ -57,12 +58,13 @@ def establish_user_data():
         if user_type == "1":
             print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
             # return data from test user worksheet (also breaks the loop)
-            return SHEET.worksheet('test_users').get_all_values()
+            return [SHEET.worksheet('test_users').get_all_values(), "test_users"]
         elif user_type == "2":
+            sheet_used = "real_users"
             print(
                 "\nWelcome to the real version of the app - let\s make some connections!\n")
             # return data from real user worksheet (also breaks the loop)
-            return SHEET.worksheet('real_users').get_all_values()
+            return [SHEET.worksheet('real_users').get_all_values(), "real_users"]
         else:
             print("Please enter either '1' or '2' to continue\n")
 
@@ -110,7 +112,7 @@ def prompt_for_password(new_or_existing_user, row=None):
                     password_valid = False
 
 
-def user_login(data):
+def user_login(data, sheet_used):
     """
     Checks if the user exists on the Google Sheet.\n
     - If the user exists, prompt them for password.\n
@@ -262,7 +264,7 @@ def prompt_for_gender():
     return gender
 
 
-def user_signup(data):
+def user_signup(data, sheet_used):
     """
     Runs generate usercode, password, alias and security question functions.\n
     - Adds the user to the Google sheet.
@@ -275,15 +277,25 @@ def user_signup(data):
     clear_terminal()
     print("\Great! We've got your username, password and alias!\n\n")
     security_questions_and_answers = prompt_for_security_questions_and_answers()
+
     clear_terminal()
     print("\nSecurity questions added!\n")
     age = prompt_for_age()
     gender = prompt_for_gender()
 
-    print(f"\n{usercode}\n{password}\n{alias}\n{security_questions_and_answers}\n{age}\n{gender}\n")
+    # create user object
+    user = User(usercode, password, alias,
+                security_questions_and_answers, age, gender)
+
+    # add user to Google Sheet
+    SHEET.worksheet(sheet_used).append_row([user.usercode, user.password, user.alias, str(
+        user.security_questions_and_answers), user.age, user.gender])
+
+    print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
+    return user
 
 
-def present_login_signup_step(data):
+def present_login_signup_step(data, sheet_used):
     """
     Provide the user with the option to login or signup.\n
     - If login, check if the user exists in the database and run the login function (if they exist)\n
@@ -296,11 +308,11 @@ def present_login_signup_step(data):
         if login_signup == "1":
             print("\nLogin\n")
             # return data from login function (also breaks the loop)
-            return user_login(data)
+            return user_login(data, sheet_used)
         elif login_signup == "2":
             print("\nSignup\n")
             # return data from signup function (also breaks the loop)
-            return user_signup(data)
+            return user_signup(data, sheet_used)
         else:
             print("\nPlease enter either '1' to Login or '2' to Signup\n")
 
@@ -311,8 +323,8 @@ def main():
     """
     clear_terminal()
     print("Welcome to Console Connections\nThere's no cover to judge here!\n")
-    user_data = establish_user_data()
-    present_login_signup_step(user_data)
+    [user_data, sheet_used] = establish_user_data()
+    present_login_signup_step(user_data, sheet_used)
 
 
 main()
