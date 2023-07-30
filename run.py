@@ -235,26 +235,25 @@ class User:
         Allows the user to update their password, security questions, bio,
         the ages they're interested in and the gender(s) they're interested in.
         """
-        print("\nEdit profile:\n")
-        print("Here is your current profile information:\n")
+        print(f"""Here is your current profile information:
 
-        print("Uneditable:\n")
-        print(f"Usercode: {self.usercode}\n")
-        print(f"Alias: {self.alias}\n")
+Uneditable:
+    Usercode: {self.usercode}
+    Alias: {self.alias}
 
-        print("Editable:\n")
-        print(f"1. Password: {self.password}\n")
-        print(
-            f"2. Security questions: {self.security_questions_and_answers}\n")
-        print(f"3. Bio: {self.bio}\n")
-        print(f"4. Age range to match with: {self.age_range_seeking}\n")
-        print(f"5. Genders to match with {self.genders_seeking}\n")
-        print("6. Save and exit\n")
+Editable:
+    1. Password: {self.password}
+    2. Security questions: {self.security_questions_and_answers}
+    3. Bio: {self.bio}
+    4. Age range to match with: {self.age_range_seeking}
+    5. Genders to match with {self.genders_seeking}
+    6. Save and exit
+        """)
 
         finsihed_editing = False
         while finsihed_editing is False:
             edit_profile_option = input(
-                "Please enter the number of the field you would like to edit:\n")
+                "Please enter the number of the field you would like to edit,\nor enter '6' to save and exit:\n")
             if edit_profile_option == "1":
                 self.password = prompt_for_password("updating")
             elif edit_profile_option == "2":
