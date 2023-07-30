@@ -9,6 +9,9 @@
 - [Stackoverflow question on generating random numbers](https://stackoverflow.com/questions/2673385/how-to-generate-a-random-number-with-a-specific-amount-of-digits)
 - [Code to clear the console](https://www.delftstack.com/howto/python/python-clear-console/)
 - [Corey Schafer Python Tutorials on Classes](https://www.youtube.com/@coreyms)
+- [update_cell method from gspread](https://docs.gspread.org/en/latest/user-guide.html)
+- [json module in Python](https://docs.python.org/3/library/json.html)
+- [re.sub() method explanation](https://www.pythontutorial.net/python-regex/python-regex-sub/)
 
 ## Planning
 
@@ -23,7 +26,9 @@ Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	ge
 
 ## Bugs and issues
 
-| Bug/Issue                                                                   | Potential Solution                             | Resolved Y/N  | Additional Comments                                                                                 |
-|-----------------------------------------------------------------------------|------------------------------------------------|---------------|-----------------------------------------------------------------------------------------------------|
-| "Running startup command: python3 run.py" command appearing when app starts | Run command to clear console before app starts | Y             | Resolved using the solution here: https://www.delftstack.com/howto/python/python-clear-console/     |
-| For age input, any text input was breaking the app                          | Assert the type of the age variable            | Y             | I was able to resolve the issue by returning the function if necessary components were not met.     |
+| Bug/Issue                                                                   | Potential Solution                                        | Resolved Y/N | Additional Comments                                                                                      |
+|-----------------------------------------------------------------------------|---------------------------------------------------------- |--------------|----------------------------------------------------------------------------------------------------------|  
+| "Running startup command: python3 run.py" command appearing when app starts.| Run command to clear console before app starts.           |      Y       | Resolved using the solution here: https://www.delftstack.com/howto/python/python-clear-console/          |
+| For age input, any text input was breaking the app.                         | Assert the type of the age variable.                      |      Y       | I was able to resolve the issue by returning the function if necessary components were not met.          |
+| When pulling a list from Google Sheets, the data passed back was a string.  | Convert the string to a list using the json module        |      Y       | I was able to resolve the issue by converting the string to a list using the json module.                |
+| Data that has single quotes and doesn't work with json.loads                | Use a regex to replace single quotes                      |      Y       | Used regex to replace single quotes at start and end of words and not within words                       |
