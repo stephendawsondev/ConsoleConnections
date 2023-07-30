@@ -153,6 +153,53 @@ def create_and_validate_alias(data):
     return alias
 
 
+def prompt_for_security_questions_and_answers():
+    """
+    User is given a list of 10 security questions to choose from.\n
+    - User selects a question and provides an answer.
+    - User is given the list of remaining questions and chooses one.
+    - User provides an answer.
+    - The questions and answers are returned in a list.
+    """
+    security_questions_and_answers = []
+
+    security_question_list = [
+        "What was the name of your first pet?",
+        "In which town or city were you born?",
+        "What was your favourite subject in secondary school?",
+        "What is your mother's maiden name?",
+        "What was the make and model of your first car?",
+        "What is the first name of your best friend from childhood?",
+        "In which city did your parents meet?",
+        "What was the name of your primary school?",
+        "What is your paternal grandfather's first name?",
+        "What was the name of your first soft toy or plaything?"
+    ]
+
+    print("For usercode/password recovery in the future, you will need to set some security questions.\nPlease choose from the list below:\n")
+    for i, question in enumerate(security_question_list):
+        print(f"{i+1}. {question}")
+
+    while len(security_questions_and_answers) < 2:
+        security_question_input = input(
+            "\nPlease select a question by entering its number:\n")
+        if not security_question_input.isdigit() or int(security_question_input) < 1 or int(security_question_input) > 10:
+            print("Please enter a number between 1 and 10")
+            continue
+        security_question_input = int(security_question_input)
+        security_question = security_question_list[security_question_input-1]
+        security_answer = input(
+            f"Please enter your answer to the question '{security_question}':\n")
+        security_questions_and_answers.append(
+            [security_question, security_answer])
+        security_question_list.pop(security_question_input-1)
+        print("\nThank you. Please choose another question from the list below:\n")
+        for i, question in enumerate(security_question_list):
+            print(f"{i+1}. {question}")
+
+    return security_questions_and_answers
+
+
 def user_signup(data):
     """
     Runs generate usercode, password and alias functions.\n
@@ -193,9 +240,10 @@ def main():
     """
     Run all program functions
     """
-    print("Welcome to Console Connections\nThere's no cover to judge here!\n")
-    user_data = establish_user_data()
-    present_login_signup_step(user_data)
+    # print("Welcome to Console Connections\nThere's no cover to judge here!\n")
+    # user_data = establish_user_data()
+    # present_login_signup_step(user_data)
+    prompt_for_security_questions_and_answers()
 
 
 main()
