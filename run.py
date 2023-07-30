@@ -31,6 +31,9 @@ Y8,          i8'    ,8I  I8   8I   8I  ,8'  Yb  i8'    ,8I  I8P   I8, ,8I  Y8,  
                                                                                                                                                                                                 """
 
 
+app_subheading = """\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n\n\t\t\t\t\t\t\t\t\t\tThere's no cover to judge here!\n\n\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n"""
+
+
 class User:
     """
     A class to represent a user.\n
@@ -335,7 +338,7 @@ def main():
     """
     clear_terminal()
     print(
-        f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{console_connections_heading}\n\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n\n\t\t\t\t\t\t\t\t\t\tThere's no cover to judge here!\n\n\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n")
+        f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{console_connections_heading}\n{app_subheading}")
     [user_data, sheet_used] = establish_user_data()
     present_login_signup_step(user_data, sheet_used)
 
