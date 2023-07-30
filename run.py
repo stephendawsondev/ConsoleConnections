@@ -1,5 +1,6 @@
 import re
 import os
+import json
 import random
 import gspread
 from google.oauth2.service_account import Credentials
@@ -18,7 +19,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ConsoleConnections')
 
-console_connections_heading = """     ,gggg,                                                                     ,gggg,                                                                                                          
+CONSOLE_CONNECTIONS_HEADING = """     ,gggg,                                                                     ,gggg,                                                                                                          
    ,88YYYY8b,                                               ,dPYb,            ,88YYYY8b,                                                          I8                                            
   d8"     `Y8                                               IP'`Yb           d8"     `Y8                                                          I8                                            
  d8'   8b  d8                                               I8  8I          d8'   8b  d8                                                       88888888 gg                                      
@@ -31,7 +32,7 @@ Y8,          i8'    ,8I  I8   8I   8I  ,8'  Yb  i8'    ,8I  I8P   I8, ,8I  Y8,  
                                                                                                                                                                                                 """
 
 
-app_subheading = """\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n\n\t\t\t\t\t\t\t\t\t\tThere's no cover to judge here!\n\n\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n"""
+APP_SUBHEADING = """\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n\n\t\t\t\t\t\t\t\t\t\tThere's no cover to judge here!\n\n\t\t\t\t\t\t\t\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n"""
 
 
 class User:
@@ -39,13 +40,105 @@ class User:
     A class to represent a user.\n
     """
 
-    def __init__(self, usercode, password, alias, security_questions_and_answers, age, gender):
+    def __init__(self, usercode, password, alias, security_questions_and_answers, age, gender, bio='', genders_seeking=None, age_range_seeking=None, messages=None, allow_contact_list=None, compatibility_answers=None, row_num=None):
         self.usercode = usercode
         self.password = password
         self.alias = alias
         self.security_questions_and_answers = security_questions_and_answers
         self.age = age
         self.gender = gender
+        self.bio = bio if bio is not None else "No bio yet"
+        self.genders_seeking = genders_seeking if genders_seeking is not None else []
+        self.age_range_seeking = age_range_seeking if age_range_seeking is not None else [
+            18, 100]
+        self.messages = messages if messages is not None else []
+        self.allow_contact_list = allow_contact_list if allow_contact_list is not None else []
+        self.compatibility_answers = compatibility_answers if compatibility_answers is not None else []
+        self.row_num = row_num
+
+    def present_compatibility_quiz(self, worksheet_selected):
+        """
+        Runs the compatibility quiz.\n
+        - Presents the user with 10 questions.\n
+        - User answers the questions.\n
+        - Answers are stored in a list and returned.
+        """
+
+        # regex to replace single quotes with double quotes
+        compatibility_answers = re.sub(
+            r"(?<![\w\\])'|'(?![\w\\])", "\"", self.compatibility_answers)
+        print(compatibility_answers)
+        # convert string to list
+        compatibility_answers = json.loads(compatibility_answers)
+
+        compatibility_questions = [
+            ["Are you more of an introvert or extrovert?",
+                ["Introvert", "Extrovert"]],
+            ["Do you prefer cities or countryside?", ["Cities", "Countryside"]],
+            ["Do you prefer a planner or spontaneous?",
+                ["Planner", "Spontaneous"]],
+            ["Are you a dog person or a cat person?",
+                ["Dog", "Cat", "Both", "Neither"]],
+            ["Do you prefer sweet or savory food?", ["Sweet", "Savory"]],
+            ["Do you prefer books or films?", ["Books", "Films", "Both"]],
+            ["Do you prefer active or relaxed getaways?", [
+                "Active", "Relaxed", "Both", "I don't like getaways"]],
+            ["Are you more logical or emotional?", ["Logical", "Emotional"]],
+            ["Do you prefer eating out or cooking at home?",
+                ["Eating out", "Cooking at home", "Both"]],
+            ["Do you prefer traveling or staying home?",
+                ["Traveling", "Staying home"]]
+        ]
+
+        quiz_option = input(
+            "Would you like to view your answers or take the quiz?\n 1. View answers\t 2. Take quiz\n 3. Return to main menu\n")
+        if quiz_option == "1":
+            print("\nView answers:")
+
+            if len(compatibility_answers) == 0:
+                print("\nYou have not yet completed the compatibility quiz\n")
+                return self.present_compatibility_quiz(worksheet_selected)
+
+            for question, answer in zip(compatibility_questions, compatibility_answers):
+                print(f"\n{question[0]}\n")
+                print(f"{answer}\n")
+            return self.present_compatibility_quiz(worksheet_selected)
+
+        elif quiz_option == "2":
+            print("\nTake quiz:\n")
+            compatibility_answers = []
+            for question in compatibility_questions:
+                print(f"\n{question[0]}\n")
+                for index, option in enumerate(question[1]):
+                    print(f"{index+1}. {option}")
+                valid_answer = False
+                while valid_answer is False:
+                    answer = input("Please enter your answer:\n")
+                    try:
+                        answer = int(answer)
+                        if answer in range(1, len(question[1])+1):
+                            valid_answer = True
+                        else:
+                            print(
+                                f"\nThe number between 1 and {len(question[1])}")
+                    except ValueError:
+                        print("\nPlease enter a valid number\n")
+                        continue
+
+                compatibility_answers.append(option)
+
+            SHEET.worksheet(worksheet_selected).update_cell(
+                self.row_num, 12, str(compatibility_answers))
+
+            print("\nQuiz complete and answers updated!\n")
+
+            return self.present_compatibility_quiz(worksheet_selected)
+        elif quiz_option == "3":
+            print("\nReturn to main menu\n")
+            return present_main_menu(self, worksheet_selected)
+        else:
+            print("\nPlease enter either '1', '2' or '3'\n")
+            return self.present_compatibility_quiz(worksheet_selected)
 
 
 def clear_terminal():
@@ -75,9 +168,9 @@ def establish_user_data():
             # return data from test user worksheet (also breaks the loop)
             return [SHEET.worksheet('test_users').get_all_values(), "test_users"]
         elif user_type == "2":
-            sheet_used = "real_users"
+            worksheet_selected = "real_users"
             print(
-                "\nWelcome to the real version of the app - let\s make some connections!\n")
+                "\nWelcome to the real version of the app - let's make some connections!\n")
             # return data from real user worksheet (also breaks the loop)
             return [SHEET.worksheet('real_users').get_all_values(), "real_users"]
         else:
@@ -127,7 +220,7 @@ def prompt_for_password(new_or_existing_user, row=None):
                     password_valid = False
 
 
-def user_login(data, sheet_used):
+def user_login(data, worksheet_selected):
     """
     Checks if the user exists on the Google Sheet.\n
     - If the user exists, prompt them for password.\n
@@ -137,15 +230,14 @@ def user_login(data, sheet_used):
     while user_exists is False:
         usercode_input = int(input("\nPlease enter your usercode:\n"))
         # checks the first column of the data for the usercode
-        for row in data:
+        for index, row in enumerate(data):
             if row[0] == str(usercode_input):
-                print("\nUsercode found\n")
                 user_exists = True
                 # prompt for password
                 password = prompt_for_password("existing", row)
                 if password is not None:
                     print("\nLogin successful\n")
-                    print(row)
+                    return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], index + 1)
                 break
         else:
             print("\nUsercode not found.\n")
@@ -212,8 +304,8 @@ def prompt_for_security_questions_and_answers():
     ]
 
     print("\nFor usercode/password recovery in the future, you will need to set some security questions.\nPlease choose from the list below:\n")
-    for i, question in enumerate(security_question_list):
-        print(f"{i+1}. {question}")
+    for index, question in enumerate(security_question_list):
+        print(f"{index+1}. {question}")
 
     while len(security_questions_and_answers) < 2:
         security_question_input = input(
@@ -229,8 +321,8 @@ def prompt_for_security_questions_and_answers():
             [security_question, security_answer])
         security_question_list.pop(security_question_input-1)
         print("\nThank you. Please choose another question from the list below:\n")
-        for i, question in enumerate(security_question_list):
-            print(f"{i+1}. {question}")
+        for index, question in enumerate(security_question_list):
+            print(f"{index+1}. {question}")
 
     return security_questions_and_answers
 
@@ -279,7 +371,7 @@ def prompt_for_gender():
     return gender
 
 
-def user_signup(data, sheet_used):
+def user_signup(data, worksheet_selected):
     """
     Runs generate usercode, password, alias and security question functions.\n
     - Adds the user to the Google sheet.
@@ -298,19 +390,20 @@ def user_signup(data, sheet_used):
     age = prompt_for_age()
     gender = prompt_for_gender()
 
+    row_num = len(data) + 1
     # create user object
     user = User(usercode, password, alias,
-                security_questions_and_answers, age, gender)
+                security_questions_and_answers, age, gender, None, None, None, None, None, None, row_num)
 
     # add user to Google Sheet
-    SHEET.worksheet(sheet_used).append_row([user.usercode, user.password, user.alias, str(
-        user.security_questions_and_answers), user.age, user.gender])
+    SHEET.worksheet(worksheet_selected).append_row([user.usercode, user.password, user.alias, str(
+        user.security_questions_and_answers), user.age, user.gender, None, None, None, None, None, None, row_num])
 
     print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
     return user
 
 
-def present_login_signup_step(data, sheet_used):
+def present_login_signup_step(data, worksheet_selected):
     """
     Provide the user with the option to login or signup.\n
     - If login, check if the user exists in the database and run the login function (if they exist)\n
@@ -321,15 +414,49 @@ def present_login_signup_step(data, sheet_used):
             "Would you like to login or signup? Please enter 1 or 2.\n 1. Login\t 2. Signup\n")
 
         if login_signup == "1":
+            clear_terminal()
             print("\nLogin\n")
             # return data from login function (also breaks the loop)
-            return user_login(data, sheet_used)
+            return user_login(data, worksheet_selected)
         elif login_signup == "2":
+            clear_terminal()
             print("\nSignup\n")
             # return data from signup function (also breaks the loop)
-            return user_signup(data, sheet_used)
+            return user_signup(data, worksheet_selected)
         else:
             print("\nPlease enter either '1' to Login or '2' to Signup\n")
+
+
+def present_main_menu(user, worksheet_selected):
+    """
+    Present the user with the main menu options.\n
+    - If the user selects '1', run the compatibility quiz.\n
+    - If the user selects '2', run the edit profile function.\n
+    - If the user selects '3', run the view messages function.\n
+    - If the user selects '4', run the logout function.\n
+    """
+    while True:
+        main_menu_input = input(
+            "\nWhat would you like to do?\n 1. Compatibility quiz\t 2. Edit profile\t 3. View messages\t 4. Logout\n")
+
+        if main_menu_input == "1":
+            print("\nCompatibility quiz\n")
+            # return data from compatibility quiz function (also breaks the loop)
+            return user.present_compatibility_quiz(worksheet_selected)
+        # elif main_menu_input == "2":
+        #     print("\nEdit profile\n")
+        #     # return data from edit profile function (also breaks the loop)
+        #     return present_edit_profile(user)
+        # elif main_menu_input == "3":
+        #     print("\nView messages\n")
+        #     # return data from view messages function (also breaks the loop)
+        #     return present_view_messages(user)
+        # elif main_menu_input == "4":
+        #     print("\nLogout\n")
+        #     # return data from logout function (also breaks the loop)
+        #     return present_logout(user)
+        else:
+            print("\nPlease enter a number between 1 and 4\n")
 
 
 def main():
@@ -337,10 +464,11 @@ def main():
     Run all program functions
     """
     clear_terminal()
-    print(
-        f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{console_connections_heading}\n{app_subheading}")
-    [user_data, sheet_used] = establish_user_data()
-    present_login_signup_step(user_data, sheet_used)
+    # print(
+    #     f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
+    [user_data, worksheet_selected] = establish_user_data()
+    user = present_login_signup_step(user_data, worksheet_selected)
+    present_main_menu(user, worksheet_selected)
 
 
 main()
