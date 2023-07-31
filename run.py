@@ -274,14 +274,69 @@ Editable:
                 SHEET.worksheet(worksheet_selected).update_cell(
                     self.row_num, 7, self.bio)
                 SHEET.worksheet(worksheet_selected).update_cell(
-                    self.row_num, 8, str(self.age_range_seeking))
+                    self.row_num, 8, str(self.genders_seeking))
                 SHEET.worksheet(worksheet_selected).update_cell(
-                    self.row_num, 9, str(self.genders_seeking))
+                    self.row_num, 9, str(self.age_range_seeking))
 
                 print("\nProfile saved!\n")
                 return present_main_menu(self, worksheet_selected)
             else:
                 print("\nPlease enter a number between 1 and 6")
+
+    def filter_users(self, worksheet_selected):
+        """
+        Filters out users who don't match the user's preferences.\n
+        - Filters out users who are not the right age.\n
+        - Filters out users whose age range does not include the user's age.\n
+        - Filters out users who do not match the gender the user seeks.
+        - Filters out users whose gender seeking preference does not include the user's.\n
+        """
+        # get all users from the Google Sheet
+        all_users = SHEET.worksheet(worksheet_selected).get_all_values()
+
+        # remove the first row (the headings)
+        all_users.pop(0)
+        # # remove user from the list
+        all_users.pop(self.row_num-2)
+
+        # print(self.genders_seeking)
+        # print(type(self.genders_seeking))
+
+        filtered_users = [
+            user for user in all_users if user[5] in self.genders_seeking]
+
+        # # filter out users whose gender preferences don't match the user's gender
+        filtered_users = [
+            user for user in filtered_users if self.gender in user[7]]
+
+        # filter out users who are not the right age
+        age_range_seeking = json.loads(self.age_range_seeking)
+
+        filtered_users = [
+            user for user in filtered_users
+            if int(user[4]) >= age_range_seeking[0] and int(user[4]) <= age_range_seeking[1]
+        ]
+
+        # # filter out users whose age range does not include the user's age
+        for user in filtered_users:
+            try:
+                user[8] = json.loads(user[8])
+            except ValueError:
+                filtered_users.remove(user)
+                continue
+
+        filtered_users = [
+            user for user in filtered_users
+            if int(self.age) >= int(user[8][0]) and int(self.age) <= int(user[8][1])
+        ]
+
+        print(
+            f"\nThere are {len(filtered_users)} users who match your preferences:\n")
+        for user in filtered_users:
+            print(f"{user[2]} ({user[4]}) - {user[5]}\nBio: {user[6]}\n")
+
+    def view_top_matches(self, worksheet_selected):
+        self.filter_users(worksheet_selected)
 
 
 def clear_terminal():
@@ -582,7 +637,7 @@ def present_main_menu(user, worksheet_selected):
     """
     while True:
         main_menu_input = input(
-            "\nWhat would you like to do?\n 1. Compatibility quiz\t 2. Edit profile\t 3. View messages\t 4. Logout\n")
+            "\nWhat would you like to do?\n 1. Compatibility quiz\t 2. Edit profile\t 3. View top matches\t 4. View messages\t 5. Logout\n")
 
         if main_menu_input == "1":
             print("\nCompatibility quiz\n")
@@ -592,6 +647,10 @@ def present_main_menu(user, worksheet_selected):
             print("\nEdit profile\n")
             # return data from edit profile function
             return user.present_edit_profile(worksheet_selected)
+        elif main_menu_input == "3":
+            print("\nView top matches\n")
+            # return data from view top matches function
+            return user.view_top_matches(worksheet_selected)
         # elif main_menu_input == "3":
         #     print("\nView messages\n")
         #     # return data from view messages function
@@ -611,9 +670,12 @@ def main():
     # clear_terminal()
     # print(
     #     f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
-    [user_data, worksheet_selected] = establish_user_data()
-    user = present_login_signup_step(user_data, worksheet_selected)
-    present_main_menu(user, worksheet_selected)
+    # [user_data, worksheet_selected] = establish_user_data()
+    # user = present_login_signup_step(user_data, worksheet_selected)
+    # present_main_menu(user, worksheet_selected)
+    user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
+                '[30, 70]', '', '[654321, 456235]', '[\'Extrovert\', \'Countryside\', \'Spontaneous\', \'Neither\', \'Savory\', \'Both\', "I don\'t like getaways", \'Emotional\', \'Both\', \'Staying home\']', 2)
+    user.view_top_matches("test_users")
 
 
 main()
