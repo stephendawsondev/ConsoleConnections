@@ -12,6 +12,7 @@
 - [update_cell method from gspread](https://docs.gspread.org/en/latest/user-guide.html)
 - [json module in Python](https://docs.python.org/3/library/json.html)
 - [re.sub() method explanation](https://www.pythontutorial.net/python-regex/python-regex-sub/)
+- [Sorting list by nest list value - stackoverflow](https://stackoverflow.com/a/65679191/12297743)
 
 ## Planning
 
@@ -33,3 +34,4 @@ Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	ge
 | When pulling a list from Google Sheets, the data passed back was a string.  | Convert the string to a list using the json module        |      Y       | I was able to resolve the issue by converting the string to a list using the json module.                |
 | Data that has single quotes and doesn't work with json.loads                | Use a regex to replace single quotes                      |      Y       | Used regex to replace single quotes at start and end of words and not within words                       |
 | The update genders method outputs each letter instead of each gender        | Use a regex to replace single quotes and just json.loads  |      N       |                                                                                             |
+| "IndexError: list index out of range" when sorting list by nested list value| Change the reference to the list length                   |      Y       | Changed `key=lambda x: x[2]` to `key=lambda x: x[1]`  |
