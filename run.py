@@ -19,16 +19,16 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('ConsoleConnections')
 
-CONSOLE_CONNECTIONS_HEADING = """     ,gggg,                                                                     ,gggg,                                                                                                          
-   ,88YYYY8b,                                               ,dPYb,            ,88YYYY8b,                                                          I8                                            
-  d8"     `Y8                                               IP'`Yb           d8"     `Y8                                                          I8                                            
- d8'   8b  d8                                               I8  8I          d8'   8b  d8                                                       88888888 gg                                      
-,8I    "Y88P'                                               I8  8'         ,8I    "Y88P'                                                          I8    ""                                      
-I8'            ,ggggg,    ,ggg,,ggg,     ,g,      ,ggggg,   I8 dP  ,ggg,   I8'            ,ggggg,    ,ggg,,ggg,   ,ggg,,ggg,   ,ggg,     ,gggg,   I8    gg     ,ggggg,    ,ggg,,ggg,     ,g,    
-d8            dP"  "Y8ggg,8" "8P" "8,   ,8'8,    dP"  "Y8gggI8dP  i8" "8i  d8            dP"  "Y8ggg,8" "8P" "8, ,8" "8P" "8, i8" "8i   dP"  "Yb  I8    88    dP"  "Y8ggg,8" "8P" "8,   ,8'8,   
-Y8,          i8'    ,8I  I8   8I   8I  ,8'  Yb  i8'    ,8I  I8P   I8, ,8I  Y8,          i8'    ,8I  I8   8I   8I I8   8I   8I I8, ,8I  i8'       ,I8,   88   i8'    ,8I  I8   8I   8I  ,8'  Yb  
-`Yba,,_____,,d8,   ,d8' ,dP   8I   Yb,,8'_   8),d8,   ,d8' ,d8b,_ `YbadP'  `Yba,,_____,,d8,   ,d8' ,dP   8I   Yb,dP   8I   Yb,`YbadP' ,d8,_    _,d88b,_,88,_,d8,   ,d8' ,dP   8I   Yb,,8'_   8) 
-  `"Y8888888P"Y8888P"   8P'   8I   `Y8P' "YY8P8P"Y8888P"   8P'"Y8888P"Y888   `"Y8888888P"Y8888P"   8P'   8I   `Y8P'   8I   `Y888P"Y888P""Y8888PP8P""Y88P""Y8P"Y8888P"   8P'   8I   `Y8P' "YY8P8P                                                                                                                                                                                                                                                                                                                                                                             
+CONSOLE_CONNECTIONS_HEADING = """     ,gggg,                                                                     ,gggg,
+   ,88YYYY8b,                                               ,dPYb,            ,88YYYY8b,                                                          I8
+  d8"     `Y8                                               IP'`Yb           d8"     `Y8                                                          I8
+ d8'   8b  d8                                               I8  8I          d8'   8b  d8                                                       88888888 gg
+,8I    "Y88P'                                               I8  8'         ,8I    "Y88P'                                                          I8    ""
+I8'            ,ggggg,    ,ggg,,ggg,     ,g,      ,ggggg,   I8 dP  ,ggg,   I8'            ,ggggg,    ,ggg,,ggg,   ,ggg,,ggg,   ,ggg,     ,gggg,   I8    gg     ,ggggg,    ,ggg,,ggg,     ,g,
+d8            dP"  "Y8ggg,8" "8P" "8,   ,8'8,    dP"  "Y8gggI8dP  i8" "8i  d8            dP"  "Y8ggg,8" "8P" "8, ,8" "8P" "8, i8" "8i   dP"  "Yb  I8    88    dP"  "Y8ggg,8" "8P" "8,   ,8'8,
+Y8,          i8'    ,8I  I8   8I   8I  ,8'  Yb  i8'    ,8I  I8P   I8, ,8I  Y8,          i8'    ,8I  I8   8I   8I I8   8I   8I I8, ,8I  i8'       ,I8,   88   i8'    ,8I  I8   8I   8I  ,8'  Yb
+`Yba,,_____,,d8,   ,d8' ,dP   8I   Yb,,8'_   8),d8,   ,d8' ,d8b,_ `YbadP'  `Yba,,_____,,d8,   ,d8' ,dP   8I   Yb,dP   8I   Yb,`YbadP' ,d8,_    _,d88b,_,88,_,d8,   ,d8' ,dP   8I   Yb,,8'_   8)
+  `"Y8888888P"Y8888P"   8P'   8I   `Y8P' "YY8P8P"Y8888P"   8P'"Y8888P"Y888   `"Y8888888P"Y8888P"   8P'   8I   `Y8P'   8I   `Y888P"Y888P""Y8888PP8P""Y88P""Y8P"Y8888P"   8P'   8I   `Y8P' "YY8P8P
                                                                                                                                                                                                 """
 
 
@@ -40,7 +40,21 @@ class User:
     A class to represent a user.\n
     """
 
-    def __init__(self, usercode, password, alias, security_questions_and_answers, age, gender, bio='', genders_seeking=None, age_range_seeking=None, messages=None, allow_contact_list=None, compatibility_answers=None, row_num=None):
+    def __init__(
+            self,
+            usercode,
+            password,
+            alias,
+            security_questions_and_answers,
+            age,
+            gender,
+            bio='',
+            genders_seeking=None,
+            age_range_seeking=None,
+            messages=None,
+            allow_contact_list=None,
+            compatibility_answers=None,
+            row_num=None):
         self.usercode = usercode
         self.password = password
         self.alias = alias
@@ -114,7 +128,8 @@ class User:
             try:
                 if action.startswith("-"):
                     gender_index = int(action[1:])
-                    if gender_index < 0 or gender_index >= len(current_genders):
+                    if gender_index < 0 or gender_index >= len(
+                            current_genders):
                         print("Invalid gender index. Please try again.")
                         continue
 
@@ -190,7 +205,8 @@ class User:
                 print("\nYou have not yet completed the compatibility quiz\n")
                 return self.present_compatibility_quiz(worksheet_selected)
 
-            for question, answer in zip(compatibility_questions, compatibility_answers):
+            for question, answer in zip(
+                    compatibility_questions, compatibility_answers):
                 print(f"\n{question[0]}\n")
                 print(f"{answer}\n")
             return self.present_compatibility_quiz(worksheet_selected)
@@ -207,7 +223,7 @@ class User:
                     answer = input("Please enter your answer:\n")
                     try:
                         answer = int(answer)
-                        if answer in range(1, len(question[1])+1):
+                        if answer in range(1, len(question[1]) + 1):
                             valid_answer = True
                         else:
                             print(
@@ -468,12 +484,14 @@ Editable:
             # calculate the percentage match
             percentage_match = round((compatibility_score / 100) * 100)
 
-            # if the percentage match is over 60%, add the user to the list of potential matches
+            # if the percentage match is over 60%, add the user to the list of
+            # potential matches
             if percentage_match > 60:
                 potential_matches.append([user, percentage_match])
 
         # sort the list of potential matches by the highest percentage
-        # taken from StackOverflow: https://stackoverflow.com/a/65679191/12297743
+        # taken from StackOverflow:
+        # https://stackoverflow.com/a/65679191/12297743
         sorted_matches = sorted(
             potential_matches, key=lambda x: x[1], reverse=True)
 
@@ -496,7 +514,7 @@ Editable:
         # remove the first row (the headings)
         all_users.pop(0)
         # # remove user from the list
-        all_users.pop(self.row_num-2)
+        all_users.pop(self.row_num - 2)
 
         # print(self.genders_seeking)
         # print(type(self.genders_seeking))
@@ -512,9 +530,9 @@ Editable:
         age_range_seeking = json.loads(self.age_range_seeking)
 
         filtered_users = [
-            user for user in filtered_users
-            if int(user[4]) >= age_range_seeking[0] and int(user[4]) <= age_range_seeking[1]
-        ]
+            user for user in filtered_users if int(
+                user[4]) >= age_range_seeking[0] and int(
+                user[4]) <= age_range_seeking[1]]
 
         # # filter out users whose age range does not include the user's age
         for user in filtered_users:
@@ -530,9 +548,11 @@ Editable:
                 continue
 
         filtered_users = [
-            user for user in filtered_users
-            if int(self.age) >= int(user[8][0]) and int(self.age) <= int(user[8][1])
-        ]
+            user for user in filtered_users if int(
+                self.age) >= int(
+                user[8][0]) and int(
+                self.age) <= int(
+                    user[8][1])]
 
         print(
             f"\nThere are {len(filtered_users)} users who match your preferences:\n")
@@ -576,13 +596,17 @@ def establish_user_data():
         if user_type == "1":
             print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
             # return data from test user worksheet (also breaks the loop)
-            return [SHEET.worksheet('test_users').get_all_values(), "test_users"]
+            return [
+                SHEET.worksheet('test_users').get_all_values(),
+                "test_users"]
         elif user_type == "2":
             worksheet_selected = "real_users"
             print(
                 "\nWelcome to the real version of the app - let's make some connections!\n")
             # return data from real user worksheet (also breaks the loop)
-            return [SHEET.worksheet('real_users').get_all_values(), "real_users"]
+            return [
+                SHEET.worksheet('real_users').get_all_values(),
+                "real_users"]
         else:
             print("Please enter either '1' or '2' to continue\n")
 
@@ -649,7 +673,20 @@ def user_login(data, worksheet_selected):
                 password = prompt_for_password("existing", row)
                 if password is not None:
                     print("\nLogin successful\n")
-                    return User(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9], row[10], row[11], index + 1)
+                    return User(
+                        row[0],
+                        row[1],
+                        row[2],
+                        row[3],
+                        row[4],
+                        row[5],
+                        row[6],
+                        row[7],
+                        row[8],
+                        row[9],
+                        row[10],
+                        row[11],
+                        index + 1)
                 break
         else:
             print("\nUsercode not found.\n")
@@ -722,16 +759,17 @@ def prompt_for_security_questions_and_answers():
     while len(security_questions_and_answers) < 2:
         security_question_input = input(
             "\nPlease select a question by entering its number:\n")
-        if not security_question_input.isdigit() or int(security_question_input) < 1 or int(security_question_input) > 10:
+        if not security_question_input.isdigit() or int(
+                security_question_input) < 1 or int(security_question_input) > 10:
             print("\nPlease enter a number between 1 and 10\n")
             continue
         security_question_input = int(security_question_input)
-        security_question = security_question_list[security_question_input-1]
+        security_question = security_question_list[security_question_input - 1]
         security_answer = input(
             f"\nPlease enter your answer to the question '{security_question}':\n")
         security_questions_and_answers.append(
             [security_question, security_answer])
-        security_question_list.pop(security_question_input-1)
+        security_question_list.pop(security_question_input - 1)
         print("\nThank you. Please choose another question from the list below:\n")
         for index, question in enumerate(security_question_list):
             print(f"{index+1}. {question}")
@@ -804,8 +842,20 @@ def user_signup(data, worksheet_selected):
 
     row_num = len(data) + 1
     # create user object
-    user = User(usercode, password, alias,
-                security_questions_and_answers, age, gender, None, None, None, None, None, None, row_num)
+    user = User(
+        usercode,
+        password,
+        alias,
+        security_questions_and_answers,
+        age,
+        gender,
+        None,
+        None,
+        None,
+        None,
+        None,
+        None,
+        row_num)
 
     # add user to Google Sheet
     SHEET.worksheet(worksheet_selected).append_row([user.usercode, user.password, user.alias, str(
@@ -885,8 +935,30 @@ def main():
     # [user_data, worksheet_selected] = establish_user_data()
     # user = present_login_signup_step(user_data, worksheet_selected)
     # present_main_menu(user, worksheet_selected)
-    user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
-                '[30, 70]', '', '[654321, 456235]', ['Extrovert', 'Countryside', 'Spontaneous', 'Neither', 'Savory', 'Books and Films equally', "I don't like getaways", 'Emotional', 'Either', 'Staying home'], 2)
+    user = User(
+        '123456',
+        'password1234!',
+        'stevie',
+        "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]",
+        '31',
+        'Male',
+        "I'm from Cork, bai!",
+        '["Male","Non-binary"]',
+        '[30, 70]',
+        '',
+        '[654321, 456235]',
+        [
+            'Extrovert',
+            'Countryside',
+            'Spontaneous',
+            'Neither',
+            'Savory',
+            'Books and Films equally',
+            "I don't like getaways",
+            'Emotional',
+            'Either',
+            'Staying home'],
+        2)
 
     user.view_top_matches("test_users")
 
