@@ -165,19 +165,20 @@ class User:
             ["Are you more of an introvert or extrovert?",
                 ["Introvert", "Extrovert"]],
             ["Do you prefer cities or countryside?", ["Cities", "Countryside"]],
-            ["Do you prefer a planner or spontaneous?",
-                ["Planner", "Spontaneous"]],
-            ["Are you a dog person or a cat person?",
-                ["Dog", "Cat", "Both", "Neither"]],
+            ["Are you more of a planner or spontaneous?",
+             ["Planner", "Spontaneous"]],
+            ["Are you a dog person, a cat person, both or neither?",
+             ["Dog", "Cat", "Dogs and Cats", "Neither"]],
             ["Do you prefer sweet or savory food?", ["Sweet", "Savory"]],
-            ["Do you prefer books or films?", ["Books", "Films", "Both"]],
-            ["Do you prefer active or relaxed getaways?", [
+            ["Do you prefer books, films, or both equally?", [
+                "Books", "Films", "Books and Films equally"]],
+            ["Do you prefer active getaways, relaxed getaways, both or neither?", [
                 "Active", "Relaxed", "Both", "I don't like getaways"]],
             ["Are you more logical or emotional?", ["Logical", "Emotional"]],
-            ["Do you prefer eating out or cooking at home?",
-                ["Eating out", "Cooking at home", "Both"]],
+            ["Do you prefer eating out, cooking at home, or either?",
+             ["Eating out", "Cooking at home", "Either"]],
             ["Do you prefer traveling or staying home?",
-                ["Traveling", "Staying home"]]
+             ["Traveling", "Staying home"]]
         ]
 
         quiz_option = input(
@@ -283,6 +284,204 @@ Editable:
             else:
                 print("\nPlease enter a number between 1 and 6")
 
+    def run_compatibilty_calculations(self, filtered_users):
+        """
+        Runs the compatibility calculations.\n
+        - Calculates the percentage match based on each users answers.\n
+        - Returns a list of potential matches sorted by percentage of questions in common.
+        """
+
+        compatibility_scores = {
+            "Introvert": {
+                "Introvert": 10,
+                "Extrovert": 0,
+            },
+            "Extrovert": {
+                "Introvert": 0,
+                "Extrovert": 10,
+            },
+            "Cities": {
+                "Cities": 10,
+                "Countryside": 0,
+            },
+            "Countryside": {
+                "Cities": 0,
+                "Countryside": 10,
+            },
+            "Planner": {
+                "Planner": 5,
+                "Spontaneous": 10,
+            },
+            "Spontaneous": {
+                "Planner": 10,
+                "Spontaneous": 5,
+            },
+            "Dog": {
+                "Dog": 10,
+                "Cat": 0,
+                "Dogs and Cats": 5,
+                "Neither": 0,
+            },
+            "Cat": {
+                "Dog": 0,
+                "Cat": 10,
+                "Dogs and Cats": 5,
+                "Neither": 0,
+            },
+            "Dogs and Cats": {
+                "Dog": 5,
+                "Cat": 5,
+                "Dogs and Cats": 10,
+                "Neither": 0,
+            },
+            "Neither": {
+                "Dog": 0,
+                "Cat": 0,
+                "Dogs and Cats": 0,
+                "Neither": 10,
+            },
+            "Sweet": {
+                "Sweet": 10,
+                "Savory": 0,
+            },
+            "Savory": {
+                "Sweet": 0,
+                "Savory": 10,
+            },
+            "Books": {
+                "Books": 10,
+                "Films": 0,
+                "Books and Films equally": 5,
+            },
+            "Films": {
+                "Books": 0,
+                "Films": 10,
+                "Books and Films equally": 5,
+            },
+            "Books and Films equally": {
+                "Books": 5,
+                "Films": 5,
+                "Books and Films equally": 10,
+            },
+            "Active": {
+                "Active": 10,
+                "Relaxed": 0,
+                "Both": 5,
+                "I don't like getaways": 0,
+            },
+            "Relaxed": {
+                "Active": 0,
+                "Relaxed": 10,
+                "Both": 5,
+                "I don't like getaways": 0,
+            },
+            "Both": {
+                "Active": 5,
+                "Relaxed": 5,
+                "Both": 10,
+                "I don't like getaways": 0,
+            },
+            "I don't like getaways": {
+                "Active": 0,
+                "Relaxed": 0,
+                "Both": 0,
+                "I don't like getaways": 10,
+            },
+            "Logical": {
+                "Logical": 10,
+                "Emotional": 0,
+            },
+            "Emotional": {
+                "Logical": 0,
+                "Emotional": 10,
+            },
+            "Eating out": {
+                "Eating out": 10,
+                "Cooking at home": 0,
+                "Either": 5,
+            },
+            "Cooking at home": {
+                "Eating out": 0,
+                "Cooking at home": 10,
+                "Either": 5,
+            },
+            "Either": {
+                "Eating out": 5,
+                "Cooking at home": 5,
+                "Either": 10,
+            },
+            "Traveling": {
+                "Traveling": 10,
+                "Staying home": 0,
+            },
+            "Staying home": {
+                "Traveling": 0,
+                "Staying home": 10,
+            }
+        }
+
+        # get the user's answers to the compatibility quiz
+        compatibility_answers = self.compatibility_answers
+
+        # ensure compatibility_answers is a string
+        if isinstance(compatibility_answers, str):
+            try:
+                compatibility_answers = re.sub(
+                    r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
+                print(compatibility_answers, type(compatibility_answers))
+                # convert string to list
+                compatibility_answers = json.loads(compatibility_answers)
+            except ValueError:
+                print(compatibility_answers, type(compatibility_answers))
+        else:
+            print(
+                f"Unexpected type {type(compatibility_answers)} for compatibility_answers")
+
+        # create a list of potential matches for those who score over 60%
+        potential_matches = []
+
+        # loop through each user in the filtered list
+        for user in filtered_users:
+            compatibility_score = 0
+            try:
+                # use regex to make valid json string
+                user[11] = re.sub(
+                    r"(?<![\w\\])'|'(?![\w\\])", "\"", user[11])
+                user_compatibility_answers = json.loads(user[11])
+            except ValueError:
+                print(user[11], type(user[11]))
+                continue
+
+            # loop through each answer in the user's compatibility answers
+            for index, answer in enumerate(compatibility_answers):
+                # add the compatibility score to the total
+                try:
+                    compatibility_score += compatibility_scores[answer][user_compatibility_answers[index]]
+                except KeyError:
+                    # print detailed error message
+                    print(
+                        f"\nKeyError: {answer} or {user_compatibility_answers[index]} not found in compatibility_scores\n")
+                    continue
+
+            print(compatibility_score)
+
+            # calculate the percentage match
+            percentage_match = round((compatibility_score / 100) * 100)
+
+            # if the percentage match is over 60%, add the user to the list of potential matches
+            if percentage_match > 60:
+                potential_matches.append([user, percentage_match])
+
+        # sort the list of potential matches by the highest percentage
+        # taken from StackOverflow: https://stackoverflow.com/a/65679191/12297743
+        sorted_matches = sorted(
+            potential_matches, key=lambda x: x[1], reverse=True)
+
+        print(sorted_matches)
+
+        # return the list of potential matches
+        return sorted_matches
+
     def filter_users(self, worksheet_selected):
         """
         Filters out users who don't match the user's preferences.\n
@@ -325,6 +524,11 @@ Editable:
                 filtered_users.remove(user)
                 continue
 
+        for user in filtered_users:
+            if (isinstance(user[8], list) is False):
+                filtered_users.remove(user)
+                continue
+
         filtered_users = [
             user for user in filtered_users
             if int(self.age) >= int(user[8][0]) and int(self.age) <= int(user[8][1])
@@ -332,10 +536,18 @@ Editable:
 
         print(
             f"\nThere are {len(filtered_users)} users who match your preferences:\n")
-        for user in filtered_users:
-            print(f"{user[2]} ({user[4]}) - {user[5]}\nBio: {user[6]}\n")
+
+        # run the compatibility calculations
+        potential_matches = self.run_compatibilty_calculations(filtered_users)
+
+        for match in potential_matches:
+            print(
+                f"{match[0][2]} ({match[0][4]}) - {match[0][5]} - Compatibility: {match[1]}\nBio: {match[0][6]}\n")
 
     def view_top_matches(self, worksheet_selected):
+        """
+        Displays the matches with the highest compatibility score.\n
+        """
         self.filter_users(worksheet_selected)
 
 
@@ -582,7 +794,7 @@ def user_signup(data, worksheet_selected):
     password = prompt_for_password("new")
     alias = create_and_validate_alias(data)
     clear_terminal()
-    print("\Great! We've got your username, password and alias!\n\n")
+    print("Great! We've got your username, password and alias!\n\n")
     security_questions_and_answers = prompt_for_security_questions_and_answers()
 
     clear_terminal()
@@ -667,15 +879,16 @@ def main():
     """
     Run all program functions
     """
-    clear_terminal()
-    print(
-        f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
-    [user_data, worksheet_selected] = establish_user_data()
-    user = present_login_signup_step(user_data, worksheet_selected)
-    present_main_menu(user, worksheet_selected)
-    # user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
-    #             '[30, 70]', '', '[654321, 456235]', '[\'Extrovert\', \'Countryside\', \'Spontaneous\', \'Neither\', \'Savory\', \'Both\', "I don\'t like getaways", \'Emotional\', \'Both\', \'Staying home\']', 2)
-    # user.view_top_matches("test_users")
+    # clear_terminal()
+    # print(
+    #     f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
+    # [user_data, worksheet_selected] = establish_user_data()
+    # user = present_login_signup_step(user_data, worksheet_selected)
+    # present_main_menu(user, worksheet_selected)
+    user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
+                '[30, 70]', '', '[654321, 456235]', ['Extrovert', 'Countryside', 'Spontaneous', 'Neither', 'Savory', 'Books and Films equally', "I don't like getaways", 'Emotional', 'Either', 'Staying home'], 2)
+
+    user.view_top_matches("test_users")
 
 
 main()
