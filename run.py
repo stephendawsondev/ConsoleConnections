@@ -667,15 +667,15 @@ def main():
     """
     Run all program functions
     """
-    # clear_terminal()
-    # print(
-    #     f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
-    # [user_data, worksheet_selected] = establish_user_data()
-    # user = present_login_signup_step(user_data, worksheet_selected)
-    # present_main_menu(user, worksheet_selected)
-    user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
-                '[30, 70]', '', '[654321, 456235]', '[\'Extrovert\', \'Countryside\', \'Spontaneous\', \'Neither\', \'Savory\', \'Both\', "I don\'t like getaways", \'Emotional\', \'Both\', \'Staying home\']', 2)
-    user.view_top_matches("test_users")
+    clear_terminal()
+    print(
+        f"\t\t\t\t\t\t\t\t\t\t\tWelcome to\n\n{CONSOLE_CONNECTIONS_HEADING}\n{APP_SUBHEADING}")
+    [user_data, worksheet_selected] = establish_user_data()
+    user = present_login_signup_step(user_data, worksheet_selected)
+    present_main_menu(user, worksheet_selected)
+    # user = User('123456', 'password1234!', 'stevie', "[['What was the name of your first pet?', 'Carlos'], ['In which town or city were you born?', 'Limk']]", '31', 'Male', "I'm from Cork, bai!", '["Male","Non-binary"]',
+    #             '[30, 70]', '', '[654321, 456235]', '[\'Extrovert\', \'Countryside\', \'Spontaneous\', \'Neither\', \'Savory\', \'Both\', "I don\'t like getaways", \'Emotional\', \'Both\', \'Staying home\']', 2)
+    # user.view_top_matches("test_users")
 
 
 main()
