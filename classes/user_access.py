@@ -31,7 +31,7 @@ class UserAccess():
         while True:
 
             user_type = input(
-                "\nAre you just testing the app or here to find a connection?\n 1. Tester\t 2. Real User\n")
+                "\nAre you just testing the app or here to find a connection?\n\n1. Tester\t2. Real User\n")
 
             if user_type == "1":
                 print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
@@ -108,7 +108,9 @@ class UserAccess():
 
         print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
 
-        return MainMenu.present_main_menu(user)
+        main_menu = MainMenu()
+
+        return main_menu.present_main_menu(user)
 
     def generate_random_usercode(self):
         """
