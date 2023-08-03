@@ -24,30 +24,43 @@ class Worksheet():
     - Edit worksheet data.
     """
 
-    def __init__(self, worksheet):
-        self.worksheet = worksheet
+    def __init__(self):
+        pass
+
+    worksheet_selected = None
+
+    @classmethod
+    def set_worksheet(cls, worksheet):
+        """
+        Class method to update the worksheet.
+        Removes the need to pass the worksheet as an argument.
+        """
+        cls.worksheet_selected = worksheet
 
     def get_all_values(self):
         """
         Pulls all values from the worksheet.
         """
-        return SHEET.worksheet(self.worksheet).get_all_values()
+        return SHEET.worksheet(self.__class__.worksheet_selected).get_all_values()
 
     def add_user(self, user):
         """
         Appends a user to the selected worksheet.
         """
-        SHEET.worksheet(self.worksheet).append_row([user.usercode, user.password, user.alias, str(
+        selected_worksheet = self.__class__.worksheet_selected if self.__class__.worksheet_selected is not None else self.__class__.worksheet_selected
+        SHEET.worksheet(selected_worksheet).append_row([user.usercode, user.password, user.alias, str(
             user.security_questions_and_answers), user.age, user.gender, None, None, None, None, None, None, user.row_num])
 
     def update_cell(self, row, column, value):
         """
         Updates a cell in the worksheet.
         """
-        SHEET.worksheet(self.worksheet).update_cell(row, column, value)
+        SHEET.worksheet(self.__class__.worksheet_selected).update_cell(
+            row, column, value)
 
     def update_row(self, row, values):
         """
         Updates an entire row in the worksheet.
         """
-        SHEET.worksheet(self.worksheet).update(f"A{row}:M{row}", [values])
+        SHEET.worksheet(self.__class__.worksheet_selected).update(
+            f"A{row}:M{row}", [values])

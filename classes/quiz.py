@@ -1,14 +1,14 @@
 import re
 import json
+from classes.worksheet import Worksheet
 
 
 class Quiz():
 
-    def __init__(self, user, worksheet_selected, callback):
+    def __init__(self, user, callback):
         self.user = user
         self.row_num = user.row_num
         self.compatibility_answers = user.compatibility_answers if user.compatibility_answers is not None else []
-        self.worksheet_selected = worksheet_selected
         self.callback = callback
 
     def present_compatibility_quiz(self):
@@ -86,8 +86,9 @@ class Quiz():
 
                 compatibility_answers.append(option)
 
-            self.worksheet_selected.update_cell(self.row_num, 12,
-                                                str(compatibility_answers))
+            worksheet = Worksheet()
+            worksheet.update_cell(self.row_num, 12,
+                                  str(compatibility_answers))
 
             print("\nQuiz complete and answers updated!\n")
 
@@ -95,7 +96,7 @@ class Quiz():
 
         if quiz_option == "3":
             print("\nReturn to main menu\n")
-            return self.callback(self.worksheet_selected, self.user)
+            return self.callback(self.user)
 
         print("\nPlease enter either '1', '2' or '3'\n")
         return self.present_compatibility_quiz()

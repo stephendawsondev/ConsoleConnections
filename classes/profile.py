@@ -1,4 +1,5 @@
 from classes.authenticaton import Authentication
+from classes.worksheet import Worksheet
 
 
 class Profile():
@@ -8,9 +9,8 @@ class Profile():
     be edited later on.
     """
 
-    def __init__(self, user, worksheet_selected, callback):
+    def __init__(self, user, callback):
         self.user = user
-        self.worksheet_selected = worksheet_selected
         self.callback = callback
 
     @staticmethod
@@ -118,7 +118,8 @@ Editable:
             elif edit_profile_option == "6":
                 print("\nSaving changes...\n")
 
-                self.worksheet_selected.update_row(self.user.row_num, [
+                worksheet = Worksheet()
+                worksheet.update_row(self.user.row_num, [
                     self.user.usercode,
                     self.user.password,
                     self.user.alias,
@@ -135,6 +136,6 @@ Editable:
                 ])
 
                 print("\nProfile saved!\n")
-                return self.callback(self.worksheet_selected, self.user)
+                return self.callback(self.user)
             else:
                 print("\nPlease enter a number between 1 and 6")

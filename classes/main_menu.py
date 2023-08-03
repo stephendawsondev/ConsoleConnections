@@ -12,7 +12,7 @@ class MainMenu():
     def __init__(self):
         pass
 
-    def present_main_menu(self, worksheet_selected, user=None):
+    def present_main_menu(self, user=None):
         """
         Present the user with the main menu options.
         - If the user selects '1', run the compatibility quiz.
@@ -26,28 +26,28 @@ class MainMenu():
 
             if main_menu_input == "1":
                 print("\nCompatibility quiz\n")
-                quiz = Quiz(user, worksheet_selected, self.present_main_menu)
+                quiz = Quiz(user, self.present_main_menu)
                 return quiz.present_compatibility_quiz()
 
             if main_menu_input == "2":
                 print("\nEdit profile\n")
-                profile = Profile(user, worksheet_selected,
+                profile = Profile(user,
                                   self.present_main_menu)
                 return profile.present_edit_profile()
 
             # if main_menu_input == "3":
             #     print("\nView top matches\n")
             #     # return data from view top matches function
-            #     return Matcher.view_top_matches(worksheet_selected, user)
+            #     return Matcher.view_top_matches(user)
 
             # if main_menu_input == "3":
             #     print("\nView messages\n")
             #     # return data from view messages function
-            #     return present_view_messages(user, worksheet_selected)
+            #     return present_view_messages(user)
 
             # if main_menu_input == "4":
             #     print("\nLogout\n")
             #     # return data from logout function
-            #     return present_logout(user, worksheet_selected)
+            #     return present_logout(user)
 
             print("\nPlease enter a number between 1 and 4\n")

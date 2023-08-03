@@ -11,13 +11,13 @@ class Matcher():
     def __init__(self):
         pass
 
-    def view_top_matches(self, worksheet_selected, user):
+    def view_top_matches(self, user):
         """
         Displays the matches with the highest compatibility score.\n
         """
-        return self.filter_users(worksheet_selected, user)
+        return self.filter_users(user)
 
-    def filter_users(self, worksheet_selected, user):
+    def filter_users(self, user):
         """
         Filters out users who don't match the user's preferences.
         - Filters out users who are not the right age.
@@ -26,7 +26,8 @@ class Matcher():
         - Filters out users whose gender seeking preference does not include the user's.
         """
         # get all users from the Google Sheet
-        all_potential_matches = Worksheet.get_all_values(worksheet_selected)
+        worksheet = Worksheet()
+        all_potential_matches = worksheet.get_all_values()
 
         # remove the first row (the headings)
         all_potential_matches.pop(0)

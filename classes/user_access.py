@@ -7,7 +7,6 @@ from classes.mixins import ClearTerminalMixin
 from classes.main_menu import MainMenu
 
 DATA = None
-WORKSHEET_SELECTED = None
 
 
 class UserAccess():
@@ -28,7 +27,6 @@ class UserAccess():
         """
 
         global DATA
-        global WORKSHEET_SELECTED
 
         while True:
 
@@ -38,17 +36,17 @@ class UserAccess():
             if user_type == "1":
                 print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
 
-                # assign data from test user worksheet and break the loop
-                DATA = Worksheet("test_users").get_all_values()
-                WORKSHEET_SELECTED = "test_users"
+                Worksheet.set_worksheet("test_users")
+                selected_worksheet = Worksheet()
+                DATA = selected_worksheet.get_all_values()
+
                 break
 
             elif user_type == "2":
                 print(
                     "\nWelcome to the real version of the app - let's make some connections!\n")
-                # assign data from real user worksheet and break the loop
-                DATA = Worksheet("real_users").get_all_values()
-                WORKSHEET_SELECTED = "real_users"
+                Worksheet.set_worksheet("real_users")
+                DATA = selected_worksheet.get_all_values()
                 break
 
             else:
@@ -105,11 +103,12 @@ class UserAccess():
             row_num)
 
         # add user to Google Sheet
-        Worksheet.add_user(user, WORKSHEET_SELECTED)
+        selected_worksheet = Worksheet()
+        selected_worksheet.add_user(user)
 
         print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
 
-        return MainMenu.present_main_menu(WORKSHEET_SELECTED, user)
+        return MainMenu.present_main_menu(user)
 
     def generate_random_usercode(self):
         """
@@ -157,7 +156,7 @@ class UserAccess():
         """
         user_exists = False
         while user_exists is False:
-            usercode_input = int(input("\nPlease enter your usercode:\n"))
+            usercode_input = input("\nPlease enter your usercode:\n")
             # checks the first column of the data for the usercode
             for index, row in enumerate(DATA):
                 if row[0] == str(usercode_input):
@@ -181,8 +180,7 @@ class UserAccess():
                             row[10],
                             row[11],
                             index + 1)
-                        return MainMenu.present_main_menu(
-                            WORKSHEET_SELECTED, user)
+                        return MainMenu.present_main_menu(user)
                     break
             else:
                 print("\nUsercode not found.\n")
