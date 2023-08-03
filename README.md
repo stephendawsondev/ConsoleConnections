@@ -13,7 +13,8 @@
 - [json module in Python](https://docs.python.org/3/library/json.html)
 - [re.sub() method explanation](https://www.pythontutorial.net/python-regex/python-regex-sub/)
 - [Sorting list by nest list value - stackoverflow](https://stackoverflow.com/a/65679191/12297743)
-
+- [Gspread user guide to update a full row](https://docs.gspread.org/en/latest/user-guide.html#updating-cells)
+- [Avoiding circular imports](https://medium.com/brexeng/avoiding-circular-imports-in-python-7c35ec8145ed)
 ## Planning
 
 ### Flowchart
@@ -33,5 +34,6 @@ Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	ge
 | For age input, any text input was breaking the app.                         | Assert the type of the age variable.                      |      Y       | I was able to resolve the issue by returning the function if necessary components were not met.          |
 | When pulling a list from Google Sheets, the data passed back was a string.  | Convert the string to a list using the json module        |      Y       | I was able to resolve the issue by converting the string to a list using the json module.                |
 | Data that has single quotes and doesn't work with json.loads                | Use a regex to replace single quotes                      |      Y       | Used regex to replace single quotes at start and end of words and not within words                       |
-| The update genders method outputs each letter instead of each gender        | Use a regex to replace single quotes and just json.loads  |      N       |                                                                                             |
-| "IndexError: list index out of range" when sorting list by nested list value| Change the reference to the list length                   |      Y       | Changed `key=lambda x: x[2]` to `key=lambda x: x[1]`  |
+| The update genders method outputs each letter instead of each gender        | Use a regex to replace single quotes and use json.loads   |      N       |                                                                                                          |
+| "IndexError: list index out of range" when sorting list by nested list value| Change the reference to the list length                   |      Y       | Changed `key=lambda x: x[2]` to `key=lambda x: x[1]`                                                     |
+| Got a few circular import errors when trying to break down my classes       | Restructure so that classes don't import each other       |      Y       | When I had to call a function from another class, I instead passed a callback function to the class.     |
