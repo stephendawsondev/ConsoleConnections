@@ -181,7 +181,9 @@ class UserAccess():
                             row[10],
                             row[11],
                             index + 1)
-                        return MainMenu.present_main_menu(user)
+
+                        main_menu = MainMenu()
+                        return main_menu.present_main_menu(user)
                     break
             else:
                 print("\nUsercode not found.\n")
