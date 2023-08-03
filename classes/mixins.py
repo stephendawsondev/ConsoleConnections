@@ -12,6 +12,7 @@ class ClearTerminalMixin():
         """
         # https://www.delftstack.com/howto/python/python-clear-console/
         command = 'clear'
-        if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        if os.name in (
+                'nt', 'dos'):  # If Machine is running on Windows, use cls
             command = 'cls'
         os.system(command)

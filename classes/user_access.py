@@ -142,7 +142,8 @@ class UserAccess():
         # check if the alias already exists in the database
         for row in DATA:
             if row[2] == alias:
-                # if the alias exists, prompt the user to come up with a new alias
+                # if the alias exists, prompt the user to come up with a new
+                # alias
                 print("\nAlias already exists.\n")
                 return self.create_and_validate_alias()
         return alias
@@ -179,7 +180,8 @@ class UserAccess():
                             row[10],
                             row[11],
                             index + 1)
-                        return MainMenu.present_main_menu(WORKSHEET_SELECTED, user)
+                        return MainMenu.present_main_menu(
+                            WORKSHEET_SELECTED, user)
                     break
             else:
                 print("\nUsercode not found.\n")
