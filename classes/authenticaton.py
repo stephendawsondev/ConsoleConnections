@@ -28,9 +28,9 @@ class Authentication():
                     if password_input == row[1]:
                         print("\nPassword correct\n")
                         return password_input
-                    else:
-                        print("\nPassword incorrect\n")
-                        password_valid = False
+
+                    print("\nPassword incorrect\n")
+                    password_valid = False
                 elif new_or_existing_user == "updating":
                     return password_input
 

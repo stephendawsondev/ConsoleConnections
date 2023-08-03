@@ -67,7 +67,8 @@ class UserAccess():
         print(
             f"If you complete the signup process, your usercode will be {usercode}. Please keep this safe as you will need it to login.\n")
 
-        password = Authentication.prompt_for_password(Authentication, "new")
+        authentication = Authentication()
+        password = authentication.prompt_for_password("new")
 
         alias = self.create_and_validate_alias()
 
