@@ -162,7 +162,8 @@ class UserAccess():
                 if row[0] == str(usercode_input):
                     user_exists = True
                     # prompt for password
-                    password = Authentication.prompt_for_password(
+                    authentication = Authentication()
+                    password = authentication.prompt_for_password(
                         "existing", row)
                     if password is not None:
                         print("\nLogin successful\n")

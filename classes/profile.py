@@ -100,12 +100,14 @@ Editable:
         """)
 
         finsihed_editing = False
+
         while finsihed_editing is False:
             edit_profile_option = input(
                 "Please enter the number of the field you would like to edit,\nor enter '6' to save and exit:\n")
             if edit_profile_option == "1":
-                self.user.password = Authentication.prompt_for_password(
-                    self.user, "updating")
+                authentication = Authentication()
+                self.user.password = authentication.prompt_for_password(
+                    "updating")
             elif edit_profile_option == "2":
                 self.user.security_questions_and_answers = Authentication.prompt_for_security_questions_and_answers()
             elif edit_profile_option == "3":
