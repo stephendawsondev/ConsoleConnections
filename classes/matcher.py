@@ -78,10 +78,6 @@ class Matcher():
         matches = self.run_compatibilty_calculations(
             potential_matches, self.user)
 
-        for match in matches:
-            print(
-                f"{match[0][2]} ({match[0][4]}) - {match[0][5]} - Compatibility: {match[1]}\nBio: {match[0][6]}\n")
-
         return self.callback(self.user)
 
     def run_compatibilty_calculations(self, potential_matches, user):
@@ -252,11 +248,6 @@ class Matcher():
                 print(match[11], type(match[11]))
                 continue
 
-            print(
-                f"compatibility_answers: {compatibility_answers}, {type(compatibility_answers)}")
-            print(
-                f"match_compatibility_answers: {match_compatibility_answers}, {type(match_compatibility_answers)}")
-
             # loop through each answer in the user's compatibility answers
             for index, answer in enumerate(compatibility_answers):
                 # add the compatibility score to the total
@@ -270,8 +261,6 @@ class Matcher():
 
             # calculate the percentage match
             percentage_match = round((compatibility_score / 100) * 100)
-
-            print(f"percentage_match: {percentage_match}")
 
             # if the percentage match is over 60%, add the user to the list of
             # potential matches
@@ -311,7 +300,72 @@ class Matcher():
                 return self.callback(self.user)
             try:
                 match = matches_list[int(action) - 1]
-                return self.view_match(match[0], match[1])
+                return self.view_match(match[0], match[1], matches_list)
             except (IndexError, ValueError):
                 print("\nInvalid choice. Please try again.\n")
                 return self.present_matches_options(matches_list)
+
+    def view_match(self, person, percentage_match, matches_list):
+        """
+        Displays the match's profile info.
+        - If the user allows contact, ask the user is they want to view messages or go back.
+        - If the user does not allow contact, ask the user if they want to allow contact.
+        - If the user allows contact but the match does not allow contact, inform the user
+        that the match does not allow contact yet. 
+        """
+        ClearTerminalMixin.clear_terminal()
+        print(
+            f"{person[2]} ({person[4]}) - {person[5]} - Compatibility: {percentage_match}\nBio: {person[6]}\n")
+
+        if person[10] == '':
+            person[10] = []
+        elif isinstance(person[10], list):
+            pass
+        else:
+            try:
+                person[10] = json.loads(person[10])
+            except ValueError:
+                print(person[10], type(person[10]))
+
+        if self.user.allow_contact_list == '':
+            self.user.allow_contact_list = []
+        elif isinstance(self.user.allow_contact_list, list):
+            pass
+        else:
+            try:
+                self.user.allow_contact_list = json.loads(
+                    self.user.allow_contact_list)
+            except ValueError:
+                print(self.user.allow_contact_list,
+                      type(self.user.allow_contact_list))
+
+        if int(person[0]) not in self.user.allow_contact_list:
+            print("You have not yet allowed this user to contact you.")
+            while True:
+                action = input(
+                    "\nWould you like to allow this user to contact you? (y/n)\n").lower()
+                if action == 'y':
+                    self.user.allow_contact_list.append(int(person[0]))
+                    user_allow_contact_string = str(
+                        self.user.allow_contact_list)
+                    worksheet = Worksheet()
+                    worksheet.update_cell(
+                        self.user.row_num, 11, user_allow_contact_string)
+                    return self.view_match(person, percentage_match, matches_list)
+                if action == 'n':
+                    return self.callback(self.user)
+                print("\nInvalid choice. Please try again.\n")
+        elif self.user.usercode not in person[10]:
+            print("This user has not yet allowed you to contact them.")
+            time.sleep(2)
+            return self.present_matches_options(matches_list)
+        else:
+            while True:
+                action = input(
+                    "\nWould you like to view messages with this user? (y/n)\n").lower()
+                if action == 'y':
+                    # return data from view messages function
+                    print("\nView messages\n")
+                if action == 'n':
+                    print("\nReturning to main menu\n")
+                print("\nInvalid choice. Please try again.\n")
