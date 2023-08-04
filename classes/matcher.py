@@ -56,8 +56,8 @@ class Matcher():
 
         potential_matches = [
             potential_match for potential_match in potential_matches if int(
-                self.user.age) >= min_age and int(
-                self.user.age) <= max_age]
+                potential_match[4]) >= int(min_age) and int(
+                potential_match[4]) <= int(max_age)]
 
         # filter out users whose age range does not include the user's age
         for potential_match in potential_matches:
@@ -70,11 +70,6 @@ class Matcher():
                     # filter out users who are not the right age
                     potential_match[8] = json.loads(potential_match[8])
             except ValueError:
-                potential_matches.remove(potential_match)
-                continue
-
-        for potential_match in potential_matches:
-            if (isinstance(potential_match[8], list) is False):
                 potential_matches.remove(potential_match)
                 continue
 
@@ -239,7 +234,8 @@ class Matcher():
                 compatibility_answers = json.loads(compatibility_answers)
             except ValueError:
                 print(compatibility_answers, type(compatibility_answers))
-
+        elif isinstance(compatibility_answers, list):
+            pass
         else:
             print(
                 f"Unexpected type {type(compatibility_answers)} for compatibility_answers")
@@ -249,15 +245,20 @@ class Matcher():
 
         for match in potential_matches:
             compatibility_score = 0
-            try:
-                # use regex to make valid json string
-                match[11] = re.sub(
-                    r"(?<![\w\\])'|'(?![\w\\])", "\"", match[11])
-                match_compatibility_answers = json.loads(
-                    match[11])
-            except ValueError:
-                print(match[11], type(match[11]))
-                continue
+            if match[11] == '':
+                match[11] = []
+            elif isinstance(match[11], list):
+                pass
+            else:
+                try:
+                    # use regex to make valid json string
+                    match[11] = re.sub(
+                        r"(?<![\w\\])'|'(?![\w\\])", "\"", match[11])
+                    match_compatibility_answers = json.loads(
+                        match[11])
+                except ValueError:
+                    print(match[11], type(match[11]))
+                    continue
 
             # loop through each answer in the user's compatibility answers
             for index, answer in enumerate(compatibility_answers):
@@ -296,7 +297,7 @@ class Matcher():
         if (len(matches_list) == 0):
             print(
                 "Sorry, there are no matches that match your preferences. Please try again later.")
-            time.sleep(3)
+            time.sleep(2)
             return self.callback(self.user)
         print("Here are your matches:\n")
         for index, match in enumerate(matches_list, start=1):
@@ -366,7 +367,7 @@ class Matcher():
                 if action == 'n':
                     return self.callback(self.user)
                 print("\nInvalid choice. Please try again.\n")
-        elif self.user.usercode not in person[10]:
+        elif int(self.user.usercode) not in person[10]:
             print("This user has not yet allowed you to contact them.")
             time.sleep(2)
             return self.present_matches_options(matches_list)
