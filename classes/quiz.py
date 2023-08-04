@@ -1,6 +1,7 @@
 import re
 import json
 from classes.worksheet import Worksheet
+from classes.mixins import ClearTerminalMixin
 
 
 class Quiz():
@@ -22,6 +23,7 @@ class Quiz():
         - Answers are stored in a list and returned.
         """
 
+        ClearTerminalMixin.clear_terminal()
         compatibility_answers = self.user.compatibility_answers if self.user.compatibility_answers is not None else []
 
         if isinstance(compatibility_answers, str) and len(
