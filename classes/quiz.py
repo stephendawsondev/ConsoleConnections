@@ -4,11 +4,14 @@ from classes.worksheet import Worksheet
 
 
 class Quiz():
+    """
+    Presents the user with the compatibility quiz
+    answers and the quiz itself.
+    """
 
     def __init__(self, user, callback):
         self.user = user
         self.row_num = user.row_num
-        self.compatibility_answers = user.compatibility_answers if user.compatibility_answers is not None else []
         self.callback = callback
 
     def present_compatibility_quiz(self):
@@ -19,14 +22,19 @@ class Quiz():
         - Answers are stored in a list and returned.
         """
 
-        compatibility_answers = self.compatibility_answers
+        compatibility_answers = self.user.compatibility_answers if self.user.compatibility_answers is not None else []
 
         # regex to replace single quotes with double quotes
         compatibility_answers = re.sub(
             r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
-        print(compatibility_answers)
+
         # convert string to list
-        compatibility_answers = json.loads(compatibility_answers)
+        if isinstance(compatibility_answers, str) and len(compatibility_answers) > 0:
+            compatibility_answers = json.loads(compatibility_answers)
+        elif isinstance(compatibility_answers, list):
+            compatibility_answers = compatibility_answers
+        else:
+            compatibility_answers = []
 
         compatibility_questions = [
             ["Are you more of an introvert or extrovert?",
@@ -49,7 +57,7 @@ class Quiz():
         ]
 
         quiz_option = input(
-            "Would you like to view your answers or take the quiz?\n 1. View answers\t 2. Take quiz\n 3. Return to main menu\n")
+            "Would you like to view your answers or take the quiz?\n1. View answers\t   2. Take quiz\t  3. Return to main menu\n")
         if quiz_option == "1":
             print("\nView answers:")
 
@@ -77,6 +85,7 @@ class Quiz():
                         answer = int(answer)
                         if answer in range(1, len(question[1]) + 1):
                             valid_answer = True
+                            chosen_answer = question[1][answer-1]
                         else:
                             print(
                                 f"\nThe number between 1 and {len(question[1])}")
@@ -84,7 +93,9 @@ class Quiz():
                         print("\nPlease enter a valid number\n")
                         continue
 
-                compatibility_answers.append(option)
+                compatibility_answers.append(chosen_answer)
+
+            self.user.compatibility_answers = str(compatibility_answers)
 
             worksheet = Worksheet()
             worksheet.update_cell(self.row_num, 12,
