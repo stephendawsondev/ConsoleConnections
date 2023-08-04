@@ -44,8 +44,13 @@ class Matcher():
         potential_matches = [
             potential_match for potential_match in potential_matches if self.user.gender in potential_match[7]]
 
-        # filter out users who are not the right age
-        age_range_seeking = json.loads(self.user.age_range_seeking)
+        if self.user.age_range_seeking == '':
+            self.user.age_range_seeking = [18, 100]
+        elif isinstance(self.user.age_range_seeking, list):
+            age_range_seeking = self.user.age_range_seeking
+        else:
+            # filter out users who are not the right age
+            age_range_seeking = json.loads(self.user.age_range_seeking)
 
         [min_age, max_age] = [int(age) for age in age_range_seeking]
 
@@ -57,7 +62,13 @@ class Matcher():
         # filter out users whose age range does not include the user's age
         for potential_match in potential_matches:
             try:
-                potential_match[8] = json.loads(potential_match[8])
+                if potential_match[8] == '':
+                    potential_match[8] = [18, 100]
+                elif isinstance(potential_match[8], list):
+                    pass
+                else:
+                    # filter out users who are not the right age
+                    potential_match[8] = json.loads(potential_match[8])
             except ValueError:
                 potential_matches.remove(potential_match)
                 continue

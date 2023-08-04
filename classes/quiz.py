@@ -32,7 +32,7 @@ class Quiz():
         if isinstance(compatibility_answers, str) and len(compatibility_answers) > 0:
             compatibility_answers = json.loads(compatibility_answers)
         elif isinstance(compatibility_answers, list):
-            compatibility_answers = compatibility_answers
+            pass
         else:
             compatibility_answers = []
 
