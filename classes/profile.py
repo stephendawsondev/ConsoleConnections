@@ -1,5 +1,8 @@
+import json
+import time
 from classes.authenticaton import Authentication
 from classes.worksheet import Worksheet
+from classes.mixins import ClearTerminalMixin
 
 
 class Profile():
@@ -79,16 +82,79 @@ class Profile():
 
         return [int(min_age), int(max_age)]
 
+    def set_genders_seeking(self, user):
+        """
+        Lets the user set or update their gender seeking preferences.
+        They are able to choose multiple genders if they wish.
+        """
+
+        available_genders = ["Male", "Female", "Non-binary"]
+        if isinstance(user.genders_seeking, list) is False:
+            current_genders = json.loads(
+                user.genders_seeking.replace("'", '"')) if user.genders_seeking else []
+        else:
+            current_genders = user.genders_seeking
+
+        while True:
+            # print out genders already in preferences
+            print("\nHere are your currently selected genders:\n")
+            for gender in current_genders:
+                print(gender)
+
+            action = input(
+                "\nDo you want to (a)dd or (r)emove genders or (q)uit?\n").lower()
+
+            if action == 'a' and len(current_genders) < len(available_genders):
+                print("\nAvailable genders to add:\n")
+                for index, gender in enumerate([gender for gender in available_genders if gender not in current_genders], start=1):
+                    print(f"{index}. {gender}\n")
+                add_gender = input(
+                    "Enter the number of the gender you want to add:\n")
+                try:
+                    chosen_gender = [
+                        gender for gender in available_genders if gender not in current_genders][int(add_gender)-1]
+                    current_genders.append(chosen_gender)
+                    print(
+                        f"{chosen_gender} has been added to your gender seeking preferences.")
+                except (IndexError, ValueError):
+                    print("Invalid choice. Please try again.")
+
+            elif action == 'r' and len(current_genders) > 0:
+                print("\nCurrent genders selected:\n")
+                for index, gender in enumerate(current_genders, start=1):
+                    print(f"{index}. {gender}")
+                remove_gender = input(
+                    "Enter the number of the gender you want to remove:\n")
+                try:
+                    chosen_gender = current_genders[int(remove_gender)-1]
+                    current_genders.remove(chosen_gender)
+                    print(
+                        f"{chosen_gender} has been removed from your gender seeking preferences.")
+                except (IndexError, ValueError):
+                    print("Invalid choice. Please try again.")
+
+            elif action == 'q':
+                if len(current_genders) == 0:
+                    print("You need to add at least one gender to your preferences.")
+                else:
+                    return current_genders
+            else:
+                print("Invalid choice. Please try again.")
+
     def present_edit_profile(self):
         """
         Allows the user to update their password, security questions, bio,
         the ages they're interested in and the gender(s) they're interested in.
         """
-        print(f"""Here is your current profile information:
 
+        finsihed_editing = False
+
+        while finsihed_editing is False:
+            ClearTerminalMixin.clear_terminal()
+            print(f"""Here is your current profile information:\n
 Uneditable:
-    Usercode: {self.user.usercode}
-    Alias: {self.user.alias}
+Usercode: {self.user.usercode}
+Alias: {self.user.alias}
 
 Editable:
     1. Password: {self.user.password}
@@ -99,9 +165,6 @@ Editable:
     6. Save and exit
         """)
 
-        finsihed_editing = False
-
-        while finsihed_editing is False:
             edit_profile_option = input(
                 "Please enter the number of the field you would like to edit,\nor enter '6' to save and exit:\n")
             if edit_profile_option == "1":
@@ -115,7 +178,7 @@ Editable:
             elif edit_profile_option == "4":
                 self.user.age_range_seeking = self.set_age_range_seeking()
             elif edit_profile_option == "5":
-                self.user.genders_seeking = self.user.set_genders_seeking(
+                self.user.genders_seeking = self.set_genders_seeking(
                     self.user)
             elif edit_profile_option == "6":
                 print("\nSaving changes...\n")
@@ -125,19 +188,20 @@ Editable:
                     self.user.usercode,
                     self.user.password,
                     self.user.alias,
-                    str(self.user.security_questions_and_answers),
+                    json.dumps(self.user.security_questions_and_answers),
                     self.user.age,
                     self.user.gender,
                     self.user.bio,
-                    self.user.genders_seeking,
-                    self.user.age_range_seeking,
-                    self.user.messages,
-                    self.user.allow_contact_list,
-                    self.user.compatibility_answers,
+                    json.dumps(self.user.genders_seeking),
+                    json.dumps(self.user.age_range_seeking),
+                    json.dumps(self.user.messages),
+                    json.dumps(self.user.allow_contact_list),
+                    json.dumps(self.user.compatibility_answers),
                     self.user.row_num
                 ])
 
                 print("\nProfile saved!\n")
+                time.sleep(2)
                 return self.callback(self.user)
             else:
                 print("\nPlease enter a number between 1 and 6")
