@@ -246,9 +246,9 @@ class Matcher():
 
         for match in potential_matches:
             compatibility_score = 0
-            if match[11] == '':
+            if match[11] == '' or match[11] == '[]':
                 continue
-            elif isinstance(match[11], list):
+            if isinstance(match[11], list):
                 pass
             else:
                 try:
