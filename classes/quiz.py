@@ -24,12 +24,10 @@ class Quiz():
 
         compatibility_answers = self.user.compatibility_answers if self.user.compatibility_answers is not None else []
 
-        # regex to replace single quotes with double quotes
-        compatibility_answers = re.sub(
-            r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
-
-        # convert string to list
         if isinstance(compatibility_answers, str) and len(compatibility_answers) > 0:
+            # regex to replace single quotes with double quotes
+            compatibility_answers = re.sub(
+                r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
             compatibility_answers = json.loads(compatibility_answers)
         elif isinstance(compatibility_answers, list):
             pass
