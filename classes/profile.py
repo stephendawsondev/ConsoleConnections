@@ -47,7 +47,7 @@ class Profile():
         Gets the user's gender.
         """
         gender_input = input(
-            "\nPlease input the gender you identify as: \n\n 1. Male\t 2. Female\t 3. Non-binary\n").lower()
+            "\nPlease input the gender you identify as: \n\n1. Male\t2. Female\t3. Non-binary\n").lower()
 
         if gender_input == "1" or gender_input == "male":
             gender = "Male"
