@@ -19,7 +19,7 @@ class Authentication():
         """
         password_valid = False
         while password_valid is False:
-            password_input = input("Please enter your password:\n")
+            password_input = input("\nPlease enter your password:\n")
             password_valid = self.validate_password(password_input)
             if password_valid is True:
                 if new_or_existing_user == "new":
@@ -32,6 +32,7 @@ class Authentication():
                     print("\nPassword incorrect\n")
                     password_valid = False
                 elif new_or_existing_user == "updating":
+                    print("\nPassword updated\n")
                     return password_input
 
     def validate_password(self, password):

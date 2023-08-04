@@ -31,7 +31,7 @@ class UserAccess():
         while True:
 
             user_type = input(
-                "\nAre you just testing the app or here to find a connection?\n\n1. Tester\t2. Real User\n")
+                "\nAre you just testing the app or here to find a connection? Please enter 1 or 2.\n\n1. Tester\t2. Real User\n")
 
             if user_type == "1":
                 print("\nWelcome to the test version of the app - feel free to play\naround and make some connections with imaginary people.\n")
@@ -46,6 +46,7 @@ class UserAccess():
                 print(
                     "\nWelcome to the real version of the app - let's make some connections!\n")
                 Worksheet.set_worksheet("real_users")
+                selected_worksheet = Worksheet()
                 DATA = selected_worksheet.get_all_values()
                 break
 
@@ -198,7 +199,7 @@ class UserAccess():
         """
         while True:
             login_signup = input(
-                "Would you like to login or signup? Please enter 1 or 2.\n 1. Login\t 2. Signup\n")
+                "Would you like to login or signup? Please enter 1 or 2.\n\n1. Login\t2. Signup\n")
 
             if login_signup == "1":
                 ClearTerminalMixin.clear_terminal()

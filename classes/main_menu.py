@@ -1,5 +1,6 @@
 from classes.profile import Profile
 from classes.quiz import Quiz
+from classes.mixins import ClearTerminalMixin
 # from classes.matcher import Matcher
 
 
@@ -20,9 +21,10 @@ class MainMenu():
         - If the user selects '3', run the view messages function.
         - If the user selects '4', run the logout function.
         """
+        ClearTerminalMixin.clear_terminal()
         while True:
             main_menu_input = input(
-                "\nWPlease select the number of what you want to do.\n 1. Compatibility quiz\t 2. Edit profile\t 3. View top matches\t 4. View messages\t 5. Logout\n")
+                "\nPlease select the number of what you want to do.\n\n1. Compatibility quiz\t 2. Edit profile\t 3. View top matches\t 4. View messages\t 5. Logout\n")
 
             if main_menu_input == "1":
                 print("\nCompatibility quiz\n")
