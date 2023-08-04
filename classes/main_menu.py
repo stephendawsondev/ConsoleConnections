@@ -1,7 +1,7 @@
 from classes.profile import Profile
 from classes.quiz import Quiz
 from classes.mixins import ClearTerminalMixin
-# from classes.matcher import Matcher
+from classes.matcher import Matcher
 
 
 class MainMenu():
@@ -37,10 +37,11 @@ class MainMenu():
                                   self.present_main_menu)
                 return profile.present_edit_profile()
 
-            # if main_menu_input == "3":
-            #     print("\nView top matches\n")
-            #     # return data from view top matches function
-            #     return Matcher.view_top_matches(user)
+            if main_menu_input == "3":
+                print("\nView top matches\n")
+                # return data from view top matches functioth
+                matcher = Matcher(user, self.present_main_menu)
+                return matcher.view_top_matches()
 
             # if main_menu_input == "3":
             #     print("\nView messages\n")

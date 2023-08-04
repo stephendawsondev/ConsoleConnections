@@ -188,15 +188,15 @@ Editable:
                     self.user.usercode,
                     self.user.password,
                     self.user.alias,
-                    json.dumps(self.user.security_questions_and_answers),
+                    str(self.user.security_questions_and_answers),
                     self.user.age,
                     self.user.gender,
                     self.user.bio,
-                    json.dumps(self.user.genders_seeking),
-                    json.dumps(self.user.age_range_seeking),
-                    json.dumps(self.user.messages),
-                    json.dumps(self.user.allow_contact_list),
-                    json.dumps(self.user.compatibility_answers),
+                    str(self.user.genders_seeking),
+                    str(self.user.age_range_seeking),
+                    str(self.user.messages),
+                    str(self.user.allow_contact_list),
+                    str(self.user.compatibility_answers),
                     self.user.row_num
                 ])
 

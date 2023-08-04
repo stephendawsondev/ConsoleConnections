@@ -1,6 +1,8 @@
 import re
+import time
 import json
 from classes.worksheet import Worksheet
+from classes.mixins import ClearTerminalMixin
 
 
 class Matcher():
@@ -8,16 +10,17 @@ class Matcher():
     Carries out the match calculations and displays the results.
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, user, callback):
+        self.user = user
+        self.callback = callback
 
-    def view_top_matches(self, user):
+    def view_top_matches(self):
         """
         Displays the matches with the highest compatibility score.\n
         """
-        return self.filter_users(user)
+        return self.filter_users()
 
-    def filter_users(self, user):
+    def filter_users(self):
         """
         Filters out users who don't match the user's preferences.
         - Filters out users who are not the right age.
@@ -31,25 +34,27 @@ class Matcher():
 
         # remove the first row (the headings)
         all_potential_matches.pop(0)
-        # # remove user from the list
-        all_potential_matches.pop(user.row_num - 2)
+        # remove user from the list
+        all_potential_matches.pop(self.user.row_num - 2)
 
         potential_matches = [
-            potential_match for potential_match in all_potential_matches if user[5] in user.genders_seeking]
+            potential_match for potential_match in all_potential_matches if potential_match[5] in self.user.genders_seeking]
 
-        # # filter out users whose gender preferences don't match the user's gender
+        # filter out users whose gender preferences don't match the user's gender
         potential_matches = [
-            potential_match for potential_match in potential_matches if user.gender in potential_match[7]]
+            potential_match for potential_match in potential_matches if self.user.gender in potential_match[7]]
 
         # filter out users who are not the right age
-        age_range_seeking = json.loads(user.age_range_seeking)
+        age_range_seeking = json.loads(self.user.age_range_seeking)
+
+        [min_age, max_age] = [int(age) for age in age_range_seeking]
 
         potential_matches = [
             potential_match for potential_match in potential_matches if int(
-                user[4]) >= age_range_seeking[0] and int(
-                user[4]) <= age_range_seeking[1]]
+                self.user.age) >= min_age and int(
+                self.user.age) <= max_age]
 
-        # # filter out users whose age range does not include the user's age
+        # filter out users whose age range does not include the user's age
         for potential_match in potential_matches:
             try:
                 potential_match[8] = json.loads(potential_match[8])
@@ -64,21 +69,20 @@ class Matcher():
 
         potential_matches = [
             potential_match for potential_match in potential_matches if int(
-                user.age) >= int(
+                self.user.age) >= int(
                 potential_match[8][0]) and int(
-                user.age) <= int(
+                self.user.age) <= int(
                     potential_match[8][1])]
-
-        print(
-            f"\nThere are {len(potential_matches)} users who match your preferences:\n")
 
         # run the compatibility calculations
         matches = self.run_compatibilty_calculations(
-            potential_matches, user)
+            potential_matches, self.user)
 
         for match in matches:
             print(
                 f"{match[0][2]} ({match[0][4]}) - {match[0][5]} - Compatibility: {match[1]}\nBio: {match[0][6]}\n")
+
+        return self.callback(self.user)
 
     def run_compatibilty_calculations(self, potential_matches, user):
         """
@@ -224,11 +228,11 @@ class Matcher():
             try:
                 compatibility_answers = re.sub(
                     r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
-                print(compatibility_answers, type(compatibility_answers))
                 # convert string to list
                 compatibility_answers = json.loads(compatibility_answers)
             except ValueError:
                 print(compatibility_answers, type(compatibility_answers))
+
         else:
             print(
                 f"Unexpected type {type(compatibility_answers)} for compatibility_answers")
@@ -236,17 +240,22 @@ class Matcher():
         # create a list of potential matches for those who score over 60%
         matches = []
 
-        # loop through each user in the filtered list
         for match in potential_matches:
             compatibility_score = 0
             try:
                 # use regex to make valid json string
                 match[11] = re.sub(
                     r"(?<![\w\\])'|'(?![\w\\])", "\"", match[11])
-                match_compatibility_answers = json.loads(user[11])
+                match_compatibility_answers = json.loads(
+                    match[11])
             except ValueError:
                 print(match[11], type(match[11]))
                 continue
+
+            print(
+                f"compatibility_answers: {compatibility_answers}, {type(compatibility_answers)}")
+            print(
+                f"match_compatibility_answers: {match_compatibility_answers}, {type(match_compatibility_answers)}")
 
             # loop through each answer in the user's compatibility answers
             for index, answer in enumerate(compatibility_answers):
@@ -259,14 +268,14 @@ class Matcher():
                         f"\nKeyError: {answer} or {match_compatibility_answers[index]} not found in compatibility_scores\n")
                     continue
 
-            print(compatibility_score)
-
             # calculate the percentage match
             percentage_match = round((compatibility_score / 100) * 100)
 
+            print(f"percentage_match: {percentage_match}")
+
             # if the percentage match is over 60%, add the user to the list of
             # potential matches
-            if percentage_match > 60:
+            if percentage_match > 50:
                 matches.append([match, percentage_match])
 
         # sort the list of potential matches by the highest percentage
@@ -275,7 +284,34 @@ class Matcher():
         sorted_matches = sorted(
             matches, key=lambda x: x[1], reverse=True)
 
-        print(sorted_matches)
-
         # return the list of potential matches
-        return sorted_matches
+        return self.present_matches_options(sorted_matches)
+
+    def present_matches_options(self, matches_list):
+        """
+        Gives the user the list of matches numbered.
+        - If the user selects a number, run the view match method.
+        - If the select 'q', return to the main menu.
+        """
+        if (len(matches_list) == 0):
+            print(
+                "Sorry, there are no matches that match your preferences. Please try again later.")
+            time.sleep(3)
+            return self.callback(self.user)
+        print("Here are your matches:\n")
+        for index, match in enumerate(matches_list, start=1):
+            [person, percentage_match] = match
+            print(
+                f"{index}. {person[2]} ({person[4]}) - {person[5]} - Compatibility: {percentage_match}\nBio: {person[6]}\n")
+
+        while True:
+            action = input(
+                "\nEnter a match's number to view or 'q' to return to the main menu:\n").lower()
+            if action == 'q':
+                return self.callback(self.user)
+            try:
+                match = matches_list[int(action) - 1]
+                return self.view_match(match[0], match[1])
+            except (IndexError, ValueError):
+                print("\nInvalid choice. Please try again.\n")
+                return self.present_matches_options(matches_list)
