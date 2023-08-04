@@ -15,6 +15,7 @@
 - [Sorting list by nest list value - stackoverflow](https://stackoverflow.com/a/65679191/12297743)
 - [Gspread user guide to update a full row](https://docs.gspread.org/en/latest/user-guide.html#updating-cells)
 - [Avoiding circular imports](https://medium.com/brexeng/avoiding-circular-imports-in-python-7c35ec8145ed)
+- [User is not subscriptable error explaination](https://blog.jcharistech.com/2022/02/07/how-to-fix-typeerror-object-is-not-subscriptable/)
 ## Planning
 
 ### Flowchart
@@ -38,3 +39,4 @@ Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	ge
 | "IndexError: list index out of range" when sorting list by nested list value      | Change the reference to the list length                   |      Y       | Changed `key=lambda x: x[2]` to `key=lambda x: x[1]`                                                |
 | Got a few circular import errors when trying to break down my classes             | Restructure so that classes don't import each other       |      Y       | When I had to call a function from another class, I instead passed a callback function to the class.|
 | After completing or redoing the compatibility quiz, the answers aren't the user's | It could be that the value is being overwritten           |      Y       | When presenting the quiz options screen, I was using the existing instance's data instead           |
+| 'User' is not subscriptable error when trying to access a user's matches          | Check the type of the user variable                       |      Y       | I was able to resolve the issue updating the way I access the data within the user instance         |
