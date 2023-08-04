@@ -24,7 +24,8 @@ class Quiz():
 
         compatibility_answers = self.user.compatibility_answers if self.user.compatibility_answers is not None else []
 
-        if isinstance(compatibility_answers, str) and len(compatibility_answers) > 0:
+        if isinstance(compatibility_answers, str) and len(
+                compatibility_answers) > 0:
             # regex to replace single quotes with double quotes
             compatibility_answers = re.sub(
                 r"(?<![\w\\])'|'(?![\w\\])", "\"", compatibility_answers)
@@ -83,7 +84,7 @@ class Quiz():
                         answer = int(answer)
                         if answer in range(1, len(question[1]) + 1):
                             valid_answer = True
-                            chosen_answer = question[1][answer-1]
+                            chosen_answer = question[1][answer - 1]
                         else:
                             print(
                                 f"\nThe number between 1 and {len(question[1])}")

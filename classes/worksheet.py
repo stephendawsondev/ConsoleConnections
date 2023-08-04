@@ -41,7 +41,8 @@ class Worksheet():
         """
         Pulls all values from the worksheet.
         """
-        return SHEET.worksheet(self.__class__.worksheet_selected).get_all_values()
+        return SHEET.worksheet(
+            self.__class__.worksheet_selected).get_all_values()
 
     def add_user(self, user):
         """

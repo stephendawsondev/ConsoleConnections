@@ -40,7 +40,8 @@ class Matcher():
         potential_matches = [
             potential_match for potential_match in all_potential_matches if potential_match[5] in self.user.genders_seeking]
 
-        # filter out users whose gender preferences don't match the user's gender
+        # filter out users whose gender preferences don't match the user's
+        # gender
         potential_matches = [
             potential_match for potential_match in potential_matches if self.user.gender in potential_match[7]]
 
@@ -323,7 +324,7 @@ class Matcher():
         - If the user allows contact, ask the user is they want to view messages or go back.
         - If the user does not allow contact, ask the user if they want to allow contact.
         - If the user allows contact but the match does not allow contact, inform the user
-        that the match does not allow contact yet. 
+        that the match does not allow contact yet.
         """
         ClearTerminalMixin.clear_terminal()
         print(
@@ -363,7 +364,8 @@ class Matcher():
                     worksheet = Worksheet()
                     worksheet.update_cell(
                         self.user.row_num, 11, user_allow_contact_string)
-                    return self.view_match(person, percentage_match, matches_list)
+                    return self.view_match(
+                        person, percentage_match, matches_list)
                 if action == 'n':
                     return self.callback(self.user)
                 print("\nInvalid choice. Please try again.\n")

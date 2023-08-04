@@ -91,7 +91,8 @@ class Profile():
         available_genders = ["Male", "Female", "Non-binary"]
         if isinstance(user.genders_seeking, list) is False:
             current_genders = json.loads(
-                user.genders_seeking.replace("'", '"')) if user.genders_seeking else []
+                user.genders_seeking.replace(
+                    "'", '"')) if user.genders_seeking else []
         else:
             current_genders = user.genders_seeking
 
@@ -106,13 +107,14 @@ class Profile():
 
             if action == 'a' and len(current_genders) < len(available_genders):
                 print("\nAvailable genders to add:\n")
-                for index, gender in enumerate([gender for gender in available_genders if gender not in current_genders], start=1):
+                for index, gender in enumerate(
+                        [gender for gender in available_genders if gender not in current_genders], start=1):
                     print(f"{index}. {gender}\n")
                 add_gender = input(
                     "Enter the number of the gender you want to add:\n")
                 try:
                     chosen_gender = [
-                        gender for gender in available_genders if gender not in current_genders][int(add_gender)-1]
+                        gender for gender in available_genders if gender not in current_genders][int(add_gender) - 1]
                     current_genders.append(chosen_gender)
                     print(
                         f"{chosen_gender} has been added to your gender seeking preferences.")
@@ -126,7 +128,7 @@ class Profile():
                 remove_gender = input(
                     "Enter the number of the gender you want to remove:\n")
                 try:
-                    chosen_gender = current_genders[int(remove_gender)-1]
+                    chosen_gender = current_genders[int(remove_gender) - 1]
                     current_genders.remove(chosen_gender)
                     print(
                         f"{chosen_gender} has been removed from your gender seeking preferences.")
