@@ -2,6 +2,7 @@ import re
 import time
 import json
 from classes.worksheet import Worksheet
+from classes.message import Message
 from classes.mixins import ClearTerminalMixin
 
 
@@ -82,7 +83,7 @@ class Matcher():
                     potential_match[8][1])]
 
         # run the compatibility calculations
-        matches = self.run_compatibilty_calculations(
+        self.run_compatibilty_calculations(
             potential_matches, self.user)
 
         return self.callback(self.user)
@@ -374,12 +375,13 @@ class Matcher():
             time.sleep(2)
             return self.present_matches_options(matches_list)
         else:
+            message = Message(self.user, self.callback)
             while True:
                 action = input(
                     "\nWould you like to view messages with this user? (y/n)\n").lower()
                 if action == 'y':
-                    # return data from view messages function
-                    print("\nView messages\n")
+                    return message.display_messages(person)
                 if action == 'n':
                     print("\nReturning to main menu\n")
+                    return self.callback(self.user)
                 print("\nInvalid choice. Please try again.\n")
