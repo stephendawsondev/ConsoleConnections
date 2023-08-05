@@ -26,6 +26,8 @@ Initial: usercode,	password, alias,	security_question_1,	security_answer_1, secu
 
 Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	genders_seeking,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	compatibility_answers
 
+Revision #2 (final): usercode, password, alias, security_questions, age, gender, bio, genders_seeking, age_range_seeking, messages, allow_contact_list, compatibity_answers, row_num													
+
 ### Messages structure
 message structure in user's message section:
 ```
@@ -66,4 +68,5 @@ message structure in user's message section:
 | After completing or redoing the compatibility quiz, the answers aren't the user's | It could be that the value is being overwritten           |      Y       | When presenting the quiz options screen, I was using the existing instance's data instead           |
 | 'User' is not subscriptable error when trying to access a user's matches          | Check the type of the user variable                       |      Y       | I was able to resolve the issue updating the way I access the data within the user instance         |
 | Mismatched ages depending on profile logged in as.                                | Make sure the age is the right type                       |      Y       | It turns out the user was checking if their own age was in range instead of the match's             |
-| In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      N       |                                                                                                     |      
+| In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      N       |                                                                                                     |
+| When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      N       |                                                                                                     |      

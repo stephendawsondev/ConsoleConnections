@@ -54,7 +54,7 @@ class MainMenu():
 
             if main_menu_input == "5":
                 # log user out and present login/signup screen
-                print("\Logged out\n")
+                print("Logged out\n")
                 from classes.user_access import UserAccess
                 user_access = UserAccess()
                 return user_access.present_login_signup_step()
