@@ -2,6 +2,7 @@ from classes.profile import Profile
 from classes.quiz import Quiz
 from classes.mixins import ClearTerminalMixin
 from classes.matcher import Matcher
+from classes.message import Message
 
 
 class MainMenu():
@@ -43,10 +44,11 @@ class MainMenu():
                 matcher = Matcher(user, self.present_main_menu)
                 return matcher.view_top_matches()
 
-            # if main_menu_input == "3":
-            #     print("\nView messages\n")
-            #     # return data from view messages function
-            #     return present_view_messages(user)
+            if main_menu_input == "4":
+                print("\nView messages\n")
+                # return data from view messages function
+                message = Message(user, self.present_main_menu)
+                return message.view_all_messages()
 
             # if main_menu_input == "4":
             #     print("\nLogout\n")

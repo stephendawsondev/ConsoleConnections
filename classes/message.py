@@ -131,3 +131,55 @@ class Message():
         print("\nMessage sent!\n")
 
         return self.callback(self.user)
+
+    def view_all_messages(self):
+        """
+        Displays the latest message from each match for the user.
+        """
+        print("\nView all messages\n")
+        worksheet = Worksheet()
+        user_messages = worksheet.get_user_messages(self.user)
+
+        if len(user_messages) == 0:
+            print("\nYou have no messages.\n")
+            return self.callback(self.user)
+
+        worksheet = Worksheet()
+        all_users = worksheet.get_all_values()
+        matches = []
+        for message in user_messages:
+            for user in all_users:
+                if message[0] == user[0]:
+                    matches.append(user)
+                else:
+                    continue
+
+        for index, message in enumerate(user_messages, start=1):
+
+            for match in matches:
+                if match[0] == message[0]:
+                    match_alias = match[2]
+                    print(
+                        f"{index}. Latest message from {match_alias}: {message[2][0][0]}")
+                    print(f"Last message received: {message[1]}")
+                    print("\n*************************************\n")
+
+        while True:
+            user_input = input(
+                "\nWould you like to 1. View all of a match's messages or 2. Go back ?\n")
+            if user_input == "1":
+                match_number = input(
+                    "\nPlease enter the number of the match you would like to view:\n")
+                try:
+                    match_number = int(match_number)
+                except ValueError:
+                    print("\nPlease enter a number\n")
+                    continue
+                if match_number < 1 or match_number > len(matches):
+                    print(
+                        "\nPlease enter a number between 1 and {len(matches)}\n")
+                    continue
+                return self.display_messages(matches[match_number - 1])
+            if user_input == "2":
+                return self.callback(self.user)
+            print("\nPlease enter either '1' or '2'\n")
