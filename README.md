@@ -26,6 +26,31 @@ Initial: usercode,	password, alias,	security_question_1,	security_answer_1, secu
 
 Revision #1: usercode,	password,	alias,	security_questions,	age,	gender,	bio,	genders_seeking,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	compatibility_answers
 
+### Messages structure
+message structure in user's message section:
+```
+[
+  [usercode, last_message_received_timestamp, 
+    [
+      [message, user_sent(true/false), timestamp],
+      [message, user_sent(true/false), timestamp]
+    ]
+  
+  ],
+  [another_usercode, last_message_received_timestamp, 
+    [
+      [message, user_sent(true/false), timestamp],
+      [message, user_sent(true/false), timestamp]
+    ]
+  ],
+  [another_usercode, last_message_received_timestamp, 
+    [
+      [message, user_sent(true/false), timestamp],
+      [message, user_sent(true/false), timestamp]
+    ]
+  ]
+]
+```
 
 ## Bugs and issues
 

@@ -1,4 +1,6 @@
 import gspread
+import re
+import json
 from google.oauth2.service_account import Credentials
 
 
@@ -65,3 +67,38 @@ class Worksheet():
         """
         SHEET.worksheet(self.__class__.worksheet_selected).update(
             f"A{row}:M{row}", [values])
+
+    def get_user_messages(self, user):
+        """
+        Gets the messages in a user's messages cell.
+        """
+        # message structure in user's message section:
+        # [
+        # [alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]],
+        # [another_alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]],
+        # [another_alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]
+        # ]
+        if isinstance(user, list):
+            user_messages = SHEET.worksheet(self.__class__.worksheet_selected).cell(
+                user[12], 10).value
+        else:
+            user_messages = SHEET.worksheet(self.__class__.worksheet_selected).cell(
+                user.row_num, 10).value
+
+        # check if user messages is an empty string, None or an empty list
+        if user_messages == "" or user_messages is None or user_messages == "[]":
+            return []
+        elif isinstance(user_messages, list):
+            return user_messages
+        else:
+            # replace single quote marks around words with double quotes
+            # but keep single quote marks within works
+            user_messages = re.sub(
+                r"(?<![\w\\])'|'(?![\w\\])", "\"", user_messages)
+            user_messages = json.loads(user_messages)
+
+            # sort messages by last_message_received_timestamp (most recent first)
+            for message in user_messages:
+                message[2].sort(key=lambda x: x[2], reverse=True)
+
+            return user_messages
