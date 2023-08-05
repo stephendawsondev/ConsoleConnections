@@ -19,9 +19,11 @@ class MainMenu():
         Present the user with the main menu options.
         - If the user selects '1', run the compatibility quiz.
         - If the user selects '2', run the edit profile function.
-        - If the user selects '3', run the view messages function.
-        - If the user selects '4', run the logout function.
+        - If the user selects '3', run the view top matches function.
+        - If the user selects '4', run the view messages function.
+        - If the user selects '5', run the logout function.
         """
+
         ClearTerminalMixin.clear_terminal()
         while True:
             main_menu_input = input(
@@ -50,9 +52,11 @@ class MainMenu():
                 message = Message(user, self.present_main_menu)
                 return message.view_all_messages()
 
-            # if main_menu_input == "4":
-            #     print("\nLogout\n")
-            #     # return data from logout function
-            #     return present_logout(user)
+            if main_menu_input == "5":
+                # log user out and present login/signup screen
+                print("\Logged out\n")
+                from classes.user_access import UserAccess
+                user_access = UserAccess()
+                return user_access.present_login_signup_step()
 
-            print("\nPlease enter a number between 1 and 4\n")
+            print("\nPlease enter a number between 1 and 5\n")
