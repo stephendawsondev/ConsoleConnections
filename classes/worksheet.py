@@ -79,10 +79,12 @@ class Worksheet():
         # [another_alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]
         # ]
         if isinstance(user, list):
-            user_messages = SHEET.worksheet(self.__class__.worksheet_selected).cell(
+            user_messages = SHEET.worksheet(
+                self.__class__.worksheet_selected).cell(
                 user[12], 10).value
         else:
-            user_messages = SHEET.worksheet(self.__class__.worksheet_selected).cell(
+            user_messages = SHEET.worksheet(
+                self.__class__.worksheet_selected).cell(
                 user.row_num, 10).value
 
         # check if user messages is an empty string, None or an empty list
@@ -97,7 +99,8 @@ class Worksheet():
                 r"(?<![\w\\])'|'(?![\w\\])", "\"", user_messages)
             user_messages = json.loads(user_messages)
 
-            # sort messages by last_message_received_timestamp (most recent first)
+            # sort messages by last_message_received_timestamp (most recent
+            # first)
             for message in user_messages:
                 message[2].sort(key=lambda x: x[2], reverse=True)
 

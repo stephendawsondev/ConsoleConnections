@@ -116,8 +116,8 @@ class Message():
                 break
 
         if not found_user_match:
-            all_match_messages.insert(
-                0, [self.user.usercode, timestamp, [[user_message, "False", timestamp]]])
+            all_match_messages.insert(0, [self.user.usercode, timestamp, [
+                [user_message, "False", timestamp]]])
 
         print("\nAll match messages (after):\n", all_match_messages)
 
