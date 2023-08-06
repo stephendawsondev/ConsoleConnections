@@ -7,9 +7,12 @@ questions in common.
 """
 import re
 import json
+from colorama import Fore, init
 from classes.worksheet import Worksheet
 from classes.message import Message
 from classes.mixins import ClearTerminalMixin
+
+init(autoreset=True)
 
 
 class Matcher():
@@ -25,6 +28,22 @@ class Matcher():
         """
         Displays the matches with the highest compatibility score.\n
         """
+        answers = self.user.compatibility_answers
+        if answers == '[]' or answers == []:
+            print(f"""{Fore.RED}
+You have not yet completed the compatibility quiz.
+Please complete the quiz or you won't be able to view matches.
+""")
+            ClearTerminalMixin.clear_terminal(3)
+            return self.callback(self.user)
+        if self.user.genders_seeking == '[]':
+            print(f"""{Fore.RED}
+You must first fill out the "Genders to match with"
+section of your profile before you can view matches.
+""")
+            ClearTerminalMixin.clear_terminal(3)
+            return self.callback(self.user)
+
         return self.filter_users()
 
     def filter_users(self):
@@ -249,7 +268,7 @@ class Matcher():
         elif isinstance(compatibility_answers, list):
             pass
         else:
-            print(f"""
+            print(f"""{Fore.RED}
 Unexpected type {type(compatibility_answers)} for compatibility_answers
 """)
 
@@ -280,7 +299,7 @@ Unexpected type {type(compatibility_answers)} for compatibility_answers
                     score += compatibility_scores[answer][match_answers[i]]
                 except KeyError:
                     # print detailed error message
-                    print(f"""
+                    print(f"""{Fore.RED}
 KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
 """)
                     continue
@@ -309,7 +328,7 @@ KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
         - If the select 'q', return to the main menu.
         """
         if len(matches_list) == 0:
-            print("""
+            print(f"""{Fore.RED}
 Sorry, there are no matches that match your preferences.
 Please try again later.
 """)
@@ -318,9 +337,10 @@ Please try again later.
         print("Here are your matches:\n")
         for index, match in enumerate(matches_list, start=1):
             [person, percentage_match] = match
+            fire_symbol = " \U0001F525" if percentage_match >= 85 else ""
             print(f"""
 {index}. {person[2]} ({person[4]}) - {person[5]}
-  Compatibility: {percentage_match}
+  Compatibility: {percentage_match}{fire_symbol}
   Bio: {person[6]}
 """)
 
@@ -336,7 +356,7 @@ Enter a match's number to view or 'q' to return to the main menu:
                 match = matches_list[int(action) - 1]
                 return self.view_match(match[0], match[1], matches_list)
             except (IndexError, ValueError):
-                print("\nInvalid choice. Please try again.\n")
+                print(f"{Fore.RED}\nInvalid choice. Please try again.\n")
                 return self.present_matches_options(matches_list)
 
     def view_match(self, person, percentage_match, matches_list):
@@ -383,7 +403,7 @@ Bio: {person[6]}
             print("You have not yet allowed this user to contact you.")
             while True:
                 action = input("""
-Would you like to allow this user to contact you? (y/n)
+Would you like to allow this user to contact you? (Y/N)
 """).lower()
                 if action == 'y':
                     self.user.allow_contact_list.append(int(person[0]))
@@ -396,20 +416,22 @@ Would you like to allow this user to contact you? (y/n)
                         person, percentage_match, matches_list)
                 if action == 'n':
                     return self.callback(self.user)
-                print("\nInvalid choice. Please try again.\n")
+                print(f"{Fore.RED}\nInvalid choice. Please try again.\n")
         elif int(self.user.usercode) not in person[10]:
-            print("This user has not yet allowed you to contact them.")
+            print(f"""{Fore.YELLOW}
+This user has not yet allowed you to contact them.
+""")
             ClearTerminalMixin.clear_terminal(2)
             return self.present_matches_options(matches_list)
         else:
             message = Message(self.user, self.callback)
             while True:
                 action = input("""
-Would you like to view messages with this user? (y/n)
+Would you like to view messages with this user? (Y/N)
 """).lower()
                 if action == 'y':
                     return message.display_messages(person)
                 if action == 'n':
                     print("\nReturning to main menu\n")
                     return self.callback(self.user)
-                print("\nInvalid choice. Please try again.\n")
+                print(f"{Fore.RED}\nInvalid choice. Please try again.\n")
