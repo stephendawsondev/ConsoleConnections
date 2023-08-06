@@ -90,6 +90,8 @@ Please keep this safe as you will need it to login.
 
         age = Profile.prompt_for_age()
 
+        ages_seeking = Profile.set_age_range_seeking()
+
         gender = Profile.prompt_for_gender()
 
         row_num = len(user_data) + 1
@@ -104,7 +106,7 @@ Please keep this safe as you will need it to login.
             gender,
             None,
             None,
-            None,
+            ages_seeking,
             None,
             None,
             None,
@@ -114,6 +116,7 @@ Please keep this safe as you will need it to login.
         selected_worksheet = Worksheet()
         selected_worksheet.add_user(user)
 
+        ClearTerminalMixin.clear_terminal()
         print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
 
         main_menu = MainMenu()

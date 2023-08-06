@@ -5,7 +5,6 @@ later on.
 """
 
 import json
-import time
 from classes.authenticaton import Authentication
 from classes.worksheet import Worksheet
 from classes.mixins import ClearTerminalMixin
@@ -74,7 +73,8 @@ Please enter one of the above genders using 1, 2, or 3.
 
         return gender
 
-    def set_age_range_seeking(self):
+    @staticmethod
+    def set_age_range_seeking():
         """
         Sets the minimum and maximum age that the user wants to match with.
         Minimum must be 18 and maximum is 100.
@@ -85,7 +85,7 @@ What is the minimum age you want to match with? The age must be 18 or over.
 
         if not min_age.isdigit():
             print("\nPlease enter a number between 18 and 100\n")
-            return self.set_age_range_seeking()
+            return Profile.set_age_range_seeking()
 
         max_age = input("""
 What is the maximum age you want to match with? The age must be 18 or over.
@@ -93,7 +93,14 @@ What is the maximum age you want to match with? The age must be 18 or over.
 
         if not max_age.isdigit():
             print("\nPlease enter a number between 18 and 100\n")
-            return self.set_age_range_seeking()
+            return Profile.set_age_range_seeking()
+
+        if int(max_age) < int(min_age):
+            ClearTerminalMixin.clear_terminal()
+            print("""
+The maximum age must be greater than or equal to the minimum age.
+""")
+            return Profile.set_age_range_seeking()
 
         return [int(min_age), int(max_age)]
 
@@ -233,7 +240,7 @@ or enter '6' to save and exit:
                 ])
 
                 print("\nProfile saved!\n")
-                time.sleep(2)
+                ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
             else:
                 print("\nPlease enter a number between 1 and 6")
