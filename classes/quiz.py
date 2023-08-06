@@ -22,7 +22,9 @@ class Quiz():
         - Answers are stored in a list and returned.
         """
 
-        compatibility_answers = self.user.compatibility_answers if self.user.compatibility_answers is not None else []
+        compatibility_answers = (self.user.compatibility_answers
+                                 if self.user.compatibility_answers is not
+                                 None else [])
 
         if isinstance(compatibility_answers, str) and len(
                 compatibility_answers) > 0:
@@ -38,7 +40,8 @@ class Quiz():
         compatibility_questions = [
             ["Are you more of an introvert or extrovert?",
                 ["Introvert", "Extrovert"]],
-            ["Do you prefer cities or countryside?", ["Cities", "Countryside"]],
+            ["Do you prefer cities or countryside?",
+             ["Cities", "Countryside"]],
             ["Are you more of a planner or spontaneous?",
              ["Planner", "Spontaneous"]],
             ["Are you a dog person, a cat person, both or neither?",
@@ -46,8 +49,9 @@ class Quiz():
             ["Do you prefer sweet or savory food?", ["Sweet", "Savory"]],
             ["Do you prefer books, films, or both equally?", [
                 "Books", "Films", "Books and Films equally"]],
-            ["Do you prefer active getaways, relaxed getaways, both or neither?", [
-                "Active", "Relaxed", "Both", "I don't like getaways"]],
+            ["""Do you prefer active getaways, relaxed getaways,
+both or neither?""",
+             ["Active", "Relaxed", "Both", "I don't like getaways"]],
             ["Are you more logical or emotional?", ["Logical", "Emotional"]],
             ["Do you prefer eating out, cooking at home, or either?",
              ["Eating out", "Cooking at home", "Either"]],
@@ -55,8 +59,10 @@ class Quiz():
              ["Traveling", "Staying home"]]
         ]
 
-        quiz_option = input(
-            "Would you like to view your answers or take the quiz?\n1. View answers\t   2. Take quiz\t  3. Return to main menu\n")
+        quiz_option = input("""
+Would you like to view your answers or take the quiz?
+1. View answers     2. Take quiz     3. Return to main menu
+""")
         if quiz_option == "1":
             print("\nView answers:")
 
@@ -86,8 +92,9 @@ class Quiz():
                             valid_answer = True
                             chosen_answer = question[1][answer - 1]
                         else:
-                            print(
-                                f"\nThe number between 1 and {len(question[1])}")
+                            print(f"""
+Chose a number between 1 and {len(question[1])}
+""")
                     except ValueError:
                         print("\nPlease enter a valid number\n")
                         continue

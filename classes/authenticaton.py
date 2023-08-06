@@ -11,10 +11,10 @@ class Authentication():
 
     def prompt_for_password(self, new_or_existing_user, row=None):
         """
-        Prompt the user for a password and validate it.\n
-        - If the user is a new user, prompt them to create a password.\n
-        - If the user is an existing user, prompt them to enter their password.\n
-        - If the password is valid, return the password.\n
+        Prompt the user for a password and validate it.
+        - If the user is a new user, prompt them to create a password.
+        - If the user is an existing user, prompt them to enter their password.
+        - If the password is valid, return the password.
         - If the password is invalid, prompt the user to try again.
         """
         password_valid = False
@@ -37,8 +37,8 @@ class Authentication():
 
     def validate_password(self, password):
         """
-        Checks the password length and complexity.\n
-        - If the password is valid, return True.\n
+        Checks the password length and complexity.
+        - If the password is valid, return True.
         - If the password is invalid, return False.
         """
         # check for length between 8 to 32 characters
@@ -56,7 +56,7 @@ class Authentication():
     @staticmethod
     def prompt_for_security_questions():
         """
-        User is given a list of 10 security questions to choose from.\n
+        User is given a list of 10 security questions to choose from.
         - User selects a question and provides an answer.
         - User is given the list of remaining questions and chooses one.
         - User provides an answer.
@@ -77,25 +77,31 @@ class Authentication():
             "What was the name of your first soft toy or plaything?"
         ]
 
-        print("\nFor usercode/password recovery in the future, you will need to set some security questions.\nPlease choose from the list below:\n")
+        print("""
+For credential recovery, you will need to set some security questions.
+Please choose from the list below:
+""")
         for index, question in enumerate(security_question_list):
             print(f"{index+1}. {question}")
 
         while len(security_questions_and_answers) < 2:
-            security_question_input = input(
+            security_question = input(
                 "\nPlease select a question by entering its number:\n")
-            if not security_question_input.isdigit() or int(
-                    security_question_input) < 1 or int(security_question_input) > 10:
+            if not security_question.isdigit() or int(
+                    security_question) < 1 or int(security_question) > 10:
                 print("\nPlease enter a number between 1 and 10\n")
                 continue
-            security_question_input = int(security_question_input)
-            security_question = security_question_list[security_question_input - 1]
-            security_answer = input(
-                f"\nPlease enter your answer to the question '{security_question}':\n")
+            security_question = int(security_question)
+            security_question = security_question_list[security_question - 1]
+            security_answer = input(f"""
+Please enter your answer to the question '{security_question}':
+""")
             security_questions_and_answers.append(
                 [security_question, security_answer])
-            security_question_list.pop(security_question_input - 1)
-            print("\nThank you. Please choose another question from the list below:\n")
+            security_question_list.pop(security_question - 1)
+            print("""
+Thank you. Please choose another question from the list below:
+""")
             for index, question in enumerate(security_question_list):
                 print(f"{index+1}. {question}")
 

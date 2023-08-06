@@ -26,8 +26,13 @@ class MainMenu():
 
         ClearTerminalMixin.clear_terminal()
         while True:
-            main_menu_input = input(
-                "\nPlease select the number of what you want to do.\n\n1. Compatibility quiz\t 2. Edit profile\t 3. View top matches\t 4. View messages\t 5. Logout\n")
+            main_menu_input = input("""
+Please select the number of what you want to do.
+
+1. Compatibility quiz     2. Edit profile     3. View top matches
+
+\t\t4. View messages     5. Logout
+""")
 
             if main_menu_input == "1":
                 print("\nCompatibility quiz\n")
