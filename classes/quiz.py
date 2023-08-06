@@ -7,8 +7,12 @@ The Quiz class is responsible for handling the compatibility quiz.
 """
 import re
 import json
+from colorama import Fore, init
 from classes.worksheet import Worksheet
 from classes.mixins import ClearTerminalMixin
+
+
+init(autoreset=True)
 
 
 class Quiz():
@@ -29,6 +33,8 @@ class Quiz():
         - User answers the questions.
         - Answers are stored in a list and returned.
         """
+
+        print(f"{Fore.YELLOW}Compatibility Quiz\n")
 
         compatibility_answers = (self.user.compatibility_answers
                                  if self.user.compatibility_answers is not
@@ -72,10 +78,14 @@ Would you like to view your answers or take the quiz?
 1. View answers     2. Take quiz     3. Return to main menu
 """)
         if quiz_option == "1":
-            print("\nView answers:")
+            ClearTerminalMixin.clear_terminal()
+            print(f"{Fore.YELLOW}\nView answers\n")
 
             if len(compatibility_answers) == 0:
-                print("\nYou have not yet completed the compatibility quiz\n")
+                print(f"""
+{Fore.RED}You have not yet completed the compatibility quiz.
+""")
+                ClearTerminalMixin.clear_terminal(2)
                 return self.present_compatibility_quiz()
 
             for question, answer in zip(
@@ -85,7 +95,8 @@ Would you like to view your answers or take the quiz?
             return self.present_compatibility_quiz()
 
         if quiz_option == "2":
-            print("\nTake quiz:\n")
+            ClearTerminalMixin.clear_terminal()
+            print(f"{Fore.YELLOW}\nQuiz")
             compatibility_answers = []
             for question in compatibility_questions:
                 print(f"\n{question[0]}\n")
@@ -93,18 +104,24 @@ Would you like to view your answers or take the quiz?
                     print(f"{index+1}. {option}")
                 valid_answer = False
                 while valid_answer is False:
-                    answer = input("Please enter your answer:\n")
+                    answer = input(
+                        "\nPlease enter your answer or press 'q' to cancel:\n")
                     try:
+                        if answer == "q":
+                            print(
+                                f"{Fore.RED}\nQuiz cancelled - answers not saved.")
+                            print("\nReturning to main menu...\n")
+                            ClearTerminalMixin.clear_terminal(2)
+                            return self.present_compatibility_quiz()
                         answer = int(answer)
                         if answer in range(1, len(question[1]) + 1):
                             valid_answer = True
                             chosen_answer = question[1][answer - 1]
                         else:
-                            print(f"""
-Chose a number between 1 and {len(question[1])}
+                            print(f"""{Fore.RED}
+Choose a number between 1 and {len(question[1])}, or press 'q' to cancel.
 """)
                     except ValueError:
-                        print("\nPlease enter a valid number\n")
                         continue
 
                 compatibility_answers.append(chosen_answer)
@@ -115,13 +132,14 @@ Chose a number between 1 and {len(question[1])}
             worksheet.update_cell(self.row_num, 12,
                                   str(compatibility_answers))
 
-            print("\nQuiz complete and answers updated!\n")
+            print(f"{Fore.GREEN}\nQuiz complete and answers updated!\n")
+            ClearTerminalMixin.clear_terminal(2)
 
             return self.present_compatibility_quiz()
 
         if quiz_option == "3":
-            print("\nReturning to main menu...\n")
-            ClearTerminalMixin.clear_terminal(2)
+            print("\nReturning to compatibility quiz menu...\n")
+            ClearTerminalMixin.clear_terminal(1)
             return self.callback(self.user)
 
         print("\nPlease enter either '1', '2' or '3'\n")
