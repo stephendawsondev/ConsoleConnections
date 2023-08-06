@@ -4,12 +4,16 @@ and pulling data from the selected sheet.
 Also handles user signup and login.
 """
 import random
+from colorama import Fore, init
 from classes.worksheet import Worksheet
 from classes.profile import Profile
 from classes.authenticaton import Authentication
 from classes.user import User
 from classes.mixins import ClearTerminalMixin
 from classes.main_menu import MainMenu
+
+
+init(autoreset=True)
 
 
 class UserAccess():
@@ -47,15 +51,14 @@ around and make some connections with imaginary people.
                 Worksheet.set_worksheet("test_users")
                 break
 
-            elif user_type == "2":
-                print("""
-Welcome to the real version of the app - let's make some connections!
+            if user_type == "2":
+                print(f"""
+Welcome to the real version of the app - {Fore.RED}let's make some connections!
 """)
                 Worksheet.set_worksheet("real_users")
                 break
 
-            else:
-                print("\nPlease enter either '1' or '2' to continue.\n")
+            print(f"{Fore.RED}\nPlease enter either '1' or '2' to continue.\n")
 
         return self.present_login_signup_step()
 
@@ -68,8 +71,9 @@ Runs generate usercode, password, alias and security question functions.
 
         print(
             f"""
-If you complete the signup process, your usercode will be {usercode}.
-Please keep this safe as you will need it to login.
+If you complete the signup process,
+your usercode will be {Fore.GREEN}{usercode}{Fore.WHITE}.
+Please keep this code safe as you will need it to login.
 """)
 
         authentication = Authentication()
@@ -79,14 +83,16 @@ Please keep this safe as you will need it to login.
 
         ClearTerminalMixin.clear_terminal()
 
-        print("Great! We've got your username, password and alias!\n")
+        print(f"""{Fore.GREEN}
+Great! We've got your usercode, password and alias!
+""")
 
         auth_check = Authentication.prompt_for_security_questions()
         security_questions_and_answers = auth_check
 
         ClearTerminalMixin.clear_terminal()
 
-        print("\nSecurity questions added!\n")
+        print(Fore.GREEN + "\nSecurity questions added!\n")
 
         age = Profile.prompt_for_age()
 
@@ -105,7 +111,7 @@ Please keep this safe as you will need it to login.
             age,
             gender,
             None,
-            None,
+            str([]),
             ages_seeking,
             None,
             None,
@@ -117,7 +123,12 @@ Please keep this safe as you will need it to login.
         selected_worksheet.add_user(user)
 
         ClearTerminalMixin.clear_terminal()
-        print(f"\nSignup successful! Remember, your usercode is {usercode}.\n")
+        print(f"""
+{Fore.GREEN}Signup successful!
+
+{Fore.WHITE}Remember, your usercode is {Fore.GREEN}{usercode}{Fore.WHITE}.
+""")
+        ClearTerminalMixin.clear_terminal(3)
 
         main_menu = MainMenu()
 
@@ -155,7 +166,7 @@ Please enter your alias now:
 
         # check if the alias is greater than 3 but fewer than 16 characters
         while len(alias) < 3 or len(alias) > 16:
-            alias = input("""
+            alias = input(f"""{Fore.RED}
 Alias must be greater than 3 but fewer than 16 characters. Please try again:
 """)
 
@@ -164,7 +175,10 @@ Alias must be greater than 3 but fewer than 16 characters. Please try again:
             if row[2] == alias:
                 # if the alias exists, prompt the user to come up with a new
                 # alias
-                print("\nAlias already exists.\n")
+                ClearTerminalMixin.clear_terminal(1)
+                print(f"""{Fore.RED}
+Alias already exists. Please choose another.
+""")
                 return self.create_and_validate_alias(user_data)
         return alias
 
@@ -187,7 +201,7 @@ Checks if the user exists on the Google Sheet.\n
                     password = authentication.prompt_for_password(
                         "existing", row)
                     if password is not None:
-                        print("\nLogin successful\n")
+                        print(Fore.GREEN + "\nLogin successful!\n")
                         user = User(
                             row[0],
                             row[1],
@@ -208,7 +222,7 @@ Checks if the user exists on the Google Sheet.\n
                         return main_menu.present_main_menu(user)
                     break
             else:
-                print("\nUsercode not found.\n")
+                print(f"{Fore.RED}\nUsercode not found.\n")
 
     def present_login_signup_step(self):
         """
@@ -228,13 +242,16 @@ Would you like to login or signup? Please enter 1 or 2.
             all_users = Worksheet().get_all_values()
             if login_signup == "1":
                 ClearTerminalMixin.clear_terminal()
-                print("\nLogin\n")
+                print(f"{Fore.YELLOW}\nLogin\n")
                 # return data from login function (also breaks the loop)
                 return self.user_login(all_users)
             if login_signup == "2":
                 ClearTerminalMixin.clear_terminal()
-                print("\nSignup\n")
+                print(f"{Fore.YELLOW}\nSignup\n")
                 # return data from signup function (also breaks the loop)
                 return self.user_signup(all_users)
 
-            print("\nPlease enter either '1' to Login or '2' to Signup.\n")
+            ClearTerminalMixin.clear_terminal()
+            print(f"""{Fore.RED}
+Please enter either '1' to Login or '2' to Signup.
+""")

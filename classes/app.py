@@ -3,8 +3,12 @@ The App module is responsible for starting the app.
 - Displays the app heading.
 - Runs the user access module.
 """
+from colorama import Fore, init
 from classes.mixins import ClearTerminalMixin
 from classes.user_access import UserAccess
+
+
+init(autoreset=True)
 
 CONSOLE_CONNECTIONS_HEADING = """
 
@@ -20,11 +24,11 @@ CONSOLE_CONNECTIONS_HEADING = """
 HEARTS = "\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764"
 SUB_TEXT = "There's no cover to judge here!"
 APP_SUBHEADING = f"""
-\t\t\t{HEARTS} {HEARTS}
+\t\t\t{Fore.RED}{HEARTS} {HEARTS}
 
-\t\t\t{SUB_TEXT}
+\t\t\t{Fore.WHITE}{SUB_TEXT}
 
-\t\t\t{HEARTS} {HEARTS}
+\t\t\t{Fore.RED}{HEARTS} {HEARTS}
 """
 
 

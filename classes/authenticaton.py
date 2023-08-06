@@ -2,7 +2,11 @@
 The Authentication class is responsible for handling the password
 authentication and security questions.
 """
+
 import re
+from colorama import Fore, init
+
+init(autoreset=True)
 
 
 class Authentication():
@@ -23,7 +27,7 @@ class Authentication():
         """
         password_valid = False
         while password_valid is False:
-            password_input = input("\nPlease enter your password:\n")
+            password_input = input("Please enter your password:\n")
             password_valid = self.validate_password(password_input)
             if password_valid is True:
                 if new_or_existing_user == "new":
@@ -31,10 +35,10 @@ class Authentication():
                 if new_or_existing_user == "existing":
                     if password_input == row[1]:
                         return password_input
-                    print("\nIncorrect password\n")
+                    print(f"{Fore.RED}\nIncorrect password\n")
                     password_valid = False
                 elif new_or_existing_user == "updating":
-                    print("\nPassword updated\n")
+                    print(f"{Fore.GREEN}Password updated\n")
                     return password_input
 
     def validate_password(self, password):
@@ -45,14 +49,16 @@ class Authentication():
         """
         # check for length between 8 to 32 characters
         if len(password) < 8 or len(password) > 32:
-            print("\nPassword must be between 8 and 32 characters.\n")
+            print(f"{Fore.RED}\nPassword must be between 8 and 32 characters.\n")
             return False
         # regex for at least 1 digit and 1 symbol
         # https://www.freecodecamp.org/news/how-to-import-a-regular-expression-in-python/#howtousethepythonremodulewithregex
         if re.search(r"^(?=.*\d)(?=.*\W).*$", password):
             return True
 
-        print("\nPassword must contain at least 1 digit and 1 symbol.\n")
+        print(f"""{Fore.RED}
+Password must contain at least 1 digit and 1 symbol.
+""")
         return False
 
     @staticmethod
@@ -98,6 +104,9 @@ Please choose from the list below:
                     security_answer = input(f"""
 Please enter your answer to the question '{selected_question}':
 """)
+                    if (security_answer == ""):
+                        print(f"{Fore.RED}\nPlease enter an answer.")
+                        continue
                     security_questions_and_answers.append(
                         [selected_question, security_answer])
 
@@ -107,10 +116,9 @@ Thank you. Please choose another question from the list below:
                     for index, question in enumerate(security_question_list):
                         print(f"{index+1}. {question}")
                 else:
-                    print("""
-Please enter a number between 1 and the number of remaining questions
-""")
+                    print(f"""{Fore.RED}
+Please enter a number between 1 and the number of remaining questions.""")
             except ValueError:
-                print("\nInvalid input. Please enter a number.\n")
+                print(f"{Fore.RED}\nPlease enter a number.")
 
         return security_questions_and_answers

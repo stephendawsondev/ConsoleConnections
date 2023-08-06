@@ -3,11 +3,15 @@ This module contains the MainMenu class, which handles
 the main menu screen and the actions that can be taken
 after a user has logged in.
 """
+from colorama import Fore, init
 from classes.profile import Profile
 from classes.quiz import Quiz
 from classes.mixins import ClearTerminalMixin
 from classes.matcher import Matcher
 from classes.message import Message
+
+
+init(autoreset=True)
 
 
 class MainMenu():
@@ -28,6 +32,7 @@ class MainMenu():
         - If the user selects '4', run the view messages function.
         - If the user selects '5', run the logout function.
         """
+        print(f"{Fore.YELLOW}Main Menu\n")
         while True:
             main_menu_input = input("""
 Please select the number of what you want to do.
@@ -39,7 +44,6 @@ Please select the number of what you want to do.
 
             if main_menu_input == "1":
                 ClearTerminalMixin.clear_terminal()
-                print("\nCompatibility quiz\n")
                 quiz = Quiz(user, self.present_main_menu)
                 return quiz.present_compatibility_quiz()
 
@@ -51,14 +55,14 @@ Please select the number of what you want to do.
 
             if main_menu_input == "3":
                 ClearTerminalMixin.clear_terminal()
-                print("\nView top matches\n")
+                print(f"{Fore.YELLOW}View top matches\n")
                 # return data from view top matches function
                 matcher = Matcher(user, self.present_main_menu)
                 return matcher.view_top_matches()
 
             if main_menu_input == "4":
                 ClearTerminalMixin.clear_terminal()
-                print("\nView all messages\n")
+                print(f"{Fore.YELLOW}View all messages\n")
                 # return data from view messages function
                 message = Message(user, self.present_main_menu)
                 return message.view_all_messages()
@@ -66,9 +70,10 @@ Please select the number of what you want to do.
             if main_menu_input == "5":
                 ClearTerminalMixin.clear_terminal()
                 # log user out and present login/signup screen
-                print("Logged out\n")
+                print(f"{Fore.GREEN}Logged out\n")
+                ClearTerminalMixin.clear_terminal(2)
                 from classes.user_access import UserAccess
                 user_access = UserAccess()
                 return user_access.present_login_signup_step()
 
-            print("\nPlease enter a number between 1 and 5\n")
+            print(f"{Fore.RED}\nPlease enter a number between 1 and 5\n")
