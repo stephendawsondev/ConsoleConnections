@@ -54,7 +54,7 @@ class Authentication():
         return False
 
     @staticmethod
-    def prompt_for_security_questions_and_answers():
+    def prompt_for_security_questions():
         """
         User is given a list of 10 security questions to choose from.\n
         - User selects a question and provides an answer.

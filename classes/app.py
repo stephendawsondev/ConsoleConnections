@@ -1,3 +1,7 @@
+"""
+Module responsible for clearing the terminal at different
+points in the app.
+"""
 from classes.mixins import ClearTerminalMixin
 from classes.user_access import UserAccess
 
