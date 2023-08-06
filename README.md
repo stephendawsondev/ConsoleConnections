@@ -19,6 +19,8 @@ Console Connections is a terminal-based dating app. By setting your age and gend
 - [**Planning**](#planning)
   - [**User stories**](#user-stories)
   - [**Flowcharts**](#flowcharts)
+    - [**Flowchart before logging in or signing up**](#flowchart-before-logging-in-or-signing-up)
+    - [**Flowchart after logging in or signing up**](#flowchart-after-logging-in-or-signing-up)
   - [**Google sheet headings**](#google-sheet-headings)
   - [**Messages structure**](#messages-structure)
 - [**Features**](#features)
@@ -233,7 +235,8 @@ Users can log out of their account. SCREENSHOT
 | 'User' is not subscriptable error when trying to access a user's matches          | Check the type of the user variable                       |      Y       | I was able to resolve the issue updating the way I access the data within the user instance         |
 | Mismatched ages depending on profile logged in as.                                | Make sure the age is the right type                       |      Y       | It turns out the user was checking if their own age was in range instead of the match's             |
 | In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      N       |                                                                                                     |
-| When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      N       |                                                                                                     |      
+| When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      Y       | Pulled the Google Worksheet data on the login/signup step                                           |
+| When updating user profile, a gspread warning is displayed. Only applies to 6.0   | Catch the warning and ignore it                           |      Y       | Imported warning module and ignored that warning to stop it from showing up                         |
 
 ## Resources used
 - [TODOs in Python](https://www.jetbrains.com/help/pycharm/using-todo.html#view_todo)
@@ -251,3 +254,4 @@ Users can log out of their account. SCREENSHOT
 - [Gspread user guide to update a full row](https://docs.gspread.org/en/latest/user-guide.html#updating-cells)
 - [Avoiding circular imports](https://medium.com/brexeng/avoiding-circular-imports-in-python-7c35ec8145ed)
 - [User is not subscriptable error explaination](https://blog.jcharistech.com/2022/02/07/how-to-fix-typeerror-object-is-not-subscriptable/)
+- [Documentation on catching Python warnings](https://docs.python.org/3/library/warnings.html)
