@@ -8,6 +8,7 @@ import time
 class ClearTerminalMixin():
     """
     Used in multiple files and clears the terminal when called.
+    Can also add a delay to the clearing of the terminal.
     """
     @staticmethod
     def clear_terminal(delay=0):
