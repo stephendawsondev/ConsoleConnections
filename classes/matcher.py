@@ -1,5 +1,4 @@
 import re
-import time
 import json
 from classes.worksheet import Worksheet
 from classes.message import Message
@@ -27,7 +26,8 @@ class Matcher():
         - Filters out users who are not the right age.
         - Filters out users whose age range does not include the user's age.
         - Filters out users who do not match the gender the user seeks.
-        - Filters out users whose gender seeking preference does not include the user's.
+        - Filters out users whose gender seeking preference
+        does not include the user's.
         """
         # get all users from the Google Sheet
         worksheet = Worksheet()
@@ -39,12 +39,14 @@ class Matcher():
         all_potential_matches.pop(self.user.row_num - 2)
 
         potential_matches = [
-            potential_match for potential_match in all_potential_matches if potential_match[5] in self.user.genders_seeking]
+            potential_match for potential_match in all_potential_matches
+            if potential_match[5] in self.user.genders_seeking]
 
         # filter out users whose gender preferences don't match the user's
         # gender
         potential_matches = [
-            potential_match for potential_match in potential_matches if self.user.gender in potential_match[7]]
+            potential_match for potential_match in potential_matches
+            if self.user.gender in potential_match[7]]
 
         if self.user.age_range_seeking == '':
             self.user.age_range_seeking = [18, 100]
@@ -90,9 +92,10 @@ class Matcher():
 
     def run_compatibilty_calculations(self, potential_matches, user):
         """
-        Runs the compatibility calculations.\n
-        - Calculates the percentage match based on each users answers.\n
-        - Returns a list of potential matches sorted by percentage of questions in common.
+        Runs the compatibility calculations.
+        - Calculates the percentage match based on each users answers.
+        - Returns a list of potential matches sorted by percentage
+         of questions in common.
         """
 
         compatibility_scores = {
@@ -239,14 +242,15 @@ class Matcher():
         elif isinstance(compatibility_answers, list):
             pass
         else:
-            print(
-                f"Unexpected type {type(compatibility_answers)} for compatibility_answers")
+            print(f"""
+Unexpected type {type(compatibility_answers)} for compatibility_answers
+""")
 
         # create a list of potential matches for those who score over 60%
         matches = []
 
         for match in potential_matches:
-            compatibility_score = 0
+            score = 0
             if match[11] == '' or match[11] == '[]':
                 continue
             if isinstance(match[11], list):
@@ -256,25 +260,26 @@ class Matcher():
                     # use regex to make valid json string
                     match[11] = re.sub(
                         r"(?<![\w\\])'|'(?![\w\\])", "\"", match[11])
-                    match_compatibility_answers = json.loads(
+                    match_answers = json.loads(
                         match[11])
                 except ValueError:
                     print(match[11], type(match[11]))
                     continue
 
             # loop through each answer in the user's compatibility answers
-            for index, answer in enumerate(compatibility_answers):
+            for i, answer in enumerate(compatibility_answers):
                 # add the compatibility score to the total
                 try:
-                    compatibility_score += compatibility_scores[answer][match_compatibility_answers[index]]
+                    score += compatibility_scores[answer][match_answers[i]]
                 except KeyError:
                     # print detailed error message
-                    print(
-                        f"\nKeyError: {answer} or {match_compatibility_answers[index]} not found in compatibility_scores\n")
+                    print(f"""
+KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
+""")
                     continue
 
             # calculate the percentage match
-            percentage_match = round((compatibility_score / 100) * 100)
+            percentage_match = round((score / 100) * 100)
 
             # if the percentage match is over 60%, add the user to the list of
             # potential matches
@@ -297,20 +302,28 @@ class Matcher():
         - If the select 'q', return to the main menu.
         """
         if (len(matches_list) == 0):
-            print(
-                "Sorry, there are no matches that match your preferences. Please try again later.")
-            time.sleep(2)
+            print("""
+Sorry, there are no matches that match your preferences.
+Please try again later.
+""")
+            ClearTerminalMixin.clear_terminal(2)
             return self.callback(self.user)
         print("Here are your matches:\n")
         for index, match in enumerate(matches_list, start=1):
             [person, percentage_match] = match
-            print(
-                f"{index}. {person[2]} ({person[4]}) - {person[5]} - Compatibility: {percentage_match}\nBio: {person[6]}\n")
+            print(f"""
+{index}. {person[2]} ({person[4]}) - {person[5]}
+  Compatibility: {percentage_match}
+  Bio: {person[6]}
+""")
 
         while True:
-            action = input(
-                "\nEnter a match's number to view or 'q' to return to the main menu:\n").lower()
+            action = input("""
+Enter a match's number to view or 'q' to return to the main menu:
+""").lower()
             if action == 'q':
+                print("\nReturning to main menu...\n")
+                ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
             try:
                 match = matches_list[int(action) - 1]
@@ -322,14 +335,20 @@ class Matcher():
     def view_match(self, person, percentage_match, matches_list):
         """
         Displays the match's profile info.
-        - If the user allows contact, ask the user is they want to view messages or go back.
-        - If the user does not allow contact, ask the user if they want to allow contact.
-        - If the user allows contact but the match does not allow contact, inform the user
-        that the match does not allow contact yet.
+        - If the user allows contact, ask the user is they
+        want to view messages or go back.
+        - If the user does not allow contact, ask the user
+        if they want to allow contact.
+        - If the user allows contact but the match does not
+        allow contact, inform the user that the match does
+        not allow contact yet.
         """
         ClearTerminalMixin.clear_terminal()
-        print(
-            f"{person[2]} ({person[4]}) - {person[5]} - Compatibility: {percentage_match}\nBio: {person[6]}\n")
+        print(f"""
+{person[2]} ({person[4]}) - {person[5]}
+Compatibility: {percentage_match}
+Bio: {person[6]}
+""")
 
         if person[10] == '':
             person[10] = []
@@ -356,8 +375,9 @@ class Matcher():
         if int(person[0]) not in self.user.allow_contact_list:
             print("You have not yet allowed this user to contact you.")
             while True:
-                action = input(
-                    "\nWould you like to allow this user to contact you? (y/n)\n").lower()
+                action = input("""
+Would you like to allow this user to contact you? (y/n)
+""").lower()
                 if action == 'y':
                     self.user.allow_contact_list.append(int(person[0]))
                     user_allow_contact_string = str(
@@ -372,13 +392,14 @@ class Matcher():
                 print("\nInvalid choice. Please try again.\n")
         elif int(self.user.usercode) not in person[10]:
             print("This user has not yet allowed you to contact them.")
-            time.sleep(2)
+            ClearTerminalMixin.clear_terminal(2)
             return self.present_matches_options(matches_list)
         else:
             message = Message(self.user, self.callback)
             while True:
-                action = input(
-                    "\nWould you like to view messages with this user? (y/n)\n").lower()
+                action = input("""
+Would you like to view messages with this user? (y/n)
+""").lower()
                 if action == 'y':
                     return message.display_messages(person)
                 if action == 'n':

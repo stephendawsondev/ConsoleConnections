@@ -23,41 +23,43 @@ class MainMenu():
         - If the user selects '4', run the view messages function.
         - If the user selects '5', run the logout function.
         """
-
-        ClearTerminalMixin.clear_terminal()
         while True:
             main_menu_input = input("""
 Please select the number of what you want to do.
 
 1. Compatibility quiz     2. Edit profile     3. View top matches
 
-\t\t4. View messages     5. Logout
+\t\t4. View all messages     5. Logout
 """)
 
             if main_menu_input == "1":
+                ClearTerminalMixin.clear_terminal()
                 print("\nCompatibility quiz\n")
                 quiz = Quiz(user, self.present_main_menu)
                 return quiz.present_compatibility_quiz()
 
             if main_menu_input == "2":
-                print("\nEdit profile\n")
+                ClearTerminalMixin.clear_terminal()
                 profile = Profile(user,
                                   self.present_main_menu)
                 return profile.present_edit_profile()
 
             if main_menu_input == "3":
+                ClearTerminalMixin.clear_terminal()
                 print("\nView top matches\n")
-                # return data from view top matches functioth
+                # return data from view top matches function
                 matcher = Matcher(user, self.present_main_menu)
                 return matcher.view_top_matches()
 
             if main_menu_input == "4":
-                print("\nView messages\n")
+                ClearTerminalMixin.clear_terminal()
+                print("\nView all messages\n")
                 # return data from view messages function
                 message = Message(user, self.present_main_menu)
                 return message.view_all_messages()
 
             if main_menu_input == "5":
+                ClearTerminalMixin.clear_terminal()
                 # log user out and present login/signup screen
                 print("Logged out\n")
                 from classes.user_access import UserAccess

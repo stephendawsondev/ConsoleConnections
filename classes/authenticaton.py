@@ -26,10 +26,8 @@ class Authentication():
                     return password_input
                 if new_or_existing_user == "existing":
                     if password_input == row[1]:
-                        print("\nPassword correct\n")
                         return password_input
-
-                    print("\nPassword incorrect\n")
+                    print("\nIncorrect password\n")
                     password_valid = False
                 elif new_or_existing_user == "updating":
                     print("\nPassword updated\n")
@@ -87,22 +85,28 @@ Please choose from the list below:
         while len(security_questions_and_answers) < 2:
             security_question = input(
                 "\nPlease select a question by entering its number:\n")
-            if not security_question.isdigit() or int(
-                    security_question) < 1 or int(security_question) > 10:
-                print("\nPlease enter a number between 1 and 10\n")
-                continue
-            security_question = int(security_question)
-            security_question = security_question_list[security_question - 1]
-            security_answer = input(f"""
-Please enter your answer to the question '{security_question}':
+
+            try:
+                security_question = int(security_question)
+                if 1 <= security_question <= len(security_question_list):
+                    selected_question = security_question_list.pop(
+                        security_question - 1)
+                    security_answer = input(f"""
+Please enter your answer to the question '{selected_question}':
 """)
-            security_questions_and_answers.append(
-                [security_question, security_answer])
-            security_question_list.pop(security_question - 1)
-            print("""
+                    security_questions_and_answers.append(
+                        [selected_question, security_answer])
+
+                    print("""
 Thank you. Please choose another question from the list below:
 """)
-            for index, question in enumerate(security_question_list):
-                print(f"{index+1}. {question}")
+                    for index, question in enumerate(security_question_list):
+                        print(f"{index+1}. {question}")
+                else:
+                    print("""
+Please enter a number between 1 and the number of remaining questions
+""")
+            except ValueError:
+                print("\nInvalid input. Please enter a number.\n")
 
         return security_questions_and_answers

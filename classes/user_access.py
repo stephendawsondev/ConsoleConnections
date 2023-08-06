@@ -198,6 +198,7 @@ Checks if the user exists on the Google Sheet.\n
                             row[11],
                             index + 1)
 
+                        ClearTerminalMixin.clear_terminal(2)
                         main_menu = MainMenu()
                         return main_menu.present_main_menu(user)
                     break

@@ -1,6 +1,7 @@
 import re
 import json
 from classes.worksheet import Worksheet
+from classes.mixins import ClearTerminalMixin
 
 
 class Quiz():
@@ -112,7 +113,8 @@ Chose a number between 1 and {len(question[1])}
             return self.present_compatibility_quiz()
 
         if quiz_option == "3":
-            print("\nReturn to main menu\n")
+            print("\nReturning to main menu...\n")
+            ClearTerminalMixin.clear_terminal(2)
             return self.callback(self.user)
 
         print("\nPlease enter either '1', '2' or '3'\n")

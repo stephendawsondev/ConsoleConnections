@@ -123,15 +123,16 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                         start=1):
                     print(f"{index}. {gender}\n")
                 add_gender = input(
-                    "Enter the number of the gender you want to add:\n")
+                    "\nEnter the number of the gender you want to add:\n")
                 try:
                     chosen_gender = [
                         gender for gender in available_genders
                         if gender not in current_genders][int(add_gender) - 1]
                     current_genders.append(chosen_gender)
                     print(f"""
- {chosen_gender} has been added to your gender seeking preferences.
+{chosen_gender} has been added to your gender seeking preferences.
 """)
+                    ClearTerminalMixin.clear_terminal(2)
                 except (IndexError, ValueError):
                     print("Invalid choice. Please try again.")
 
@@ -140,13 +141,14 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                 for index, gender in enumerate(current_genders, start=1):
                     print(f"{index}. {gender}")
                 remove_gender = input(
-                    "Enter the number of the gender you want to remove:\n")
+                    "\nEnter the number of the gender you want to remove:\n")
                 try:
                     chosen_gender = current_genders[int(remove_gender) - 1]
                     current_genders.remove(chosen_gender)
                     print(f"""
 {chosen_gender} has been removed from your gender seeking preferences.
 """)
+                    ClearTerminalMixin.clear_terminal(2)
                 except (IndexError, ValueError):
                     print("Invalid choice. Please try again.")
 
@@ -165,6 +167,8 @@ You need to add at least one gender to your preferences.
         Allows the user to update their password, security questions, bio,
         the ages they're interested in and the gender(s) they're interested in.
         """
+
+        print("\nEdit profile\n")
 
         finsihed_editing = False
 

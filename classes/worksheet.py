@@ -1,6 +1,7 @@
 import gspread
 import re
 import json
+import warnings
 from google.oauth2.service_account import Credentials
 
 
@@ -50,9 +51,26 @@ class Worksheet():
         """
         Appends a user to the selected worksheet.
         """
-        selected_worksheet = self.__class__.worksheet_selected if self.__class__.worksheet_selected is not None else self.__class__.worksheet_selected
-        SHEET.worksheet(selected_worksheet).append_row([user.usercode, user.password, user.alias, str(
-            user.security_questions_and_answers), user.age, user.gender, None, None, None, None, None, None, user.row_num])
+        selected_worksheet = (self.__class__.worksheet_selected
+                              if self.__class__.worksheet_selected
+                              is not None else
+                              self.__class__.worksheet_selected)
+        SHEET.worksheet(selected_worksheet).append_row(
+            [
+                user.usercode,
+                user.password,
+                user.alias,
+                str(user.security_questions_and_answers),
+                user.age,
+                user.gender,
+                None,
+                None,
+                None,
+                None,
+                None,
+                None,
+                user.row_num
+            ])
 
     def update_cell(self, row, column, value):
         """
@@ -65,19 +83,15 @@ class Worksheet():
         """
         Updates an entire row in the worksheet.
         """
-        SHEET.worksheet(self.__class__.worksheet_selected).update(
-            f"A{row}:M{row}", [values])
+        with warnings.catch_warnings():
+            warnings.filterwarnings('ignore', category=UserWarning)
+            SHEET.worksheet(self.__class__.worksheet_selected).update(
+                f"A{row}:M{row}", [values])
 
     def get_user_messages(self, user):
         """
         Gets the messages in a user's messages cell.
         """
-        # message structure in user's message section:
-        # [
-        # [alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]],
-        # [another_alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]],
-        # [another_alias, last_message_received_timestamp, [[message, user_sent(true/false), timestamp],[message, user_sent(true/false), timestamp]]
-        # ]
         if isinstance(user, list):
             user_messages = SHEET.worksheet(
                 self.__class__.worksheet_selected).cell(
@@ -88,20 +102,21 @@ class Worksheet():
                 user.row_num, 10).value
 
         # check if user messages is an empty string, None or an empty list
-        if user_messages == "" or user_messages is None or user_messages == "[]":
+        messages = user_messages
+        if messages == "" or messages is None or messages == "[]":
             return []
-        elif isinstance(user_messages, list):
-            return user_messages
-        else:
-            # replace single quote marks around words with double quotes
-            # but keep single quote marks within works
-            user_messages = re.sub(
-                r"(?<![\w\\])'|'(?![\w\\])", "\"", user_messages)
-            user_messages = json.loads(user_messages)
+        if isinstance(messages, list):
+            return messages
 
-            # sort messages by last_message_received_timestamp (most recent
-            # first)
-            for message in user_messages:
-                message[2].sort(key=lambda x: x[2], reverse=True)
+        # replace single quote marks around words with double quotes
+        # but keep single quote marks within works
+        messages = re.sub(
+            r"(?<![\w\\])'|'(?![\w\\])", "\"", messages)
+        messages = json.loads(messages)
 
-            return user_messages
+        # sort messages by last_message_received_timestamp (most recent
+        # first)
+        for message in messages:
+            message[2].sort(key=lambda x: x[2], reverse=True)
+
+        return messages

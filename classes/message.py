@@ -1,6 +1,7 @@
 import datetime
 import gspread
 from classes.worksheet import Worksheet
+from classes.mixins import ClearTerminalMixin
 
 
 class Message():
@@ -19,7 +20,6 @@ class Message():
 
         messages = []
 
-        print("\nDisplay messages\n")
         worksheet = Worksheet()
         user_messages = worksheet.get_user_messages(self.user)
 
@@ -32,6 +32,7 @@ class Message():
         if len(messages) == 0:
             print(f"\nYou have no messages with {match[2]}.\n")
 
+            ClearTerminalMixin.clear_terminal(2)
         if len(messages) > 0:
             # sort messages by most recent first
             messages.sort(key=lambda x: x[2], reverse=True)
@@ -39,16 +40,22 @@ class Message():
             for message in messages:
                 [message_text, user_sent, timestamp] = message
                 if user_sent == "True":
-                    print(f"\n{timestamp} - {self.user.alias}: {message_text}\n")
+                    print(f"""
+{timestamp} - {self.user.alias}: {message_text}
+""")
                 else:
                     print(f"\n{timestamp} - {match[2]}: {message_text}\n")
 
         while True:
-            user_input = input(
-                "\nWould you like to 1. Send a message or 2. Go back ?\n")
+            user_input = input("""
+Would you like to send a message or go back to the main menu?
+1. Send message     2. Go back to main menu
+""")
             if user_input == "1":
                 return self.send_message(user_messages, messages, match)
             if user_input == "2":
+                print("\nReturning to main menu...\n")
+                ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
             print("\nPlease enter either '1' or '2'\n")
 
@@ -63,20 +70,12 @@ class Message():
         # get current timestamp
         timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-        print(f"all user messages before: {all_user_messages}")
-
-        print("\n", timestamp, user_message)
-
-        print("\nMessages to match (before):\n", messages_to_match)
-
         # add message to user's messages
         try:
             messages_to_match.insert(0, [user_message, "True", timestamp])
         except Exception as excep:
             print("\nError adding message to user's messages\n")
             print(excep)
-
-        print("\nMessages to match (after):\n", messages_to_match)
 
         # add messages_to_match to all_user_messages
         found_match = False
@@ -89,8 +88,6 @@ class Message():
         if not found_match:
             all_user_messages.insert(
                 0, [match[0], timestamp, messages_to_match])
-
-        print("\nAll user messages (after):\n", all_user_messages)
 
         # update user's messages cell
         try:
@@ -119,8 +116,6 @@ class Message():
             all_match_messages.insert(0, [self.user.usercode, timestamp, [
                 [user_message, "False", timestamp]]])
 
-        print("\nAll match messages (after):\n", all_match_messages)
-
         # update match's messages cell
         try:
             worksheet.update_cell(match[12], 10, str(all_match_messages))
@@ -130,18 +125,20 @@ class Message():
 
         print("\nMessage sent!\n")
 
+        ClearTerminalMixin.clear_terminal(2)
+
         return self.callback(self.user)
 
     def view_all_messages(self):
         """
         Displays the latest message from each match for the user.
         """
-        print("\nView all messages\n")
         worksheet = Worksheet()
         user_messages = worksheet.get_user_messages(self.user)
 
         if len(user_messages) == 0:
             print("\nYou have no messages.\n")
+            ClearTerminalMixin.clear_terminal(2)
             return self.callback(self.user)
 
         worksheet = Worksheet()
@@ -159,26 +156,31 @@ class Message():
             for match in matches:
                 if match[0] == message[0]:
                     match_alias = match[2]
-                    print(
-                        f"{index}. Latest message from {match_alias}: {message[2][0][0]}")
-                    print(f"Last message received: {message[1]}")
-                    print("\n*************************************\n")
-
+                    print(f"""
+{index}. Latest message from {match_alias}: {message[2][0][0]}
+Last message received: {message[1]}
+*************************************
+""")
         while True:
-            user_input = input(
-                "\nWould you like to 1. View all of a match's messages or 2. Go back ?\n")
+            user_input = input("""
+Would you like to view all of a match's messages or go back?
+1. View all of a match's messages     2. Go back
+""")
             if user_input == "1":
-                match_number = input(
-                    "\nPlease enter the number of the match you would like to view:\n")
+                match_number = input("""
+Please enter the number of the match you would like to view:
+""")
                 try:
                     match_number = int(match_number)
                 except ValueError:
                     print("\nPlease enter a number\n")
                     continue
                 if match_number < 1 or match_number > len(matches):
-                    print(
-                        "\nPlease enter a number between 1 and {len(matches)}\n")
+                    print(f"""
+Please enter a number between 1 and {len(matches)}
+""")
                     continue
+                ClearTerminalMixin.clear_terminal()
                 return self.display_messages(matches[match_number - 1])
             if user_input == "2":
                 return self.callback(self.user)
