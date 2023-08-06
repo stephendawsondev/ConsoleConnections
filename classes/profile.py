@@ -5,9 +5,12 @@ later on.
 """
 
 import json
+from colorama import Fore, init
 from classes.authenticaton import Authentication
 from classes.worksheet import Worksheet
 from classes.mixins import ClearTerminalMixin
+
+init(autoreset=True)
 
 
 class Profile():
@@ -30,12 +33,12 @@ class Profile():
         """
         age = input("\nPlease enter your age:\n")
         if not age.isdigit():
-            print("\nYou must enter a number between 18 and 100.\n")
+            print(f"{Fore.RED}\nYou must enter a number between 18 and 100.\n")
             return Profile.prompt_for_age()
 
         age = int(age)
         if age < 18:
-            print("""
+            print(f"""{Fore.RED}
 Sorry! You must be at least 18 years old to use Console Connections.
 """)
             return Profile.prompt_for_age()
@@ -66,7 +69,7 @@ Please input the gender you identify as:
         elif gender_input == "3" or gender_input == "non-binary":
             gender = "Non-binary"
         else:
-            print("""
+            print(f"""{Fore.RED}
 Please enter one of the above genders using 1, 2, or 3.
 """)
             return Profile.prompt_for_gender()
@@ -84,7 +87,13 @@ What is the minimum age you want to match with? The age must be 18 or over.
 """)
 
         if not min_age.isdigit():
-            print("\nPlease enter a number between 18 and 100\n")
+            print(f"{Fore.RED}\nPlease enter a number between 18 and 100\n")
+            return Profile.set_age_range_seeking()
+
+        if int(min_age) < 18:
+            print(f"""{Fore.RED}
+The minimum age must be 18 or over.
+""")
             return Profile.set_age_range_seeking()
 
         max_age = input("""
@@ -92,13 +101,25 @@ What is the maximum age you want to match with? The age must be 18 or over.
 """)
 
         if not max_age.isdigit():
-            print("\nPlease enter a number between 18 and 100\n")
+            print(f"{Fore.RED}\nPlease enter a number between 18 and 100\n")
             return Profile.set_age_range_seeking()
 
         if int(max_age) < int(min_age):
             ClearTerminalMixin.clear_terminal()
-            print("""
+            print(f"""{Fore.RED}
 The maximum age must be greater than or equal to the minimum age.
+""")
+            return Profile.set_age_range_seeking()
+
+        if int(max_age) > 100:
+            print(f"""{Fore.RED}
+The maximum age must be 100 or under.
+""")
+            return Profile.set_age_range_seeking()
+
+        if int(max_age) < 18:
+            print(f"""{Fore.RED}
+The maximum age must be 18 or over.
 """)
             return Profile.set_age_range_seeking()
 
@@ -142,7 +163,7 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                         gender for gender in available_genders
                         if gender not in current_genders][int(add_gender) - 1]
                     current_genders.append(chosen_gender)
-                    print(f"""
+                    print(f"""{Fore.GREEN}
 {chosen_gender} has been added to your gender seeking preferences.
 """)
                     ClearTerminalMixin.clear_terminal(2)
@@ -158,22 +179,22 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                 try:
                     chosen_gender = current_genders[int(remove_gender) - 1]
                     current_genders.remove(chosen_gender)
-                    print(f"""
+                    print(f"""{Fore.GREEN}
 {chosen_gender} has been removed from your gender seeking preferences.
 """)
                     ClearTerminalMixin.clear_terminal(2)
                 except (IndexError, ValueError):
-                    print("Invalid choice. Please try again.")
+                    print(f"{Fore.RED}Invalid choice. Please try again.")
 
             elif action == 'q':
                 if len(current_genders) == 0:
-                    print("""
+                    print(f"""{Fore.RED}
 You need to add at least one gender to your preferences.
 """)
                 else:
                     return current_genders
             else:
-                print("Invalid choice. Please try again.")
+                print(f"{Fore.RED}Invalid choice. Please try again.")
 
     def present_edit_profile(self):
         """
@@ -181,25 +202,25 @@ You need to add at least one gender to your preferences.
         the ages they're interested in and the gender(s) they're interested in.
         """
 
-        print("\nEdit profile\n")
+        print("{Fore.YELLOW}Edit profile\n")
 
         finsihed_editing = False
 
         while finsihed_editing is False:
             ClearTerminalMixin.clear_terminal()
             print(f"""Here is your current profile information:\n
-Uneditable:
+{Fore.RED}Uneditable:{Fore.WHITE}
 Usercode: {self.user.usercode}
 Alias: {self.user.alias}
 
-Editable:
+{Fore.GREEN}Editable:{Fore.WHITE}
     1. Password: {self.user.password}
     2. Security questions: {self.user.security_questions_and_answers}
     3. Bio: {self.user.bio}
     4. Age range to match with: {self.user.age_range_seeking}
-    5. Genders to match with {self.user.genders_seeking}
+    5. Genders to match with: {self.user.genders_seeking}
     6. Save and exit
-        """)
+""")
 
             edit_profile_option = input("""
 Please enter the number of the field you would like to edit,
@@ -220,7 +241,7 @@ or enter '6' to save and exit:
                 self.user.genders_seeking = self.set_genders_seeking(
                     self.user)
             elif edit_profile_option == "6":
-                print("\nSaving changes...\n")
+                print(f"{Fore.YELLOW}\nSaving changes...\n")
 
                 worksheet = Worksheet()
                 worksheet.update_row(self.user.row_num, [
@@ -239,8 +260,8 @@ or enter '6' to save and exit:
                     self.user.row_num
                 ])
 
-                print("\nProfile saved!\n")
+                print(f"{Fore.GREEN}\nProfile saved!\n")
                 ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
             else:
-                print("\nPlease enter a number between 1 and 6")
+                print(f"{Fore.RED}\nPlease enter a number between 1 and 6")
