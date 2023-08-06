@@ -4,8 +4,11 @@ for timestamps in the message class.
 """
 import datetime
 import gspread
+from colorama import init, Fore
 from classes.worksheet import Worksheet
 from classes.mixins import ClearTerminalMixin
+
+init(autoreset=True)
 
 
 class Message():
@@ -38,17 +41,23 @@ class Message():
 
             ClearTerminalMixin.clear_terminal(2)
         if len(messages) > 0:
+            print(f"""
+Your message are in {Fore.BLUE}BLUE{Fore.WHITE} 
+and your match's messages are in {Fore.MAGENTA}MAGENTA{Fore.WHITE}.
+""")
             # sort messages by most recent first
             messages.sort(key=lambda x: x[2], reverse=True)
 
             for message in messages:
                 [message_text, user_sent, timestamp] = message
                 if user_sent == "True":
-                    print(f"""
+                    print(f"""{Fore.BLUE}
 {timestamp} - {self.user.alias}: {message_text}
 """)
                 else:
-                    print(f"\n{timestamp} - {match[2]}: {message_text}\n")
+                    print(f"""{Fore.MAGENTA}
+{timestamp} - {match[2]}: {message_text}
+""")
 
         while True:
             user_input = input("""
@@ -106,8 +115,6 @@ Would you like to send a message or go back to the main menu?
         worksheet = Worksheet()
         all_match_messages = worksheet.get_user_messages(match)
 
-        print("\nAll match messages (before):\n", all_match_messages)
-
         # add message to match's messages
         found_user_match = False
         for message in all_match_messages:
@@ -160,9 +167,17 @@ Would you like to send a message or go back to the main menu?
             for match in matches:
                 if match[0] == message[0]:
                     match_alias = match[2]
+                    last_message_text = ""
+                    # loop through match messages to check for the
+                    # last message where user_sent is false
+                    for match_message in message[2]:
+                        if match_message[1] == "False":
+                            last_message_text = match_message[0]
+                            break
                     print(f"""
-{index}. Latest message from {match_alias}: {message[2][0][0]}
+{index}. Latest message from {match_alias}: {last_message_text}
 Last message received: {message[1]}
+
 *************************************
 """)
         while True:
@@ -177,15 +192,18 @@ Please enter the number of the match you would like to view:
                 try:
                     match_number = int(match_number)
                 except ValueError:
-                    print("\nPlease enter a number\n")
+                    print(f"{Fore.RED}\nPlease enter a number\n")
                     continue
                 if match_number < 1 or match_number > len(matches):
-                    print(f"""
+                    print(f"""{Fore.RED}
 Please enter a number between 1 and {len(matches)}
 """)
                     continue
                 ClearTerminalMixin.clear_terminal()
                 return self.display_messages(matches[match_number - 1])
             if user_input == "2":
+                ClearTerminalMixin.clear_terminal()
+                print("\nReturning to main menu...\n")
+                ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
-            print("\nPlease enter either '1' or '2'\n")
+            print(f"{Fore.RED}\nPlease enter either '1' or '2'\n")
