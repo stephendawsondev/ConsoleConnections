@@ -12,8 +12,15 @@ CONSOLE_CONNECTIONS_HEADING = """
 \t\t▀▀▀ ▀▀▀▀ ▀  ▀ ▀  ▀ ▀▀▀ ▀▀▀   ▀   ▀▀▀ ▀▀▀▀ ▀  ▀ ▀▀▀
 """
 
+HEARTS = "\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764"
+SUB_TEXT = "There's no cover to judge here!"
+APP_SUBHEADING = f"""
+\t\t\t{HEARTS} {HEARTS}
 
-APP_SUBHEADING = "\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n\n\t\t\tThere's no cover to judge here!\n\n\t\t\t\u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764 \u2764\n"
+\t\t\t{SUB_TEXT}
+
+\t\t\t{HEARTS} {HEARTS}
+"""
 
 
 class App():
