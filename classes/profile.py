@@ -202,13 +202,14 @@ You need to add at least one gender to your preferences.
         the ages they're interested in and the gender(s) they're interested in.
         """
 
-        print("{Fore.YELLOW}Edit profile\n")
-
         finsihed_editing = False
 
         while finsihed_editing is False:
+            print("{Fore.YELLOW}Edit profile\n")
+
             ClearTerminalMixin.clear_terminal()
-            print(f"""Here is your current profile information:\n
+            print(f"""
+Here is your current profile information:
 {Fore.RED}Uneditable:{Fore.WHITE}
 Usercode: {self.user.usercode}
 Alias: {self.user.alias}

@@ -110,7 +110,7 @@ Would you like to view your answers or take the quiz?
                         if answer == "q":
                             print(
                                 f"{Fore.RED}\nQuiz cancelled - answers not saved.")
-                            print("\nReturning to main menu...\n")
+                            print("\nReturning to compatibility quiz menu...\n")
                             ClearTerminalMixin.clear_terminal(2)
                             return self.present_compatibility_quiz()
                         answer = int(answer)
@@ -138,7 +138,7 @@ Choose a number between 1 and {len(question[1])}, or press 'q' to cancel.
             return self.present_compatibility_quiz()
 
         if quiz_option == "3":
-            print("\nReturning to compatibility quiz menu...\n")
+            print("\nReturning to main menu...\n")
             ClearTerminalMixin.clear_terminal(1)
             return self.callback(self.user)
 

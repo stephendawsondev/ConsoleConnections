@@ -42,8 +42,8 @@ class Message():
             ClearTerminalMixin.clear_terminal(2)
         if len(messages) > 0:
             print(f"""
-Your message are in {Fore.BLUE}BLUE{Fore.WHITE} 
-and your match's messages are in {Fore.MAGENTA}MAGENTA{Fore.WHITE}.
+Your message are in {Fore.CYAN}CYAN{Fore.WHITE}
+and your match's messages are in {Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}.
 """)
             # sort messages by most recent first
             messages.sort(key=lambda x: x[2], reverse=True)
@@ -51,11 +51,11 @@ and your match's messages are in {Fore.MAGENTA}MAGENTA{Fore.WHITE}.
             for message in messages:
                 [message_text, user_sent, timestamp] = message
                 if user_sent == "True":
-                    print(f"""{Fore.BLUE}
+                    print(f"""{Fore.CYAN}
 {timestamp} - {self.user.alias}: {message_text}
 """)
                 else:
-                    print(f"""{Fore.MAGENTA}
+                    print(f"""{Fore.LIGHTMAGENTA_EX}
 {timestamp} - {match[2]}: {message_text}
 """)
 
@@ -70,7 +70,7 @@ Would you like to send a message or go back to the main menu?
                 print("\nReturning to main menu...\n")
                 ClearTerminalMixin.clear_terminal(2)
                 return self.callback(self.user)
-            print("\nPlease enter either '1' or '2'\n")
+            print(f"{Fore.RED}\nPlease enter either '1' or '2'.\n")
 
     def send_message(self, all_user_messages, messages_to_match, match):
         """
@@ -134,7 +134,7 @@ Would you like to send a message or go back to the main menu?
             print("\nError updating match's messages cell\n")
             print(excep)
 
-        print("\nMessage sent!\n")
+        print(f"{Fore.GREEN}\nMessage sent!\n")
 
         ClearTerminalMixin.clear_terminal(2)
 

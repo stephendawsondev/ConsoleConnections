@@ -334,14 +334,14 @@ Please try again later.
 """)
             ClearTerminalMixin.clear_terminal(2)
             return self.callback(self.user)
-        print("Here are your matches:\n")
+        print(f"{Fore.YELLOW}Your matches\n")
         for index, match in enumerate(matches_list, start=1):
             [person, percentage_match] = match
             fire_symbol = " \U0001F525" if percentage_match >= 85 else ""
             print(f"""
 {index}. {person[2]} ({person[4]}) - {person[5]}
-  Compatibility: {percentage_match}{fire_symbol}
-  Bio: {person[6]}
+   Compatibility: {percentage_match}{fire_symbol}
+   Bio: {person[6]}
 """)
 
         while True:

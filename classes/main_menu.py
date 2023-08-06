@@ -35,7 +35,7 @@ class MainMenu():
         print(f"{Fore.YELLOW}Main Menu\n")
         while True:
             main_menu_input = input("""
-Please select the number of what you want to do.
+Please select the number of the action you want to take:
 
 1. Compatibility quiz     2. Edit profile     3. View top matches
 
@@ -55,7 +55,6 @@ Please select the number of what you want to do.
 
             if main_menu_input == "3":
                 ClearTerminalMixin.clear_terminal()
-                print(f"{Fore.YELLOW}View top matches\n")
                 # return data from view top matches function
                 matcher = Matcher(user, self.present_main_menu)
                 return matcher.view_top_matches()
