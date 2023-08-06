@@ -1,3 +1,9 @@
+"""
+This module contains the User class, which is used to create
+a user object.
+"""
+
+
 class User:
     """
     A class to represent a user. This is created using data from

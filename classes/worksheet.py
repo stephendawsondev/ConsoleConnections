@@ -1,7 +1,13 @@
-import gspread
+"""
+The Worksheet class is responsible for handling the worksheet operations.
+- Pull data from worksheet.
+- Write data to worksheet.
+- Edit worksheet data.
+"""
 import re
 import json
 import warnings
+import gspread
 from google.oauth2.service_account import Credentials
 
 

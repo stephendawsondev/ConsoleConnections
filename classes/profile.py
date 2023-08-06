@@ -1,3 +1,9 @@
+"""
+The Profile class is responsible for handling the profile details of the user,
+some of which are added at the account creation step, and which can be edited
+later on.
+"""
+
 import json
 import time
 from classes.authenticaton import Authentication

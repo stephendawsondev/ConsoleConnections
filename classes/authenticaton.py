@@ -1,3 +1,7 @@
+"""
+The Authentication class is responsible for handling the password
+authentication and security questions.
+"""
 import re
 
 

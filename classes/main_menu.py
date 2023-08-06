@@ -1,3 +1,8 @@
+"""
+This module contains the MainMenu class, which handles
+the main menu screen and the actions that can be taken
+after a user has logged in.
+"""
 from classes.profile import Profile
 from classes.quiz import Quiz
 from classes.mixins import ClearTerminalMixin

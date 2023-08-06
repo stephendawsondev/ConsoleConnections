@@ -1,3 +1,10 @@
+"""
+The Matcher class is responsible for handling the match calculations.
+- Filters out users who don't match the user's preferences.
+- Calculates the percentage match based on each users answers.
+- Returns a list of potential matches sorted by percentage of
+questions in common.
+"""
 import re
 import json
 from classes.worksheet import Worksheet
@@ -301,7 +308,7 @@ KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
         - If the user selects a number, run the view match method.
         - If the select 'q', return to the main menu.
         """
-        if (len(matches_list) == 0):
+        if len(matches_list) == 0:
             print("""
 Sorry, there are no matches that match your preferences.
 Please try again later.

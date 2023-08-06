@@ -1,3 +1,7 @@
+"""
+Module providing data/time functionality
+for timestamps in the message class.
+"""
 import datetime
 import gspread
 from classes.worksheet import Worksheet
@@ -73,7 +77,7 @@ Would you like to send a message or go back to the main menu?
         # add message to user's messages
         try:
             messages_to_match.insert(0, [user_message, "True", timestamp])
-        except Exception as excep:
+        except AttributeError as excep:
             print("\nError adding message to user's messages\n")
             print(excep)
 
@@ -119,7 +123,7 @@ Would you like to send a message or go back to the main menu?
         # update match's messages cell
         try:
             worksheet.update_cell(match[12], 10, str(all_match_messages))
-        except Exception as excep:
+        except gspread.exceptions.APIError as excep:
             print("\nError updating match's messages cell\n")
             print(excep)
 

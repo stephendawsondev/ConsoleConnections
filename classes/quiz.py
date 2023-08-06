@@ -1,3 +1,10 @@
+"""
+The Quiz class is responsible for handling the compatibility quiz.
+- Presents the user with 10 questions.
+- User answers the questions.
+- Answers are stored in a list and returned.
+- Allows the user to view their answers.
+"""
 import re
 import json
 from classes.worksheet import Worksheet

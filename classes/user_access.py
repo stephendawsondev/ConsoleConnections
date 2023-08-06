@@ -1,7 +1,9 @@
-"""Module responsible for handling random number generation
-in the signup process."""
+"""
+The User Access class is responsible for handling the sheet selection,
+and pulling data from the selected sheet.
+Also handles user signup and login.
+"""
 import random
-
 from classes.worksheet import Worksheet
 from classes.profile import Profile
 from classes.authenticaton import Authentication

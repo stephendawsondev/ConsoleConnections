@@ -1,3 +1,6 @@
+"""
+Module that checks is the machine is running Windows or not.
+"""
 import os
 import time
 

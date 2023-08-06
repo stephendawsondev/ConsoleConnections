@@ -1,6 +1,7 @@
 """
-Module responsible for clearing the terminal at different
-points in the app.
+The App module is responsible for starting the app.
+- Displays the app heading.
+- Runs the user access module.
 """
 from classes.mixins import ClearTerminalMixin
 from classes.user_access import UserAccess
