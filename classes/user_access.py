@@ -144,7 +144,7 @@ Please keep this safe as you will need it to login.
 You will also need to create an alias to use for in-app communication.
 The alias must be unique and it is recommended that it does not easily
 identify you (for security reasons).
-                      
+
 Please enter your alias now:
 """)
 
