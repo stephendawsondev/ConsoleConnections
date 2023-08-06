@@ -1,3 +1,7 @@
+"""
+The initial file to run the program.
+"""
+
 from classes.app import App
 
 
