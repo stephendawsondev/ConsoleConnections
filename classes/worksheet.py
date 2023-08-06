@@ -70,7 +70,7 @@ class Worksheet():
                 user.age,
                 user.gender,
                 None,
-                None,
+                str([]),
                 str(user.age_range_seeking),
                 None,
                 None,
