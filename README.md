@@ -4,6 +4,8 @@
 
 Console Connections is a terminal-based dating app. By setting your age and gender preferences, and answering a few compatibility questions, you can find a match (or matches). Once both of you have allowed for contact, you can send messages to each other. The app runs in the Code Institute Mock Terminal, which is deployed on Heroku.
 
+![Screenshot of the app welcome screen](images/readme-images/console-connections-home.png)
+
 ## Table of Contents
 - [**Using the app - Login/Registration steps**](#using-the-app---loginregistration-steps)
   - [**Establishing user type**](#establishing-user-type)
@@ -28,15 +30,23 @@ Console Connections is a terminal-based dating app. By setting your age and gend
   - [**Login and signup options**](#login-and-signup-options)
   - [**Unique usercode generation**](#unique-usercode-generation)
   - [**Security questions and answers for credential recovery**](#security-questions-and-answers-for-credential-recovery)
+  - [**Credentials recovery**](#credentials-recovery)
   - [**Main menu**](#main-menu-1)
   - [**Compatibility quiz**](#compatibility-quiz-1)
   - [**Edit profile**](#edit-profile-1)
   - [**View matches**](#view-matches-1)
   - [**View messages**](#view-messages-1)
+  - [**Add matches to allow contact list**](#add-matches-to-allow-contact-list)
   - [**Message matches**](#message-matches)
   - [**Log out**](#log-out-1)
 - [**Testing**](#testing)
 - [**Deployment**](#deployment)
+  - [**Google Sheets**](#google-sheets)
+  - [**Local Deployment**](#local-deployment)
+  - [**Before remote deployment**](#before-remote-deployment)
+  - [**Deployment on Heroku**](#deployment-on-heroku)
+  - [**Creating a fork**](#creating-a-fork)
+  - [**Cloning Repository**](#cloning-repository)
 - [**Bugs and issues table**](#bugs-and-issues-table)
 - [**Resources used**](#resources-used)
 
@@ -99,7 +109,7 @@ As a frequent user, I want:
 - to be able to edit my profile
 - to be able to view my message history
 - to see new matches as they become available
-
+___
 ### Flowcharts
 #### Flowchart before logging in or signing up
 ![Flowchart before logging in or signing up](./images/flowcharts/signup-signin-flowchart.png)
@@ -107,7 +117,7 @@ As a frequent user, I want:
 #### Flowchart after logging in or signing up
 
 ![Flowchart after logging in or signing up](./images/flowcharts/signedin-flowchart.png)
-
+___
 ### Google sheet headings
 
 I used Google Sheets to store user's data, compatibility quiz answers and messages. There were some iterations of the headings used in the sheet:
@@ -122,7 +132,7 @@ usercode,	password,	alias,	security_questions,	age,	gender,	bio,	genders_seeking
 
 #### Final iteration of Google Sheet headings:
  usercode, password, alias, security_questions, age, gender, bio, genders_seeking, age_range_seeking, messages, allow_contact_list, compatibity_answers, row_num													
-
+___
 ### Messages structure
 
 The structure of messages was a little tricky as it required some nested lists. I decided to store the messages in the Google Sheet as a string. I used the json module to convert the string to a list. I used the following message structure in user's message section:
@@ -154,40 +164,85 @@ The structure of messages was a little tricky as it required some nested lists. 
 
 ### Test mode or real mode
 
-Users can choose whether to use test data or if they want to actually use the app.
-SCREENSHOT 
+Users can choose whether to use test data or if they want to actually use the app.<br>
+
+![console connections welcome screen showing test and real user options](images/readme-images/homescreen-user-types.png) 
 
 ### Login and signup options
-Existing users can sign in and new users can sign up.
-SCREENSHOT 
+Existing users can sign in and new users can sign up.<br>
+
+![console connections welcome screen showing test and real user options](images/readme-images/login-signup.png)
+
 
 ### Unique usercode generation
-Each user is assigned a unique usercode to log into the app.
-SCREENSHOT
+Each user is assigned a unique usercode to log into the app.<br>
+
+![signup page showing usercode and password prompt](images/readme-images/signup-password.png)
 
 ### Security questions and answers for credential recovery
-Users can set two security questions and answers to help them recover their password or usercode. SCREENSHOT
+Users can set two security questions and answers to help them recover their password or usercode. <br>
 
+![first security question prompt](images/readme-images/signup-security-questions-1.png)
+
+![second security question prompt](images/readme-images/signup-security-questions-2.png)
+
+
+### Credentials recovery
+If a user forgets their username or password, they can recover it by going through some steps like providing their alias along with security questions.
+
+![forgot usercode prompt](images/readme-images/login-forgot-usercode.png)
+
+![forgot password prompt](images/readme-images/login-forgot-password.png)
 ### Main menu
-The main menu after users have logged in. Provides users with a number of options to choose from. SCREENSHOT
+The main menu after users have logged in. Provides users with a number of options to choose from. <br>
+
+![app main menu after login](images/readme-images/main-menu.png)
 
 ### Compatibility quiz
-Users can take a compatibility quiz to help them find matches. SCREENSHOT
+Users can take a compatibility quiz to help them find matches. <br>
+
+![compatibility quiz on completion](images/readme-images/compatibility-quiz-quiz-complete.png)
+
+![view answer of compatibility quiz](images/readme-images/compatibility-quiz-view-answers.png)
 
 ### Edit profile
-Users can edit their profile details. SCREENSHOT
+Users can edit their profile details. <br>
+
+![edit profile page with values updated and saved](images/readme-images/edit-profile-save.png)
 
 ### View matches
-Users can view their matches. SCREENSHOT
+Users can view their matches. Matches with a compatibility score of 85 or more get a little fire.<br>
+
+![matches listed with their ages, compatibility score and bios](images/readme-images/matches-displayed.png)
 
 ### View messages
-Users can view their messages. SCREENSHOT
+Users can view their latest messages with all matches, then choose which one they want to see the full conversation for.<br>
+
+![screen with the latest messages displayed from different matches](images/readme-images/matches-latest-messages.png)
+
+
+### Add matches to allow contact list
+Users have an extra layer of security because they can choose to allow contact from a match. Both users must allow contact in order to message.<br>
+
+![screen prompting user to allow contact](images/readme-images/allow-contact.png)
+
+![screen with message saying match hasn't allowed contact yet](images/readme-images/matches-no-contact.png)
 
 ### Message matches
-Users can message their matches. SCREENSHOT
+Users can message their matches. <br>
+
+![match with option to view match's messages](images/readme-images/matches-view-user-messages.png)
+Users can message their matches. <br>
+
+![screen to send message to match](images/readme-images/matches-send-message.png)
+Users can message their matches. <br>
+
+![conversation with match](images/readme-images/matches-match-messages.png)
 
 ### Log out
-Users can log out of their account. SCREENSHOT
+Users can log out of their account and is displayed a message, which later updates to the login/signup screen.
+
+![logged out test on the screen](images/readme-images/logged-out.png)
 
 ## Testing
 
@@ -225,7 +280,7 @@ I used the Code Institute Mock Terminal to test the app. I asked family and frie
 ## Deployment
 
 ### Google Sheets
-The application stores data in a Google Sheet. The credentials for the communicating with the sheet and should be saved in a file titled `cred.json`. To generate your Google Sheet credentials, follow these steps:
+The application stores data in a Google Sheet. The credentials for the communicating with the sheet and should be saved in a file titled `creds.json`. To generate your Google Sheet credentials, follow these steps:
 1. Go to the [Google Developers Console](https://console.developers.google.com/)
 2. Create a new project
 3. Enable the Google Drive API
