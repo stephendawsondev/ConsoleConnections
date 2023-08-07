@@ -76,7 +76,7 @@ your usercode will be {Fore.GREEN}{usercode}{Fore.WHITE}.
 Please keep this code safe as you will need it to login.
 """)
 
-        authentication = Authentication()
+        authentication = Authentication("", self.present_login_signup_step)
         password = authentication.prompt_for_password("new")
 
         alias = self.create_and_validate_alias(user_data)
@@ -136,9 +136,9 @@ Great! We've got your usercode, password and alias!
 
     def generate_random_usercode(self, user_data):
         """
-        - Generates a new 6-digit usercode for the user.\n
-        - Checks if the usercode already exists in the database.\n
-        - If the usercode exists, generate a new one.\n
+        - Generates a new 6-digit usercode for the user.
+        - Checks if the usercode already exists in the database.
+        - If the usercode exists, generate a new one.
         """
         usercode = random.randint(100000, 999999)
 
@@ -184,20 +184,29 @@ Alias already exists. Please choose another.
 
     def user_login(self, all_users):
         """
-Checks if the user exists on the Google Sheet.\n
-- If the user exists, prompt them for password.\n
-- If the user doesn't exist, let them know and ask if they want to signup.\n
+        Checks if the user exists on the Google Sheet.
+        - If the user exists, prompt them for password.
+        - If the user doesn't exist, let them know and
+        ask if they want to signup.
         """
         all_users = Worksheet().get_all_values()
         user_exists = False
         while user_exists is False:
-            usercode_input = input("\nPlease enter your usercode:\n")
+            usercode_input = input("""
+Please enter your usercode. If you forgot it, enter 'f' to recover it:
+""")
+            if usercode_input == "f":
+                authentication = Authentication(
+                    "usercode", self.present_login_signup_step)
+                return authentication.recover_credentials()
+
             # checks the first column of the data for the usercode
             for index, row in enumerate(all_users):
                 if row[0] == str(usercode_input):
                     user_exists = True
                     # prompt for password
-                    authentication = Authentication()
+                    authentication = Authentication(
+                        "", self.present_login_signup_step)
                     password = authentication.prompt_for_password(
                         "existing", row)
                     if password is not None:
@@ -226,11 +235,11 @@ Checks if the user exists on the Google Sheet.\n
 
     def present_login_signup_step(self):
         """
-Provide the user with the option to login or signup.\n
-- If login, check if the user exists in the database and
-run the login function (if they exist)
-- If signup, check if the user exists in the database
-and run the signup function (if they don't exist).
+        Provide the user with the option to login or signup.
+        - If login, check if the user exists in the database and
+        run the login function (if they exist)
+        - If signup, check if the user exists in the database
+        and run the signup function (if they don't exist).
         """
         while True:
             login_signup = input("""
