@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/attach/attach.js"></script>
-    <title>Python Terminal by Code Institute</title>
+    <title>Console Conections</title>
     <style>
         body {
             font-family: Arial;
@@ -164,6 +164,32 @@
             text-transform: uppercase;
             margin: 10px;
             border-radius: 8px;
+        }
+
+        /* Custom styles */
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('../images/love-hearts.svg');
+            background-repeat: no-repeat;
+            background-position: top center;
+            background-size: cover;
+            background-color: black;
+        }
+
+        .xterm .xterm-viewport {
+            width: initial;
+        }
+
+        #terminal {
+            background-color: rgba(255,255,255,0.75);
+        }
+
+        #terminal button {
+            display: block;
+            margin: 1em auto;
         }
     </style>
 </head>
