@@ -100,32 +100,6 @@ As a frequent user, I want:
 - to be able to view my message history
 - to see new matches as they become available
 
-<details><summary>
-
-### Testing details/summary on GitHub
-
-</summary>
-
-As a first-time user, I want:
-- to be able to sign up for an account
-- to be able to edit my profile
-- to be able to take a compatibility quiz
-- to be able to view my matches
-- to log out of my account
-
-As a returning user, I want:
-- to be able to log in to my account
-- to be able to edit my profile
-- to be able to view my messages
-- to be able to message my matches
-
-As a frequent user, I want:
-- to be able to edit my profile
-- to be able to view my message history
-- to see new matches as they become available
-
-</details>
-
 ### Flowcharts
 
 #### Flowchart before logging in or signing up
@@ -218,6 +192,20 @@ Users can log out of their account. SCREENSHOT
 
 ## Testing
 
+I used the Code Institute Mock Terminal to test the app. I asked family and friends to test both the test user and real user versions of the app. I also tested the app myself. I used the following test cases:
+
+| Test Case | Test Steps | Expected Result | Actual Result | Pass/Fail |
+|-----------|------------|-----------------|---------------|-----------|
+| Test user signup | 1. Select test user option 2. Select signup option 3. Enter usercode 4. Enter password 5. Enter security questions 6. Enter security answers 7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
+| Test user login | 1. Select test user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
+| Real user signup | 1. Select real user option 2. Select signup option 3. Enter usercode 4. Enter password 5. Enter security questions 6. Enter security answers 7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
+| Real user login | 1. Select real user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
+
+| Test Case | Test Steps | Expected Result | Actual Result | Pass/Fail |
+|-----------|------------|-----------------|---------------|-----------|
+
+
+
 ## Deployment
 
 ## Bugs and issues table
@@ -234,7 +222,7 @@ Users can log out of their account. SCREENSHOT
 | After completing or redoing the compatibility quiz, the answers aren't the user's | It could be that the value is being overwritten           |      Y       | When presenting the quiz options screen, I was using the existing instance's data instead           |
 | 'User' is not subscriptable error when trying to access a user's matches          | Check the type of the user variable                       |      Y       | I was able to resolve the issue updating the way I access the data within the user instance         |
 | Mismatched ages depending on profile logged in as.                                | Make sure the age is the right type                       |      Y       | It turns out the user was checking if their own age was in range instead of the match's             |
-| In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      N       |                                                                                                     |
+| In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      Y       | I looped through the messages to find the last one that the match sent instead                      |
 | When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      Y       | Pulled the Google Worksheet data on the login/signup step                                           |
 | When updating user profile, a gspread warning is displayed. Only applies to 6.0   | Catch the warning and ignore it                           |      Y       | Imported warning module and ignored that warning to stop it from showing up                         |
 
@@ -255,3 +243,4 @@ Users can log out of their account. SCREENSHOT
 - [Avoiding circular imports](https://medium.com/brexeng/avoiding-circular-imports-in-python-7c35ec8145ed)
 - [User is not subscriptable error explaination](https://blog.jcharistech.com/2022/02/07/how-to-fix-typeerror-object-is-not-subscriptable/)
 - [Documentation on catching Python warnings](https://docs.python.org/3/library/warnings.html)
+- [Colours in the terminal](https://sparkbyexamples.com/python/print-colored-text-to-the-terminal-in-python)

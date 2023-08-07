@@ -62,7 +62,7 @@ and your match's messages are in {Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}.
         while True:
             user_input = input("""
 Would you like to send a message or go back to the main menu?
-1. Send message     2. Go back to messages
+1. Send message     2. Go back to main menu
 """)
             if user_input == "1":
                 return self.send_message(user_messages, messages, match)

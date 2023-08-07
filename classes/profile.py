@@ -210,6 +210,7 @@ You need to add at least one gender to your preferences.
             ClearTerminalMixin.clear_terminal()
             print(f"""
 Here is your current profile information:
+
 {Fore.RED}Uneditable:{Fore.WHITE}
 Usercode: {self.user.usercode}
 Alias: {self.user.alias}
@@ -228,7 +229,7 @@ Please enter the number of the field you would like to edit,
 or enter '6' to save and exit:
 """)
             if edit_profile_option == "1":
-                authentication = Authentication()
+                authentication = Authentication("", self.present_edit_profile)
                 self.user.password = authentication.prompt_for_password(
                     "updating")
             elif edit_profile_option == "2":
