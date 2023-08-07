@@ -243,7 +243,7 @@ Please enter your usercode. If you forgot it, enter 'f' to recover it:
         """
         while True:
             login_signup = input("""
-Would you like to login or signup? Please enter 1 or 2.
+Would you like to log in or sign up? Please enter 1 or 2.
 
 1. Login     2. Signup
 """)
@@ -262,5 +262,5 @@ Would you like to login or signup? Please enter 1 or 2.
 
             ClearTerminalMixin.clear_terminal()
             print(f"""{Fore.RED}
-Please enter either '1' to Login or '2' to Signup.
+Please enter either '1' to log in or '2' to sign up.
 """)

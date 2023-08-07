@@ -80,6 +80,9 @@ Would you like to send a message or go back to the main menu?
         """
         user_message = input("\nPlease enter your message:\n")
 
+        # remove double quotes from user message
+        user_message = user_message.replace('"', "")
+
         # get current timestamp
         timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
