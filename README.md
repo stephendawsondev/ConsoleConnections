@@ -101,7 +101,6 @@ As a frequent user, I want:
 - to see new matches as they become available
 
 ### Flowcharts
-
 #### Flowchart before logging in or signing up
 ![Flowchart before logging in or signing up](./images/flowcharts/signup-signin-flowchart.png)
 
@@ -196,17 +195,85 @@ I used the Code Institute Mock Terminal to test the app. I asked family and frie
 
 | Test Case | Test Steps | Expected Result | Actual Result | Pass/Fail |
 |-----------|------------|-----------------|---------------|-----------|
-| Test user signup | 1. Select test user option 2. Select signup option 3. Enter usercode 4. Enter password 5. Enter security questions 6. Enter security answers 7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
-| Test user login | 1. Select test user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
-| Real user signup | 1. Select real user option 2. Select signup option 3. Enter usercode 4. Enter password 5. Enter security questions 6. Enter security answers 7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
-| Real user login | 1. Select real user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
+| User signup | 1. Select test user option <br>2. Select signup option <br>3. Enter usercode <br>4. Enter password <br>5. Enter security questions <br>6. Enter security answers <br>7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
+| User login | 1. Select test user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
+| User views matches without completing compatibilty quiz | 1.Sign up <br>2. Select view matches option | User is shown a message that they need to complete the compatibility quiz | User is shown a message that they need to complete the compatibility quiz | Pass |
+| User views compatibilty quiz answers without answer | 1. Sign up <br>2. Select compatibility quiz option <br>3. Select view quiz answers option | User is shown a message that they have not yet completed the compatibility quiz | User is shown a message that they need to complete the compatibility quiz | Pass |
+| User takes compatibility quiz and finishes | 1. Select compatibility quiz option <br>2. Answer all questions | User is shown a message that they have completed the compatibility quiz | User is shown a message that they have completed the compatibility quiz | Pass |
+| User views compatibilty quiz answers after completing quiz | 1. Select compatibility quiz option <br>2. Select view quiz answers option | User is shown a message that they have not yet completed the compatibility quiz | User is shown a message that they have completed the compatibility quiz | Pass |
+| User clicks "Return to main menu" on compatibility screen | 1. Select compatibility quiz option <br>2. Select return to main menu option | User is taken back to the main menu | User receives a message saying they are going back to main menu and is taken back to the main menu | Pass |
+| User views matches without completing their profile but completed compatibilty quiz | 1. Sign up <br>2. Select view matches option | User is shown a message that they need to fill out the genders seeking section | User is shown a message that they need to complete their profile | Pass |
+| User clicks edit profile option | 1. Select edit profile option | User is taken to the edit profile screen | User is taken to the edit profile screen | Pass |
+| User edits their profile and saves | 1. Select edit profile option <br>2. Edit profile details <br>3. Select save and exit option | User's profile is updated is taken back to the main menu | User is taken back to the main menu and profile is updated | Pass |
+| User views messages without matching with anyone | 1. Sign up <br>2. Select view messages option | User is shown a message that they have no messages | User is shown a message that they have no messages | Pass |
+| User views matches with matches | 1. Sign up <br>2. Complete profile and compatibility question <br>3. Select view matches option | User is shown a list of matches | User is shown a list of matches' names, age, gender, compatibility score and bio | Pass |
+| User views messages with matches for first time | 1. View matches with complete profile (and have matches) <br>2. Select view messages option | User is prompted to allow for contact from that match | If match allows contact, displays message option. If match doesn't allow contact, displays message saying they have not yet allowed contact and redirects to matches screen. | Pass |
+| User views messages with matches when contact is allowed | 1. View matches with complete profile (and have matches) <br>2. Select view matches option <br>3. Select a match that has allowed contact | User is shown a list of messages from that match and given the option to send a message | User is shown a list of messages from that match and given the option to send a message | Pass |
+| User sends a message to the match | 1. View matches with complete profile (and have matches) <br>2. Select view matches option <br>3. Select a match that has allowed contact <br>4. Select send message option <br>5. Enter message | User's message is recorded and user is redirected to the match message screen where there is a list of messages from that match | User's message is saved with timestamp, message sent message is provided and the user is redirect back to the message with that match | Pass |
+| User views all messages | 1. Select view matches option | User is shown a list of messages from all matches | User is shown a list of the most recent messages from all matches | Pass |
+| User clicks logout option | 1. Select logout option | User is logged out and taken to the login/signup screen | User is logged out and taken to the login/signup screen | Pass |
+| User logs in with incorrect usercode | 1. Select login option <br>2. Enter incorrect usercode | User is shown a message that the usercode is incorrect | User is shown a message that the usercode is incorrect | Pass |
+| User logs in with incorrect password | 1. Select login option <br>2. Enter usercode <br>3. Enter incorrect password | User is shown a message that the password is incorrect | User is shown a message that the password is incorrect | Pass |
+| User logs in with correct usercode and password | 1. Select login option <br>2. Enter usercode <br>3. Enter password | User is logged in and taken to the main menu | User is logged in and taken to the main menu | Pass |
+| User forgets usercode | 1. Select the login option <br>2. Enter 'f' to indicate usercode was forgotten 3. Enter alias 4. Enter security questions correctly | User is presented with usercode | User is presented with usercode | Pass |
+| User forgets password | 1. Select the login option <br>2. Enter the correct usercode <br>3. Enter 'f' to indicate password was forgotten <br>4. Enter security questions correctly <br>5. Enter new password | User's password is updated and they're brought back to the login screen | User's password is updated and they're brought back to the login screen | Pass |
 
-| Test Case | Test Steps | Expected Result | Actual Result | Pass/Fail |
-|-----------|------------|-----------------|---------------|-----------|
+
 
 
 
 ## Deployment
+
+### Google Sheets
+The application stores data in a Google Sheet. The credentials for the communicating with the sheet and should be saved in a file titled `cred.json`. To generate your Google Sheet credentials, follow these steps:
+1. Go to the [Google Developers Console](https://console.developers.google.com/)
+2. Create a new project
+3. Enable the Google Drive API
+4. Create credentials for a Web Server to access Application Data
+5. Name the service account and grant it a Project Role of Editor
+6. Download the JSON file
+7. Copy the JSON file to your code directory and rename it to cred.json
+8. In the JSON file, change the email address to the one you are sharing your Google Sheet with
+9. In the Google Sheet, share the sheet with the email address in the JSON file
+
+### Local Deployment
+To run the project locally, you will need to Python, Git and pip installed. You will also need to install the `requirements.txt` dependencies by running the following command in the terminal:
+```
+pip3 install -r requirements.txt
+```
+To run the project, run the following command in the terminal:
+```
+python3 run.py
+```
+You can stop the project from running by pressing `Ctrl + C` in the terminal.
+
+### Before remote deployment
+To ensure the application is deployed correctly on Heroku, you must update the requirements.txt. This is a list of requirements that the application needs in order to run. 
+- To create the list of requirements we use the command `pip3 freeze > requirements.txt`. This will ensure the file with the requirements is updated. If you run the command on VSCode, you should also make sure to remove anything after and including the `@path` beside each of the modules.
+- Commit and push the changes and push to GitHub.
+### Deployment on Heroku
+- To deploy the project on [Heroku](https://www.heroku.com), first create an account.
+- Once logged in, create a new app by clicking on the create app button
+- Pick a unique name for the app, select a region, and click create app.
+- On the next page select the settings tab and scroll down to Config Vars. If there are any files that should be hidden like credentials and API keys they should be added here. In this project, there are credentials that need to be protected. To do this I have created a config var and added CREDS as the key and the content of the creds.json file as a value.
+- Scroll down to Buildpacks. The buildpacks will install further dependencies that are not included in the `requirements.txt`. For this project, there are two buildpacks required - Python and Nodejs.
+- Select the deploy section from the tab in the menu. 
+- The deployment method for this project is GitHub. Once selected, confirm that we want to connect to GitHub, search for the repository name and click connect to connect the Heroku app to our GitHub code. 
+- Scroll further down to the deploy section where automatic deploys can be enabled, which means that the app will update every time code is pushed to GitHub. Click deploy and wait for the app to be built. Once this is done, a message should appear letting us know that the app was successfully deployed with a view button to see the app.
+
+### Creating a fork
+1. Navigate to the [repository](https://github.com/stephendawsondev/ConsoleConnections)
+2. In the top-right corner of the page click on the fork button and select "Create a fork".
+3. Change the name of the fork and add a description 
+4. Choose to copy only the main branch to the new fork. 
+5. Click "Create a Fork". A new repository should appear in your GitHub.
+
+### Cloning Repository
+1. Navigate to the [repository](https://github.com/stephendawsondev/ConsoleConnections)
+2. Click on the Code button on top of the repository and copy the link. 
+3. Open Git Bash and change the working directory to the location where we want the cloned directory. 
+4. Type git clone and then paste the link.
+5. Press Enter to create our local clone.
 
 ## Bugs and issues table
 
@@ -225,6 +292,7 @@ I used the Code Institute Mock Terminal to test the app. I asked family and frie
 | In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      Y       | I looped through the messages to find the last one that the match sent instead                      |
 | When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      Y       | Pulled the Google Worksheet data on the login/signup step                                           |
 | When updating user profile, a gspread warning is displayed. Only applies to 6.0   | Catch the warning and ignore it                           |      Y       | Imported warning module and ignored that warning to stop it from showing up                         |
+| If double quotes are added in a user message, it breaks.                          | Remove double quotes before saving to the sheet.          |      Y       | Removed double quotes with .replace method                                                          |
 
 ## Resources used
 - [TODOs in Python](https://www.jetbrains.com/help/pycharm/using-todo.html#view_todo)
