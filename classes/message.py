@@ -42,7 +42,7 @@ class Message():
             ClearTerminalMixin.clear_terminal(2)
         if len(messages) > 0:
             print(f"""
-Your message are in {Fore.CYAN}CYAN{Fore.WHITE}
+Your messages are in {Fore.CYAN}CYAN{Fore.WHITE}
 and your match's messages are in {Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}.
 """)
             # sort messages by most recent first
@@ -62,7 +62,7 @@ and your match's messages are in {Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}.
         while True:
             user_input = input("""
 Would you like to send a message or go back to the main menu?
-1. Send message     2. Go back to main menu
+1. Send message     2. Go back to messages
 """)
             if user_input == "1":
                 return self.send_message(user_messages, messages, match)
@@ -138,7 +138,7 @@ Would you like to send a message or go back to the main menu?
 
         ClearTerminalMixin.clear_terminal(2)
 
-        return self.callback(self.user)
+        return self.display_messages(match)
 
     def view_all_messages(self):
         """
@@ -168,15 +168,18 @@ Would you like to send a message or go back to the main menu?
                 if match[0] == message[0]:
                     match_alias = match[2]
                     last_message_text = ""
+                    last_message_date = message[1]
                     # loop through match messages to check for the
                     # last message where user_sent is false
                     for match_message in message[2]:
                         if match_message[1] == "False":
+                            last_message_date = match_message[2]
+                            message[1] = last_message_date
                             last_message_text = match_message[0]
                             break
                     print(f"""
 {index}. Latest message from {match_alias}: {last_message_text}
-Last message received: {message[1]}
+Received: {message[1]}
 
 *************************************
 """)
