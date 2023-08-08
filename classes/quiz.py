@@ -14,6 +14,28 @@ from classes.mixins import ClearTerminalMixin
 
 init(autoreset=True)
 
+COMPATIBILITY_QUESTIONS = [
+    ["Are you more of an introvert or extrovert?",
+     ["Introvert", "Extrovert"]],
+    ["Do you prefer cities or countryside?",
+     ["Cities", "Countryside"]],
+    ["Are you more of a planner or spontaneous?",
+     ["Planner", "Spontaneous"]],
+    ["Are you a dog person, a cat person, both or neither?",
+     ["Dog", "Cat", "Dogs and Cats", "Neither"]],
+    ["Do you prefer sweet or savory food?", ["Sweet", "Savory"]],
+    ["Do you prefer books, films, or both equally?", [
+        "Books", "Films", "Books and Films equally"]],
+    ["Do you prefer active getaways, relaxed getaways,"
+     " both or neither?",
+     ["Active", "Relaxed", "Both", "I don't like getaways"]],
+    ["Are you more logical or emotional?", ["Logical", "Emotional"]],
+    ["Do you prefer eating out, cooking at home, or either?",
+     ["Eating out", "Cooking at home", "Either"]],
+    ["Do you prefer traveling or staying home?",
+     ["Traveling", "Staying home"]]
+]
+
 
 class Quiz():
     """
@@ -51,45 +73,25 @@ class Quiz():
         else:
             compatibility_answers = []
 
-        compatibility_questions = [
-            ["Are you more of an introvert or extrovert?",
-                ["Introvert", "Extrovert"]],
-            ["Do you prefer cities or countryside?",
-             ["Cities", "Countryside"]],
-            ["Are you more of a planner or spontaneous?",
-             ["Planner", "Spontaneous"]],
-            ["Are you a dog person, a cat person, both or neither?",
-             ["Dog", "Cat", "Dogs and Cats", "Neither"]],
-            ["Do you prefer sweet or savory food?", ["Sweet", "Savory"]],
-            ["Do you prefer books, films, or both equally?", [
-                "Books", "Films", "Books and Films equally"]],
-            ["""Do you prefer active getaways, relaxed getaways,
-both or neither?""",
-             ["Active", "Relaxed", "Both", "I don't like getaways"]],
-            ["Are you more logical or emotional?", ["Logical", "Emotional"]],
-            ["Do you prefer eating out, cooking at home, or either?",
-             ["Eating out", "Cooking at home", "Either"]],
-            ["Do you prefer traveling or staying home?",
-             ["Traveling", "Staying home"]]
-        ]
+        quiz_option = input("\nWould you like to view your "
+                            "answers or take the quiz?\n"
+                            "\n1. View answers     2. Take "
+                            "quiz     3. Return to main menu\n")
 
-        quiz_option = input("""
-Would you like to view your answers or take the quiz?
-1. View answers     2. Take quiz     3. Return to main menu
-""")
         if quiz_option == "1":
             ClearTerminalMixin.clear_terminal()
             print(f"{Fore.YELLOW}\nView answers\n")
 
             if len(compatibility_answers) == 0:
-                print(f"""
-{Fore.RED}You have not yet completed the compatibility quiz.
-""")
+                print(
+                    f"\n{Fore.RED}You have not yet completed "
+                    "the compatibility quiz.\n")
+
                 ClearTerminalMixin.clear_terminal(2)
                 return self.present_compatibility_quiz()
 
             for question, answer in zip(
-                    compatibility_questions, compatibility_answers):
+                    COMPATIBILITY_QUESTIONS, compatibility_answers):
                 print(f"\n{question[0]}\n")
                 print(f"{answer}\n")
             return self.present_compatibility_quiz()
@@ -98,7 +100,7 @@ Would you like to view your answers or take the quiz?
             ClearTerminalMixin.clear_terminal()
             print(f"{Fore.YELLOW}\nQuiz")
             compatibility_answers = []
-            for question in compatibility_questions:
+            for question in COMPATIBILITY_QUESTIONS:
                 print(f"\n{question[0]}\n")
                 for index, option in enumerate(question[1]):
                     print(f"{index+1}. {option}")
@@ -118,9 +120,10 @@ Would you like to view your answers or take the quiz?
                             valid_answer = True
                             chosen_answer = question[1][answer - 1]
                         else:
-                            print(f"""{Fore.RED}
-Choose a number between 1 and {len(question[1])}, or press 'q' to cancel.
-""")
+                            print(f"{Fore.RED}\nChoose a number between "
+                                  f"1 and {len(question[1])},"
+                                  f" or press 'q' to cancel.\n")
+
                     except ValueError:
                         continue
 

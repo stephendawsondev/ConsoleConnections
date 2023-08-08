@@ -38,15 +38,15 @@ class Profile():
 
         age = int(age)
         if age < 18:
-            print(f"""{Fore.RED}
-Sorry! You must be at least 18 years old to use Console Connections.
-""")
+            print(f"{Fore.RED}\nSorry! You must be at least 18 years old "
+                  "to use Console Connections.\n")
+
             return Profile.prompt_for_age()
 
         if age >= 100:
-            print("""
-While we admire your vitality, users must between the ages of 18 and 100
-""")
+            print("\nWhile we admire your vitality, users must be between "
+                  "the ages of 18 and 100\n")
+
             return Profile.prompt_for_age()
 
         return age
@@ -56,11 +56,9 @@ While we admire your vitality, users must between the ages of 18 and 100
         """
         Gets the user's gender.
         """
-        gender_input = input("""
-Please input the gender you identify as:
-
-1. Male     2. Female     3. Non-binary
-""").lower()
+        gender_input = input("\nPlease input the gender you identify as:"
+                             "\n\n1. Male     2. Female     "
+                             "3. Non-binary\n").lower()
 
         if gender_input == "1" or gender_input == "male":
             gender = "Male"
@@ -69,9 +67,9 @@ Please input the gender you identify as:
         elif gender_input == "3" or gender_input == "non-binary":
             gender = "Non-binary"
         else:
-            print(f"""{Fore.RED}
-Please enter one of the above genders using 1, 2, or 3.
-""")
+            print(f"{Fore.RED}\nPlease enter one of the above genders using "
+                  "1, 2, or 3.\n")
+
             return Profile.prompt_for_gender()
 
         return gender
@@ -82,23 +80,20 @@ Please enter one of the above genders using 1, 2, or 3.
         Sets the minimum and maximum age that the user wants to match with.
         Minimum must be 18 and maximum is 100.
         """
-        min_age = input("""
-What is the minimum age you want to match with? The age must be 18 or over.
-""")
+        min_age = input("\nWhat is the minimum age you want to match with? "
+                        "The age must be 18 or over.\n")
 
         if not min_age.isdigit():
             print(f"{Fore.RED}\nPlease enter a number between 18 and 100\n")
             return Profile.set_age_range_seeking()
 
         if int(min_age) < 18:
-            print(f"""{Fore.RED}
-The minimum age must be 18 or over.
-""")
+            print(f"{Fore.RED}\nThe minimum age must be 18 or over.\n")
+
             return Profile.set_age_range_seeking()
 
-        max_age = input("""
-What is the maximum age you want to match with? The age must be 18 or over.
-""")
+        max_age = input("\nWhat is the maximum age you want to match with? "
+                        "The age must be 18 or over.\n")
 
         if not max_age.isdigit():
             print(f"{Fore.RED}\nPlease enter a number between 18 and 100\n")
@@ -106,21 +101,19 @@ What is the maximum age you want to match with? The age must be 18 or over.
 
         if int(max_age) < int(min_age):
             ClearTerminalMixin.clear_terminal()
-            print(f"""{Fore.RED}
-The maximum age must be greater than or equal to the minimum age.
-""")
+            print(f"{Fore.RED}\nThe maximum age must be greater than or equal "
+                  "to the minimum age.\n")
+
             return Profile.set_age_range_seeking()
 
         if int(max_age) > 100:
-            print(f"""{Fore.RED}
-The maximum age must be 100 or under.
-""")
+            print(f"{Fore.RED}\nThe maximum age must be 100 or under.\n")
+
             return Profile.set_age_range_seeking()
 
         if int(max_age) < 18:
-            print(f"""{Fore.RED}
-The maximum age must be 18 or over.
-""")
+            print(f"{Fore.RED}\nThe maximum age must be 18 or over.\n")
+
             return Profile.set_age_range_seeking()
 
         return [int(min_age), int(max_age)]
@@ -145,9 +138,8 @@ The maximum age must be 18 or over.
             for gender in current_genders:
                 print(gender)
 
-            action = input("""
-Do you want to (a)dd or (r)emove genders or (q)uit?
-""").lower()
+            action = input("\nDo you want to (a)dd or (r)emove genders "
+                           "or (q)uit?\n").lower()
 
             if action == 'a' and len(current_genders) < len(available_genders):
                 print("\nAvailable genders to add:\n")
@@ -163,9 +155,9 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                         gender for gender in available_genders
                         if gender not in current_genders][int(add_gender) - 1]
                     current_genders.append(chosen_gender)
-                    print(f"""{Fore.GREEN}
-{chosen_gender} has been added to your gender seeking preferences.
-""")
+                    print(f"{Fore.GREEN}\n{chosen_gender} has been added "
+                          f"to your gender seeking preferences.\n")
+
                     ClearTerminalMixin.clear_terminal(2)
                 except (IndexError, ValueError):
                     print("Invalid choice. Please try again.")
@@ -179,18 +171,18 @@ Do you want to (a)dd or (r)emove genders or (q)uit?
                 try:
                     chosen_gender = current_genders[int(remove_gender) - 1]
                     current_genders.remove(chosen_gender)
-                    print(f"""{Fore.GREEN}
-{chosen_gender} has been removed from your gender seeking preferences.
-""")
+                    print(f"{Fore.GREEN}\n{chosen_gender} has been removed "
+                          f"from your gender seeking preferences.\n")
+
                     ClearTerminalMixin.clear_terminal(2)
                 except (IndexError, ValueError):
                     print(f"{Fore.RED}Invalid choice. Please try again.")
 
             elif action == 'q':
                 if len(current_genders) == 0:
-                    print(f"""{Fore.RED}
-You need to add at least one gender to your preferences.
-""")
+                    print(f"{Fore.RED}\nYou need to add at least one "
+                          f"gender to your preferences.\n")
+
                 else:
                     return current_genders
             else:
@@ -208,26 +200,25 @@ You need to add at least one gender to your preferences.
             print("{Fore.YELLOW}Edit profile\n")
 
             ClearTerminalMixin.clear_terminal()
-            print(f"""
-Here is your current profile information:
+            print(f"\nHere is your current profile information:\n"
+                  f"\n{Fore.RED}Uneditable:{Fore.WHITE}\n"
+                  f"Usercode: {self.user.usercode}\n"
+                  f"Alias: {self.user.alias}\n"
+                  f"\n{Fore.GREEN}Editable:{Fore.WHITE}\n"
+                  f"    1. Password: {self.user.password}\n"
+                  f"    2. Security questions: "
+                  f"{self.user.security_questions_and_answers}\n"
+                  f"    3. Bio: {self.user.bio}\n"
+                  f"    4. Age range to match with: "
+                  f"{self.user.age_range_seeking}\n"
+                  f"    5. Genders to match with: "
+                  f"{self.user.genders_seeking}\n"
+                  f"    6. Save and exit\n")
 
-{Fore.RED}Uneditable:{Fore.WHITE}
-Usercode: {self.user.usercode}
-Alias: {self.user.alias}
+            edit_profile_option = input("\nPlease enter the number"
+                                        " of the field you would like to edit,"
+                                        "\nor enter '6' to save and exit:\n")
 
-{Fore.GREEN}Editable:{Fore.WHITE}
-    1. Password: {self.user.password}
-    2. Security questions: {self.user.security_questions_and_answers}
-    3. Bio: {self.user.bio}
-    4. Age range to match with: {self.user.age_range_seeking}
-    5. Genders to match with: {self.user.genders_seeking}
-    6. Save and exit
-""")
-
-            edit_profile_option = input("""
-Please enter the number of the field you would like to edit,
-or enter '6' to save and exit:
-""")
             if edit_profile_option == "1":
                 authentication = Authentication("", self.present_edit_profile)
                 self.user.password = authentication.prompt_for_password(

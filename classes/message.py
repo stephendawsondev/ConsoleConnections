@@ -41,29 +41,28 @@ class Message():
 
             ClearTerminalMixin.clear_terminal(2)
         if len(messages) > 0:
-            print(f"""
-Your messages are in {Fore.CYAN}CYAN{Fore.WHITE}
-and your match's messages are in {Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}.
-""")
+            print(f"\nYour messages are in {Fore.CYAN}CYAN{Fore.WHITE}\n"
+                  f"and your match's messages are in "
+                  f"{Fore.LIGHTMAGENTA_EX}PURPLE{Fore.WHITE}\n")
+
             # sort messages by most recent first
             messages.sort(key=lambda x: x[2], reverse=True)
 
             for message in messages:
                 [message_text, user_sent, timestamp] = message
                 if user_sent == "True":
-                    print(f"""{Fore.CYAN}
-{timestamp} - {self.user.alias}: {message_text}
-""")
+                    print(f"{Fore.CYAN}\n{timestamp} - {self.user.alias}: "
+                          f"{message_text}\n")
+
                 else:
-                    print(f"""{Fore.LIGHTMAGENTA_EX}
-{timestamp} - {match[2]}: {message_text}
-""")
+                    print(f"{Fore.LIGHTMAGENTA_EX}\n{timestamp} - {match[2]}: "
+                          f"{message_text}\n")
 
         while True:
-            user_input = input("""
-Would you like to send a message or go back to the main menu?
-1. Send message     2. Go back to main menu
-""")
+            user_input = input("\nWould you like to send a message or go back "
+                               "to the main menu?\n"
+                               "1. Send message     2. Go back to main menu\n")
+
             if user_input == "1":
                 return self.send_message(user_messages, messages, match)
             if user_input == "2":
@@ -180,32 +179,30 @@ Would you like to send a message or go back to the main menu?
                             message[1] = last_message_date
                             last_message_text = match_message[0]
                             break
-                    print(f"""
-{index}. Latest message from {match_alias}:
-{last_message_text}
-
-Received: {message[1]}
-
-*************************************
-""")
+                    print(f"\n{index}. Latest message from {match_alias}:"
+                          f"\n{last_message_text}\n\nReceived:"
+                          f" {message[1]}\n\n"
+                          "*************************************\n")
         while True:
-            user_input = input("""
-Would you like to view all of a match's messages or go back?
-1. View all of a match's messages     2. Go back
-""")
+            user_input = input("\nWould you like to view all of a "
+                               "match's messages "
+                               "or go back?\n"
+                               "1. View all of a match's messages     "
+                               "2. Go back\n")
+
             if user_input == "1":
-                match_number = input("""
-Please enter the number of the match you would like to view:
-""")
+                match_number = input("\nPlease enter the number of the match"
+                                     " you would like to view:\n")
+
                 try:
                     match_number = int(match_number)
                 except ValueError:
                     print(f"{Fore.RED}\nPlease enter a number\n")
                     continue
                 if match_number < 1 or match_number > len(matches):
-                    print(f"""{Fore.RED}
-Please enter a number between 1 and {len(matches)}
-""")
+                    print(f"{Fore.RED}\nPlease enter a number between 1 "
+                          f"and {len(matches)}")
+
                     continue
                 ClearTerminalMixin.clear_terminal()
                 return self.display_messages(matches[match_number - 1])

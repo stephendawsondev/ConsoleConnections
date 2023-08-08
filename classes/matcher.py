@@ -14,6 +14,135 @@ from classes.mixins import ClearTerminalMixin
 
 init(autoreset=True)
 
+COMPATIBILITY_SCORES = {
+    "Introvert": {
+        "Introvert": 10,
+        "Extrovert": 0,
+    },
+    "Extrovert": {
+        "Introvert": 0,
+        "Extrovert": 10,
+    },
+    "Cities": {
+        "Cities": 10,
+        "Countryside": 0,
+    },
+    "Countryside": {
+        "Cities": 0,
+        "Countryside": 10,
+    },
+    "Planner": {
+        "Planner": 5,
+        "Spontaneous": 10,
+    },
+    "Spontaneous": {
+        "Planner": 10,
+        "Spontaneous": 5,
+    },
+    "Dog": {
+        "Dog": 10,
+        "Cat": 0,
+        "Dogs and Cats": 5,
+        "Neither": 0,
+    },
+    "Cat": {
+        "Dog": 0,
+        "Cat": 10,
+        "Dogs and Cats": 5,
+        "Neither": 0,
+    },
+    "Dogs and Cats": {
+        "Dog": 5,
+        "Cat": 5,
+        "Dogs and Cats": 10,
+        "Neither": 0,
+    },
+    "Neither": {
+        "Dog": 0,
+        "Cat": 0,
+        "Dogs and Cats": 0,
+        "Neither": 10,
+    },
+    "Sweet": {
+        "Sweet": 10,
+        "Savory": 0,
+    },
+    "Savory": {
+        "Sweet": 0,
+        "Savory": 10,
+    },
+    "Books": {
+        "Books": 10,
+        "Films": 0,
+        "Books and Films equally": 5,
+    },
+    "Films": {
+        "Books": 0,
+        "Films": 10,
+        "Books and Films equally": 5,
+    },
+    "Books and Films equally": {
+        "Books": 5,
+        "Films": 5,
+        "Books and Films equally": 10,
+    },
+    "Active": {
+        "Active": 10,
+        "Relaxed": 0,
+        "Both": 5,
+        "I don't like getaways": 0,
+    },
+    "Relaxed": {
+        "Active": 0,
+        "Relaxed": 10,
+        "Both": 5,
+        "I don't like getaways": 0,
+    },
+    "Both": {
+        "Active": 5,
+        "Relaxed": 5,
+        "Both": 10,
+        "I don't like getaways": 0,
+    },
+    "I don't like getaways": {
+        "Active": 0,
+        "Relaxed": 0,
+        "Both": 0,
+        "I don't like getaways": 10,
+    },
+    "Logical": {
+        "Logical": 10,
+        "Emotional": 0,
+    },
+    "Emotional": {
+        "Logical": 0,
+        "Emotional": 10,
+    },
+    "Eating out": {
+        "Eating out": 10,
+        "Cooking at home": 0,
+        "Either": 5,
+    },
+    "Cooking at home": {
+        "Eating out": 0,
+        "Cooking at home": 10,
+        "Either": 5,
+    },
+    "Either": {
+        "Eating out": 5,
+        "Cooking at home": 5,
+        "Either": 10,
+    },
+    "Traveling": {
+        "Traveling": 10,
+        "Staying home": 0,
+    },
+    "Staying home": {
+        "Traveling": 0,
+        "Staying home": 10,
+    }
+}
+
 
 class Matcher():
     """
@@ -30,17 +159,19 @@ class Matcher():
         """
         answers = self.user.compatibility_answers
         if answers == '[]' or answers == []:
-            print(f"""{Fore.RED}
-You have not yet completed the compatibility quiz.
-Please complete the quiz or you won't be able to view matches.
-""")
+            print(f"{Fore.RED}\nYou have not yet completed "
+                  "the compatibility quiz."
+                  f"\nPlease complete the quiz or you won't "
+                  "be able to view matches.\n")
+
             ClearTerminalMixin.clear_terminal(3)
             return self.callback(self.user)
         if self.user.genders_seeking == '[]':
-            print(f"""{Fore.RED}
-You must first fill out the "Genders to match with"
-section of your profile before you can view matches.
-""")
+            print(f"{Fore.RED}\nYou must first fill out "
+                  "the \"Genders to match with\""
+                  "\nsection of your profile before you "
+                  "can view matches.\n")
+
             ClearTerminalMixin.clear_terminal(3)
             return self.callback(self.user)
 
@@ -124,135 +255,6 @@ section of your profile before you can view matches.
          of questions in common.
         """
 
-        compatibility_scores = {
-            "Introvert": {
-                "Introvert": 10,
-                "Extrovert": 0,
-            },
-            "Extrovert": {
-                "Introvert": 0,
-                "Extrovert": 10,
-            },
-            "Cities": {
-                "Cities": 10,
-                "Countryside": 0,
-            },
-            "Countryside": {
-                "Cities": 0,
-                "Countryside": 10,
-            },
-            "Planner": {
-                "Planner": 5,
-                "Spontaneous": 10,
-            },
-            "Spontaneous": {
-                "Planner": 10,
-                "Spontaneous": 5,
-            },
-            "Dog": {
-                "Dog": 10,
-                "Cat": 0,
-                "Dogs and Cats": 5,
-                "Neither": 0,
-            },
-            "Cat": {
-                "Dog": 0,
-                "Cat": 10,
-                "Dogs and Cats": 5,
-                "Neither": 0,
-            },
-            "Dogs and Cats": {
-                "Dog": 5,
-                "Cat": 5,
-                "Dogs and Cats": 10,
-                "Neither": 0,
-            },
-            "Neither": {
-                "Dog": 0,
-                "Cat": 0,
-                "Dogs and Cats": 0,
-                "Neither": 10,
-            },
-            "Sweet": {
-                "Sweet": 10,
-                "Savory": 0,
-            },
-            "Savory": {
-                "Sweet": 0,
-                "Savory": 10,
-            },
-            "Books": {
-                "Books": 10,
-                "Films": 0,
-                "Books and Films equally": 5,
-            },
-            "Films": {
-                "Books": 0,
-                "Films": 10,
-                "Books and Films equally": 5,
-            },
-            "Books and Films equally": {
-                "Books": 5,
-                "Films": 5,
-                "Books and Films equally": 10,
-            },
-            "Active": {
-                "Active": 10,
-                "Relaxed": 0,
-                "Both": 5,
-                "I don't like getaways": 0,
-            },
-            "Relaxed": {
-                "Active": 0,
-                "Relaxed": 10,
-                "Both": 5,
-                "I don't like getaways": 0,
-            },
-            "Both": {
-                "Active": 5,
-                "Relaxed": 5,
-                "Both": 10,
-                "I don't like getaways": 0,
-            },
-            "I don't like getaways": {
-                "Active": 0,
-                "Relaxed": 0,
-                "Both": 0,
-                "I don't like getaways": 10,
-            },
-            "Logical": {
-                "Logical": 10,
-                "Emotional": 0,
-            },
-            "Emotional": {
-                "Logical": 0,
-                "Emotional": 10,
-            },
-            "Eating out": {
-                "Eating out": 10,
-                "Cooking at home": 0,
-                "Either": 5,
-            },
-            "Cooking at home": {
-                "Eating out": 0,
-                "Cooking at home": 10,
-                "Either": 5,
-            },
-            "Either": {
-                "Eating out": 5,
-                "Cooking at home": 5,
-                "Either": 10,
-            },
-            "Traveling": {
-                "Traveling": 10,
-                "Staying home": 0,
-            },
-            "Staying home": {
-                "Traveling": 0,
-                "Staying home": 10,
-            }
-        }
-
         # get the user's answers to the compatibility quiz
         compatibility_answers = user.compatibility_answers
 
@@ -268,9 +270,8 @@ section of your profile before you can view matches.
         elif isinstance(compatibility_answers, list):
             pass
         else:
-            print(f"""{Fore.RED}
-Unexpected type {type(compatibility_answers)} for compatibility_answers
-""")
+            print(f"{Fore.RED}\nUnexpected type {type(compatibility_answers)} "
+                  "for compatibility_answers\n")
 
         # create a list of potential matches for those who score over 60%
         matches = []
@@ -296,12 +297,13 @@ Unexpected type {type(compatibility_answers)} for compatibility_answers
             for i, answer in enumerate(compatibility_answers):
                 # add the compatibility score to the total
                 try:
-                    score += compatibility_scores[answer][match_answers[i]]
+                    score += COMPATIBILITY_SCORES[answer][match_answers[i]]
                 except KeyError:
                     # print detailed error message
-                    print(f"""{Fore.RED}
-KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
-""")
+                    print(f"{Fore.RED}\nKeyError: {answer} or "
+                          f"{match_answers[i]} not found in "
+                          "COMPATIBILITY_SCORES\n")
+
                     continue
 
             # calculate the percentage match
@@ -328,26 +330,23 @@ KeyError: {answer} or {match_answers[i]} not found in compatibility_scores
         - If the select 'q', return to the main menu.
         """
         if len(matches_list) == 0:
-            print(f"""{Fore.RED}
-Sorry, there are no matches that match your preferences.
-Please try again later.
-""")
+            print(f"{Fore.RED}\nSorry, there are no matches that match your "
+                  "preferences. Please try again later.\n")
+
             ClearTerminalMixin.clear_terminal(2)
             return self.callback(self.user)
         print(f"{Fore.YELLOW}Your matches\n")
         for index, match in enumerate(matches_list, start=1):
             [person, percentage_match] = match
             fire_symbol = " \U0001F525" if percentage_match >= 85 else ""
-            print(f"""
-{index}. {person[2]} ({person[4]}) - {person[5]}
-   Compatibility: {percentage_match}{fire_symbol}
-   Bio: {person[6]}
-""")
+            print(f"\n{index}. {person[2]} ({person[4]}) - {person[5]}\n"
+                  f"   Compatibility: {percentage_match}{fire_symbol}\n"
+                  f"   Bio: {person[6]}\n")
 
         while True:
-            action = input("""
-Enter a match's number to view or 'q' to return to the main menu:
-""").lower()
+            action = input("\nEnter a match's number to view or "
+                           "'q' to return to the main menu:\n").lower()
+
             if action == 'q':
                 print("\nReturning to main menu...\n")
                 ClearTerminalMixin.clear_terminal(2)
@@ -371,11 +370,9 @@ Enter a match's number to view or 'q' to return to the main menu:
         not allow contact yet.
         """
         ClearTerminalMixin.clear_terminal()
-        print(f"""
-{person[2]} ({person[4]}) - {person[5]}
-Compatibility: {percentage_match}
-Bio: {person[6]}
-""")
+        print(f"\n{person[2]} ({person[4]}) - {person[5]}\n"
+              f"Compatibility: {percentage_match}\n"
+              f"Bio: {person[6]}")
 
         if person[10] == '':
             person[10] = []
@@ -402,9 +399,9 @@ Bio: {person[6]}
         if int(person[0]) not in self.user.allow_contact_list:
             print("You have not yet allowed this user to contact you.")
             while True:
-                action = input("""
-Would you like to allow this user to contact you? (Y/N)
-""").lower()
+                action = input("\nWould you like to allow this user "
+                               "to contact you? (Y/N)\n").lower()
+
                 if action == 'y':
                     self.user.allow_contact_list.append(int(person[0]))
                     user_allow_contact_string = str(
@@ -418,17 +415,17 @@ Would you like to allow this user to contact you? (Y/N)
                     return self.callback(self.user)
                 print(f"{Fore.RED}\nInvalid choice. Please try again.\n")
         elif int(self.user.usercode) not in person[10]:
-            print(f"""{Fore.YELLOW}
-This user has not yet allowed you to contact them.
-""")
+            print(f"{Fore.YELLOW}\nThis user has not yet allowed "
+                  "you to contact them.\n")
+
             ClearTerminalMixin.clear_terminal(2)
             return self.present_matches_options(matches_list)
         else:
             message = Message(self.user, self.callback)
             while True:
-                action = input("""
-Would you like to view messages with this user? (Y/N)
-""").lower()
+                action = input("\nWould you like to view messages "
+                               "with this user? (Y/N)\n").lower()
+
                 if action == 'y':
                     return message.display_messages(person)
                 if action == 'n':

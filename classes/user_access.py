@@ -35,26 +35,22 @@ class UserAccess():
 
         while True:
 
-            user_type = input(
-                """
-Are you testing or here to find a connection? Please enter 1 or 2.
-
-1. Tester     2. Real User
-""")
+            user_type = input("Are you testing or here to find a connection? "
+                              "Please enter 1 or 2.\n\n"
+                              "1. Tester     2. Real User\n")
 
             if user_type == "1":
-                print("""
-Welcome to the test version of the app - feel free to play
-around and make some connections with imaginary people.
-""")
+                print("Welcome to the test version of the app - feel free "
+                      "to play around and make some connections with "
+                      "imaginary people.")
 
                 Worksheet.set_worksheet("test_users")
                 break
 
             if user_type == "2":
-                print(f"""
-Welcome to the real version of the app - {Fore.RED}let's make some connections!
-""")
+                print(f"Welcome to the real version of the app - "
+                      f"{Fore.RED}let's make some connections!")
+
                 Worksheet.set_worksheet("real_users")
                 break
 
@@ -64,17 +60,16 @@ Welcome to the real version of the app - {Fore.RED}let's make some connections!
 
     def user_signup(self, user_data):
         """
-Runs generate usercode, password, alias and security question functions.
-- Adds the user to the Google sheet."""
+        Runs generate usercode, password, alias and security
+        question functions.
+        - Adds the user to the Google sheet.
+        """
 
         usercode = self.generate_random_usercode(user_data)
 
-        print(
-            f"""
-If you complete the signup process,
-your usercode will be {Fore.GREEN}{usercode}{Fore.WHITE}.
-Please keep this code safe as you will need it to login.
-""")
+        print(f"If you complete the signup process, your usercode will be "
+              f"{Fore.GREEN}{usercode}{Fore.WHITE}. Please keep this code "
+              "safe as you will need it to login.")
 
         authentication = Authentication("", self.present_login_signup_step)
         password = authentication.prompt_for_password("new")
@@ -83,9 +78,8 @@ Please keep this code safe as you will need it to login.
 
         ClearTerminalMixin.clear_terminal()
 
-        print(f"""{Fore.GREEN}
-Great! We've got your usercode, password and alias!
-""")
+        print(f"{Fore.GREEN}\nGreat! We've got your usercode, password"
+              "and alias!\n")
 
         auth_check = Authentication.prompt_for_security_questions()
         security_questions_and_answers = auth_check
@@ -123,11 +117,9 @@ Great! We've got your usercode, password and alias!
         selected_worksheet.add_user(user)
 
         ClearTerminalMixin.clear_terminal()
-        print(f"""
-{Fore.GREEN}Signup successful!
-
-{Fore.WHITE}Remember, your usercode is {Fore.GREEN}{usercode}{Fore.WHITE}.
-""")
+        print(f"{Fore.GREEN}Signup successful!\n\n"
+              f"{Fore.WHITE}Remember, your usercode is "
+              f"{Fore.GREEN}{usercode}{Fore.WHITE}.\n")
         ClearTerminalMixin.clear_terminal(3)
 
         main_menu = MainMenu()
@@ -156,19 +148,16 @@ Great! We've got your usercode, password and alias!
         - If the alias exists, prompt the user to come up with a new alias.
         - If the alias doesn't exist, return the alias.
         """
-        alias = input("""
-You will also need to create an alias to use for in-app communication.
-The alias must be unique and it is recommended that it does not easily
-identify you (for security reasons).
-
-Please enter your alias now:
-""")
+        alias = input("\nYou will also need to create an alias to use for "
+                      "in-app communication. The alias must be"
+                      " unique and it is recommended that it does not easily"
+                      " identify you (for security reasons).\n\n"
+                      "Please enter your alias now:\n")
 
         # check if the alias is greater than 3 but fewer than 16 characters
         while len(alias) < 3 or len(alias) > 16:
-            alias = input(f"""{Fore.RED}
-Alias must be greater than 3 but fewer than 16 characters. Please try again:
-""")
+            alias = input(f"{Fore.RED}\n Alias must be greater than 3 but"
+                          "fewer than 16 characters. Please try again:\n")
 
         # check if the alias already exists in the database
         for row in user_data:
@@ -176,9 +165,8 @@ Alias must be greater than 3 but fewer than 16 characters. Please try again:
                 # if the alias exists, prompt the user to come up with a new
                 # alias
                 ClearTerminalMixin.clear_terminal(1)
-                print(f"""{Fore.RED}
-Alias already exists. Please choose another.
-""")
+                print(f"{Fore.RED}\n"
+                      "Alias already exists. Please choose another.\n")
                 return self.create_and_validate_alias(user_data)
         return alias
 
@@ -192,9 +180,8 @@ Alias already exists. Please choose another.
         all_users = Worksheet().get_all_values()
         user_exists = False
         while user_exists is False:
-            usercode_input = input("""
-Please enter your usercode. If you forgot it, enter 'f' to recover it:
-""")
+            usercode_input = input("\nPlease enter your usercode. If you "
+                                   "forgot it, enter 'f' to recover it:\n")
             if usercode_input == "f":
                 authentication = Authentication(
                     "usercode", self.present_login_signup_step)
@@ -242,11 +229,9 @@ Please enter your usercode. If you forgot it, enter 'f' to recover it:
         and run the signup function (if they don't exist).
         """
         while True:
-            login_signup = input("""
-Would you like to log in or sign up? Please enter 1 or 2.
-
-1. Login     2. Signup
-""")
+            login_signup = input("\nWould you like to log in or sign up? "
+                                 "Please enter 1 or 2.\n\n"
+                                 "1. Login     2. Signup\n")
 
             all_users = Worksheet().get_all_values()
             if login_signup == "1":
@@ -261,6 +246,5 @@ Would you like to log in or sign up? Please enter 1 or 2.
                 return self.user_signup(all_users)
 
             ClearTerminalMixin.clear_terminal()
-            print(f"""{Fore.RED}
-Please enter either '1' to log in or '2' to sign up.
-""")
+            print(f"{Fore.RED}"
+                  "Please enter either '1' to log in or '2' to sign up.")

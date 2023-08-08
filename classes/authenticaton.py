@@ -32,9 +32,9 @@ class Authentication():
         password_valid = False
         while password_valid is False:
             if new_or_existing_user == "existing":
-                password_input = input("""
-Please enter your password or press 'f' if you forgot it:
-""")
+                password_input = input("\nPlease enter your password or press "
+                                       "'f' if you forgot it:\n")
+
                 if password_input == "f":
                     self.credential = "password"
                     return self.recover_credentials(row)
@@ -62,18 +62,18 @@ Please enter your password or press 'f' if you forgot it:
         """
         # check for length between 8 to 32 characters
         if len(password) < 8 or len(password) > 32:
-            print(f"""{Fore.RED}
-Password must be between 8 and 32 characters.
-""")
+            print(f"{Fore.RED}\n"
+                  "Password must be between 8 and 32 characters.\n")
             return False
         # regex for at least 1 digit and 1 symbol
-        # https://www.freecodecamp.org/news/how-to-import-a-regular-expression-in-python/#howtousethepythonremodulewithregex
+        # https://www.freecodecamp.org/news/
+        # how-to-import-a-regular-expression-in-python
+        # /#howtousethepythonremodulewithregex
         if re.search(r"^(?=.*\d)(?=.*\W).*$", password):
             return True
 
-        print(f"""{Fore.RED}
-Password must contain at least 1 digit and 1 symbol.
-""")
+        print(f"{Fore.RED}\n"
+              "Password must contain at least 1 digit and 1 symbol.\n")
         return False
 
     @staticmethod
@@ -100,10 +100,10 @@ Password must contain at least 1 digit and 1 symbol.
             "What was the name of your first soft toy or plaything?"
         ]
 
-        print("""
-For credential recovery, you will need to set some security questions.
-Please choose from the list below:
-""")
+        print("For credential recovery, you will need to set"
+              " some security questions.\n"
+              "Please choose from the list below:\n")
+
         for index, question in enumerate(security_question_list):
             print(f"{index+1}. {question}")
 
@@ -116,23 +116,23 @@ Please choose from the list below:
                 if 1 <= security_question <= len(security_question_list):
                     selected_question = security_question_list.pop(
                         security_question - 1)
-                    security_answer = input(f"""
-Please enter your answer to the question '{selected_question}':
-""")
+                    security_answer = input("\nPlease enter your "
+                                            "answer to the question"
+                                            f" '{selected_question}':\n")
+
                     if security_answer == "":
                         print(f"{Fore.RED}\nPlease enter an answer.")
                         continue
                     security_questions_and_answers.append(
                         [selected_question, security_answer])
 
-                    print("""
-Thank you. Please choose another question from the list below:
-""")
+                    print("Thank you. Please choose another "
+                          "question from the list below:")
                     for index, question in enumerate(security_question_list):
                         print(f"{index+1}. {question}")
                 else:
-                    print(f"""{Fore.RED}
-Please enter a number between 1 and the number of remaining questions.""")
+                    print(f"{Fore.RED}\nPlease enter a number "
+                          "between 1 and the number of remaining questions.")
             except ValueError:
                 print(f"{Fore.RED}\nPlease enter a number.")
 
@@ -153,13 +153,13 @@ Please enter a number between 1 and the number of remaining questions.""")
         """
         all_users = Worksheet().get_all_values()
         if self.credential == "usercode":
-            alias = input("""
-Please enter your alias. If you forgot it, enter 'f':
-""")
+            alias = input(
+                "\nPlease enter your alias. If you forgot it, enter 'f': \n")
             if alias == "f":
-                print(f"""{Fore.RED}
-If you forgot your alias. You will need to sign up again.
-""")
+                print(
+                    f"{Fore.RED}\nIf you forgot your alias. "
+                    "You will need to sign up again.\n")
+
                 ClearTerminalMixin.clear_terminal(2)
                 return self.callback()
             user_exists = False
@@ -171,20 +171,17 @@ If you forgot your alias. You will need to sign up again.
                         selected_row = row
                         break
                 if user_exists is False:
-                    print(f"""{Fore.RED}
-Alias does not exist. Please try again.
-""")
+                    print(f"{Fore.RED}\nAlias does not exist. "
+                          "Please try again.\n")
                     return self.recover_credentials()
 
                 if Authentication.verify_security_answers(selected_row):
-                    print(f"""{Fore.GREEN}
-Your usercode is {selected_row[0]}.
-""")
+                    print(f"{Fore.GREEN}\nYour usercode is "
+                          f"{selected_row[0]}.\n")
                     return self.callback()
 
-                print(f"""{Fore.RED}
-You have failed to answer your security questions correctly.
-""")
+                print(f"{Fore.RED}\nYou have failed to answer "
+                      "your security questions correctly.")
                 return self.callback()
 
         if self.credential == "password":
@@ -199,9 +196,8 @@ You have failed to answer your security questions correctly.
                         selected_row = row
                         break
                 if user_exists is False:
-                    print(f"""{Fore.RED}
-Usercode does not exist. Please try again.
-""")
+                    print(f"{Fore.RED}\nUsercode does not exist. "
+                          "Please try again.\n")
                     return self.recover_credentials()
                 questions_correct = Authentication.verify_security_answers(
                     selected_row)
@@ -212,9 +208,8 @@ Usercode does not exist. Please try again.
                     worksheet = Worksheet()
                     worksheet.update_cell(selected_row[12], 2, new_password)
                     return self.callback()
-                print(f"""{Fore.RED}
-You have failed to answer your security questions correctly.
-""")
+                print(f"{Fore.RED}\nYou have failed to answer "
+                      "your security questions correctly.\n")
                 return self.callback()
 
     @staticmethod
@@ -225,9 +220,8 @@ You have failed to answer your security questions correctly.
         - If the answers are incorrect, return False.
         """
         if row[3] == "" or row[3] is None:
-            print(f"""{Fore.RED}
-You have not set any security questions.
-""")
+            print(f"{Fore.RED}\nYou have not set any "
+                  "security questions.\n")
             return False
 
         security_questions_and_answers = re.sub(
@@ -238,12 +232,8 @@ You have not set any security questions.
         for question_and_answer in security_questions_and_answers:
             question = question_and_answer[0]
             answer = question_and_answer[1]
-            user_answer = input(f"""
-{question}
-""")
+            user_answer = input(f"\n{question}\n")
             if user_answer.lower() != answer.lower():
-                print(f"""{Fore.RED}
-Incorrect answer.
-""")
+                print(f"{Fore.RED}\nIncorrect answer.\n")
                 return False
         return True
