@@ -273,9 +273,61 @@ I used the Code Institute Mock Terminal to test the app. I asked family and frie
 | User forgets usercode | 1. Select the login option <br>2. Enter 'f' to indicate usercode was forgotten 3. Enter alias 4. Enter security questions correctly | User is presented with usercode | User is presented with usercode | Pass |
 | User forgets password | 1. Select the login option <br>2. Enter the correct usercode <br>3. Enter 'f' to indicate password was forgotten <br>4. Enter security questions correctly <br>5. Enter new password | User's password is updated and they're brought back to the login screen | User's password is updated and they're brought back to the login screen | Pass |
 
+### User stories testing
 
+#### As a first-time user, I want:
 
+- to be able to sign up for an account:
+<br>
+After selecting whether they are a test user or a real user, the user is presented with a signup option. If they answer all the questions, they are signed up and logged in.
 
+- to be able to edit my profile:
+<br>
+After logging in, the user is presented with a main menu. From there, they can choose to edit their profile. If they make changes to their profile, they are saved to the Google Sheet.
+
+- to be able to take a compatibility quiz:
+<br>
+After logging in, the user is presented with a main menu. From there, they can choose to take the compatibility quiz. If they answer all the questions, their answers are saved to the Google Sheet.
+
+- to be able to view my matches:
+<br>
+If the user finsihes the compatibility quiz and completes their profile, they can view their matches. The matches are sorted by the highest compatibility score. They will only have matches if the gender, age and compatibility questions match up.
+
+- to log out of my account:
+<br>
+On the main menu, the user can choose to log out. If they choose to log out, they are logged out and taken back to the login/signup screen.
+
+#### As a returning user, I want:
+
+- to be able to log in to my account:
+<br>
+After selecting whether they are a test user or a real user, the user is presented with a login option. If they enter their usercode and password correctly, they are logged in and taken to the main menu.
+
+- to be able to edit my profile:
+<br>
+The user can choose to edit their profile. If they make changes to their profile, they are saved to the Google Sheet.
+
+- to be able to view my messages:
+<br>
+The user can choose to view their messages. If they have messages, they are presented with a list of their last message from each match. If they select a match, they are presented with a list of all the messages from that match.
+
+- to be able to message my matches:
+<br>
+If the user selects a match, they are presented with a list of messages from that match. If they choose to send a message, they can type a message and send it to the match. The message is saved to the Google Sheet in the user and the match's message cell.
+
+#### As a frequent user, I want:
+
+- to be able to edit my profile:
+<br>
+The user can choose to edit their profile from the main menu. If they make changes to their profile, their answers are saved to the Google Sheet.
+
+- to be able to view my message history:
+<br>
+The user can choose to view their messages. If they have messages, they are presented with a list of their last message from each match. If they select a match, they are presented with a list of all the messages from that match. Alternatively, they can view their matches and select the match to view their profile and then view their messages with the match.
+
+- to see new matches as they become available:
+<br>
+The compatibility score is run each time the user views matches. If there are new users who are matches, or if someone has updated their preferences or compatibility test to match, they will be displayed in the matches list.
 
 ## Deployment
 

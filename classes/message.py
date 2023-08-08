@@ -181,7 +181,9 @@ Would you like to send a message or go back to the main menu?
                             last_message_text = match_message[0]
                             break
                     print(f"""
-{index}. Latest message from {match_alias}: {last_message_text}
+{index}. Latest message from {match_alias}:
+{last_message_text}
+
 Received: {message[1]}
 
 *************************************
