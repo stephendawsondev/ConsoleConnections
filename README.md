@@ -238,10 +238,8 @@ Users have an extra layer of security because they can choose to allow contact f
 Users can message their matches. <br>
 
 ![match with option to view match's messages](images/readme-images/matches-view-user-messages.png)
-Users can message their matches. <br>
 
 ![screen to send message to match](images/readme-images/matches-send-message.png)
-Users can message their matches. <br>
 
 ![conversation with match](images/readme-images/matches-match-messages.png)
 
@@ -308,7 +306,7 @@ To ensure the application is deployed correctly on Heroku, you must update the r
 5. Press Enter to create our local clone.
 
 
-## Credits
+## Credits
 ### Resources used
 
 - [TODOs in Python](https://www.jetbrains.com/help/pycharm/using-todo.html#view_todo)

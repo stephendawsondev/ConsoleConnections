@@ -97,8 +97,13 @@ I used the [Code Institute PEP8 validator](https://pep8ci.herokuapp.com/) to che
 | Mismatched ages depending on profile logged in as.                | Make sure the age is the right type            |   Y    | It turns out the user was checking if their own age was in range instead of the match's       |
 | In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message |   Y    | I looped through the messages to find the last one that the match sent instead           |
 | When a newly signed up user logs out, they are unable to log back in       | Using the data before user existed in UserAccess class  |   Y    | Pulled the Google Worksheet data on the login/signup step                      |
-| When updating user profile, a gspread warning is displayed. Only applies to 6.0  | Catch the warning and ignore it              |   Y    | Imported warning module and ignored that warning to stop it from showing up             |
+| When updating user profile, a Gspread warning is displayed. Only applies to 6.0  | Catch the warning and ignore it              |   Y    | Imported warning module and ignored that warning to stop it from showing up             |
 | If double quotes are added in a user message, it breaks.             | Remove double quotes before saving to the sheet.     |   Y    | Removed double quotes with .replace method                             |
+
+## Known issues
+
+- In the terminal, even though it is cleared, the user can still scroll up and see the previous output. The output is cut off so that it displays an earlier output than the last output on the screen. This appears to be an issue with the terminal.
+- A feature that is partially a bug is that when the user changes their ages seeking, genders seeking or compatibility answers, matches who were once matches may no longer be displayed. However, the user can still contact them through the "View messages" setting if they have messages with that person already. I decided to leave that as is because it is like a real dating app where you can disconnect with someone but still have their message history. It also made me decide a good future-feature would be contact favouriting.
 
 ## Future features
 
@@ -106,3 +111,6 @@ I used the [Code Institute PEP8 validator](https://pep8ci.herokuapp.com/) to che
 - Add a way to block a match and prevent matching with them in the future
 - Add a way to report a match (perhaps add reports to a new sheet)
 - Add more compatibility quiz questions
+- Notifications for new matches and new messages
+- Colour indications of when contact is allowed
+- Password encryption and hashing
