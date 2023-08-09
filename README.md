@@ -6,7 +6,9 @@ Console Connections is a terminal-based dating app. By setting your age and gend
 
 ![Screenshot of the app welcome screen](images/readme-images/console-connections-home.png)
 
+
 ## Table of Contents
+
 - [**Using the app - Login/Registration steps**](#using-the-app---loginregistration-steps)
   - [**Establishing user type**](#establishing-user-type)
   - [**Signing up**](#signing-up)
@@ -47,7 +49,6 @@ Console Connections is a terminal-based dating app. By setting your age and gend
   - [**Deployment on Heroku**](#deployment-on-heroku)
   - [**Creating a fork**](#creating-a-fork)
   - [**Cloning Repository**](#cloning-repository)
-- [**Bugs and issues table**](#bugs-and-issues-table)
 - [**Resources used**](#resources-used)
 
 
@@ -123,40 +124,42 @@ ___
 I used Google Sheets to store user's data, compatibility quiz answers and messages. There were some iterations of the headings used in the sheet:
 
 #### Initial Google Sheet headings:
-
-usercode,	password, alias,	security_question_1,	security_answer_1, security_question_2,	security_answer_2,	bio,	gender,	genders_seeking,	age,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	question_1,	question_2,	question_3,	question_4,	question_5,	question_6,	question_7,	question_8,	question_9,	question_10	
-
+```
+usercode, password, alias, security_question_1,security_answer_1, security_question_2, security_answer_2, bio, gender, genders_seeking, age, age_range_seeking, messages_sent, messages_received, allow_contact_list, question_1, question_2, question_3, question_4, question_5, question_6, question_7, question_8, question_9, question_10 
+```
 #### Second iteration of Google Sheet headings:
-
-usercode,	password,	alias,	security_questions,	age,	gender,	bio,	genders_seeking,	age_range_seeking,	messages_sent,	messages_received,	allow_contact_list,	compatibility_answers
-
+```
+usercode, password, alias, security_questions, age, gender, bio, genders_seeking, age_range_seeking, messages_sent, messages_received, allow_contact_list, compatibility_answers
+```
 #### Final iteration of Google Sheet headings:
- usercode, password, alias, security_questions, age, gender, bio, genders_seeking, age_range_seeking, messages, allow_contact_list, compatibity_answers, row_num													
+```
+usercode, password, alias, security_questions, age, gender, bio, genders_seeking, age_range_seeking, messages, allow_contact_list, compatibity_answers, row_num             
+```
 ___
 ### Messages structure
 
 The structure of messages was a little tricky as it required some nested lists. I decided to store the messages in the Google Sheet as a string. I used the json module to convert the string to a list. I used the following message structure in user's message section:
 ```
 [
-  [usercode, last_message_received_timestamp, 
-    [
-      [message, user_sent(true/false), timestamp],
-      [message, user_sent(true/false), timestamp]
-    ]
-  
-  ],
-  [another_usercode, last_message_received_timestamp, 
-    [
-      [message, user_sent(true/false), timestamp],
-      [message, user_sent(true/false), timestamp]
-    ]
-  ],
-  [another_usercode, last_message_received_timestamp, 
-    [
-      [message, user_sent(true/false), timestamp],
-      [message, user_sent(true/false), timestamp]
-    ]
+ [usercode, last_message_received_timestamp, 
+  [
+   [message, user_sent(true/false), timestamp],
+   [message, user_sent(true/false), timestamp]
   ]
+ 
+ ],
+ [another_usercode, last_message_received_timestamp, 
+  [
+   [message, user_sent(true/false), timestamp],
+   [message, user_sent(true/false), timestamp]
+  ]
+ ],
+ [another_usercode, last_message_received_timestamp, 
+  [
+   [message, user_sent(true/false), timestamp],
+   [message, user_sent(true/false), timestamp]
+  ]
+ ]
 ]
 ```
 
@@ -221,12 +224,15 @@ Users can view their latest messages with all matches, then choose which one the
 ![screen with the latest messages displayed from different matches](images/readme-images/matches-latest-messages.png)
 
 
-### Add matches to allow contact list
+### Add matches to allow contact list
+
 Users have an extra layer of security because they can choose to allow contact from a match. Both users must allow contact in order to message.<br>
 
 ![screen prompting user to allow contact](images/readme-images/allow-contact.png)
 
 ![screen with message saying match hasn't allowed contact yet](images/readme-images/matches-no-contact.png)
+
+
 
 ### Message matches
 Users can message their matches. <br>
@@ -246,88 +252,7 @@ Users can log out of their account and is displayed a message, which later updat
 
 ## Testing
 
-I used the Code Institute Mock Terminal to test the app. I asked family and friends to test both the test user and real user versions of the app. I also tested the app myself. I used the following test cases:
-
-| Test Case | Test Steps | Expected Result | Actual Result | Pass/Fail |
-|-----------|------------|-----------------|---------------|-----------|
-| User signup | 1. Select test user option <br>2. Select signup option <br>3. Enter usercode <br>4. Enter password <br>5. Enter security questions <br>6. Enter security answers <br>7. Enter alias | User is signed up and taken to main menu | User is signed up and taken to main menu | Pass |
-| User login | 1. Select test user option 2. Select login option 3. Enter usercode 4. Enter password | User is logged in and taken to main menu | User is logged in and taken to main menu | Pass |
-| User views matches without completing compatibilty quiz | 1.Sign up <br>2. Select view matches option | User is shown a message that they need to complete the compatibility quiz | User is shown a message that they need to complete the compatibility quiz | Pass |
-| User views compatibilty quiz answers without answer | 1. Sign up <br>2. Select compatibility quiz option <br>3. Select view quiz answers option | User is shown a message that they have not yet completed the compatibility quiz | User is shown a message that they need to complete the compatibility quiz | Pass |
-| User takes compatibility quiz and finishes | 1. Select compatibility quiz option <br>2. Answer all questions | User is shown a message that they have completed the compatibility quiz | User is shown a message that they have completed the compatibility quiz | Pass |
-| User views compatibilty quiz answers after completing quiz | 1. Select compatibility quiz option <br>2. Select view quiz answers option | User is shown a message that they have not yet completed the compatibility quiz | User is shown a message that they have completed the compatibility quiz | Pass |
-| User clicks "Return to main menu" on compatibility screen | 1. Select compatibility quiz option <br>2. Select return to main menu option | User is taken back to the main menu | User receives a message saying they are going back to main menu and is taken back to the main menu | Pass |
-| User views matches without completing their profile but completed compatibilty quiz | 1. Sign up <br>2. Select view matches option | User is shown a message that they need to fill out the genders seeking section | User is shown a message that they need to complete their profile | Pass |
-| User clicks edit profile option | 1. Select edit profile option | User is taken to the edit profile screen | User is taken to the edit profile screen | Pass |
-| User edits their profile and saves | 1. Select edit profile option <br>2. Edit profile details <br>3. Select save and exit option | User's profile is updated is taken back to the main menu | User is taken back to the main menu and profile is updated | Pass |
-| User views messages without matching with anyone | 1. Sign up <br>2. Select view messages option | User is shown a message that they have no messages | User is shown a message that they have no messages | Pass |
-| User views matches with matches | 1. Sign up <br>2. Complete profile and compatibility question <br>3. Select view matches option | User is shown a list of matches | User is shown a list of matches' names, age, gender, compatibility score and bio | Pass |
-| User views messages with matches for first time | 1. View matches with complete profile (and have matches) <br>2. Select view messages option | User is prompted to allow for contact from that match | If match allows contact, displays message option. If match doesn't allow contact, displays message saying they have not yet allowed contact and redirects to matches screen. | Pass |
-| User views messages with matches when contact is allowed | 1. View matches with complete profile (and have matches) <br>2. Select view matches option <br>3. Select a match that has allowed contact | User is shown a list of messages from that match and given the option to send a message | User is shown a list of messages from that match and given the option to send a message | Pass |
-| User sends a message to the match | 1. View matches with complete profile (and have matches) <br>2. Select view matches option <br>3. Select a match that has allowed contact <br>4. Select send message option <br>5. Enter message | User's message is recorded and user is redirected to the match message screen where there is a list of messages from that match | User's message is saved with timestamp, message sent message is provided and the user is redirect back to the message with that match | Pass |
-| User views all messages | 1. Select view matches option | User is shown a list of messages from all matches | User is shown a list of the most recent messages from all matches | Pass |
-| User clicks logout option | 1. Select logout option | User is logged out and taken to the login/signup screen | User is logged out and taken to the login/signup screen | Pass |
-| User logs in with incorrect usercode | 1. Select login option <br>2. Enter incorrect usercode | User is shown a message that the usercode is incorrect | User is shown a message that the usercode is incorrect | Pass |
-| User logs in with incorrect password | 1. Select login option <br>2. Enter usercode <br>3. Enter incorrect password | User is shown a message that the password is incorrect | User is shown a message that the password is incorrect | Pass |
-| User logs in with correct usercode and password | 1. Select login option <br>2. Enter usercode <br>3. Enter password | User is logged in and taken to the main menu | User is logged in and taken to the main menu | Pass |
-| User forgets usercode | 1. Select the login option <br>2. Enter 'f' to indicate usercode was forgotten 3. Enter alias 4. Enter security questions correctly | User is presented with usercode | User is presented with usercode | Pass |
-| User forgets password | 1. Select the login option <br>2. Enter the correct usercode <br>3. Enter 'f' to indicate password was forgotten <br>4. Enter security questions correctly <br>5. Enter new password | User's password is updated and they're brought back to the login screen | User's password is updated and they're brought back to the login screen | Pass |
-
-### User stories testing
-
-#### As a first-time user, I want:
-
-- to be able to sign up for an account:
-<br>
-After selecting whether they are a test user or a real user, the user is presented with a signup option. If they answer all the questions, they are signed up and logged in.
-
-- to be able to edit my profile:
-<br>
-After logging in, the user is presented with a main menu. From there, they can choose to edit their profile. If they make changes to their profile, they are saved to the Google Sheet.
-
-- to be able to take a compatibility quiz:
-<br>
-After logging in, the user is presented with a main menu. From there, they can choose to take the compatibility quiz. If they answer all the questions, their answers are saved to the Google Sheet.
-
-- to be able to view my matches:
-<br>
-If the user finsihes the compatibility quiz and completes their profile, they can view their matches. The matches are sorted by the highest compatibility score. They will only have matches if the gender, age and compatibility questions match up.
-
-- to log out of my account:
-<br>
-On the main menu, the user can choose to log out. If they choose to log out, they are logged out and taken back to the login/signup screen.
-
-#### As a returning user, I want:
-
-- to be able to log in to my account:
-<br>
-After selecting whether they are a test user or a real user, the user is presented with a login option. If they enter their usercode and password correctly, they are logged in and taken to the main menu.
-
-- to be able to edit my profile:
-<br>
-The user can choose to edit their profile. If they make changes to their profile, they are saved to the Google Sheet.
-
-- to be able to view my messages:
-<br>
-The user can choose to view their messages. If they have messages, they are presented with a list of their last message from each match. If they select a match, they are presented with a list of all the messages from that match.
-
-- to be able to message my matches:
-<br>
-If the user selects a match, they are presented with a list of messages from that match. If they choose to send a message, they can type a message and send it to the match. The message is saved to the Google Sheet in the user and the match's message cell.
-
-#### As a frequent user, I want:
-
-- to be able to edit my profile:
-<br>
-The user can choose to edit their profile from the main menu. If they make changes to their profile, their answers are saved to the Google Sheet.
-
-- to be able to view my message history:
-<br>
-The user can choose to view their messages. If they have messages, they are presented with a list of their last message from each match. If they select a match, they are presented with a list of all the messages from that match. Alternatively, they can view their matches and select the match to view their profile and then view their messages with the match.
-
-- to see new matches as they become available:
-<br>
-The compatibility score is run each time the user views matches. If there are new users who are matches, or if someone has updated their preferences or compatibility test to match, they will be displayed in the matches list.
+You can view the full testing process [in the TESTING.md file](TESTING.md).
 
 ## Deployment
 
@@ -339,7 +264,7 @@ The application stores data in a Google Sheet. The credentials for the communica
 4. Create credentials for a Web Server to access Application Data
 5. Name the service account and grant it a Project Role of Editor
 6. Download the JSON file
-7. Copy the JSON file to your code directory and rename it to cred.json
+7. Copy the JSON file to your code directory and rename it to creds.json
 8. In the JSON file, change the email address to the one you are sharing your Google Sheet with
 9. In the Google Sheet, share the sheet with the email address in the JSON file
 
@@ -363,7 +288,7 @@ To ensure the application is deployed correctly on Heroku, you must update the r
 - Once logged in, create a new app by clicking on the create app button
 - Pick a unique name for the app, select a region, and click create app.
 - On the next page select the settings tab and scroll down to Config Vars. If there are any files that should be hidden like credentials and API keys they should be added here. In this project, there are credentials that need to be protected. To do this I have created a config var and added CREDS as the key and the content of the creds.json file as a value.
-- Scroll down to Buildpacks. The buildpacks will install further dependencies that are not included in the `requirements.txt`. For this project, there are two buildpacks required - Python and Nodejs.
+- Scroll down to Buildpacks. The Buildpacks will install further dependencies that are not included in the `requirements.txt`. For this project, there are two Buildpacks required - Python and Nodejs.
 - Select the deploy section from the tab in the menu. 
 - The deployment method for this project is GitHub. Once selected, confirm that we want to connect to GitHub, search for the repository name and click connect to connect the Heroku app to our GitHub code. 
 - Scroll further down to the deploy section where automatic deploys can be enabled, which means that the app will update every time code is pushed to GitHub. Click deploy and wait for the app to be built. Once this is done, a message should appear letting us know that the app was successfully deployed with a view button to see the app.
@@ -382,40 +307,33 @@ To ensure the application is deployed correctly on Heroku, you must update the r
 4. Type git clone and then paste the link.
 5. Press Enter to create our local clone.
 
-## Bugs and issues table
 
-| Bug/Issue                                                                         | Potential Solution                                        | Resolved Y/N | Additional Comments                                                                                 |
-|-----------------------------------------------------------------------------------|---------------------------------------------------------- |--------------|-----------------------------------------------------------------------------------------------------|  
-| "Running startup command: python3 run.py" command appearing when app starts.      | Run command to clear console before app starts.           |      Y       | Resolved using the solution here: https://www.delftstack.com/howto/python/python-clear-console/     |
-| For age input, any text input was breaking the app.                               | Assert the type of the age variable.                      |      Y       | I was able to resolve the issue by returning the function if necessary components were not met.     |
-| When pulling a list from Google Sheets, the data passed back was a string.        | Convert the string to a list using the json module        |      Y       | I was able to resolve the issue by converting the string to a list using the json module.           |
-| Data that has single quotes and doesn't work with json.loads                      | Use a regex to replace single quotes                      |      Y       | Used regex to replace single quotes at start and end of words and not within words                  |
-| The update genders method outputs each letter instead of each gender              | Use a regex to replace single quotes and use json.loads   |      Y       | Used regex to replace signle quotes with double quotes for valid json string                        |
-| "IndexError: list index out of range" when sorting list by nested list value      | Change the reference to the list length                   |      Y       | Changed `key=lambda x: x[2]` to `key=lambda x: x[1]`                                                |
-| Got a few circular import errors when trying to break down my classes             | Restructure so that classes don't import each other       |      Y       | When I had to call a function from another class, I instead passed a callback function to the class.|
-| After completing or redoing the compatibility quiz, the answers aren't the user's | It could be that the value is being overwritten           |      Y       | When presenting the quiz options screen, I was using the existing instance's data instead           |
-| 'User' is not subscriptable error when trying to access a user's matches          | Check the type of the user variable                       |      Y       | I was able to resolve the issue updating the way I access the data within the user instance         |
-| Mismatched ages depending on profile logged in as.                                | Make sure the age is the right type                       |      Y       | It turns out the user was checking if their own age was in range instead of the match's             |
-| In the view all messages, the "last message from match" can be the user's message | Check for the True/False boolean when displaying message  |      Y       | I looped through the messages to find the last one that the match sent instead                      |
-| When a newly signed up user logs out, they are unable to log back in              | Using the data before user existed in UserAccess class    |      Y       | Pulled the Google Worksheet data on the login/signup step                                           |
-| When updating user profile, a gspread warning is displayed. Only applies to 6.0   | Catch the warning and ignore it                           |      Y       | Imported warning module and ignored that warning to stop it from showing up                         |
-| If double quotes are added in a user message, it breaks.                          | Remove double quotes before saving to the sheet.          |      Y       | Removed double quotes with .replace method                                                          |
+## Credits
+### Resources used
 
-## Resources used
 - [TODOs in Python](https://www.jetbrains.com/help/pycharm/using-todo.html#view_todo)
-- Lucidchart for flowcharts
+- [Lucidchart for flowcharts](https://lucid.app/)
 - [Understanding Python Option arguments](https://realpython.com/python-optional-arguments/)
 - [FreeCodeCamp Python Regex](https://www.freecodecamp.org/news/how-to-import-a-regular-expression-in-python/#howtousethepythonremodulewithregex)
 - [Console Connections font](https://patorjk.com/software/taag/#p=display&h=2&v=1&f=NV%20Script&t=Console%20Connections)
 - [Stackoverflow question on generating random numbers](https://stackoverflow.com/questions/2673385/how-to-generate-a-random-number-with-a-specific-amount-of-digits)
 - [Code to clear the console](https://www.delftstack.com/howto/python/python-clear-console/)
 - [Corey Schafer Python Tutorials on Classes](https://www.youtube.com/@coreyms)
-- [update_cell method from gspread](https://docs.gspread.org/en/latest/user-guide.html)
+- [update_cell method from Gspread](https://docs.gspread.org/en/latest/user-guide.html)
 - [json module in Python](https://docs.python.org/3/library/json.html)
 - [re.sub() method explanation](https://www.pythontutorial.net/python-regex/python-regex-sub/)
-- [Sorting list by nest list value - stackoverflow](https://stackoverflow.com/a/65679191/12297743)
+- [Sorting list by nest list value - Stackoverflow](https://stackoverflow.com/a/65679191/12297743)
 - [Gspread user guide to update a full row](https://docs.gspread.org/en/latest/user-guide.html#updating-cells)
 - [Avoiding circular imports](https://medium.com/brexeng/avoiding-circular-imports-in-python-7c35ec8145ed)
-- [User is not subscriptable error explaination](https://blog.jcharistech.com/2022/02/07/how-to-fix-typeerror-object-is-not-subscriptable/)
+- [User is not subscriptable error explanation](https://blog.jcharistech.com/2022/02/07/how-to-fix-typeerror-object-is-not-subscriptable/)
 - [Documentation on catching Python warnings](https://docs.python.org/3/library/warnings.html)
 - [Colours in the terminal](https://sparkbyexamples.com/python/print-colored-text-to-the-terminal-in-python)
+- [Heart colour tunnel image](https://openclipart.org/detail/289906/heart-8-colour-2)
+
+### Acknowledgements
+- [Code Institute](https://codeinstitute.net/) for the Mock Terminal
+- [Code Institute](https://codeinstitute.net/) for the Google Sheets module and the Love Sandwich project that thought me how to interact with Google sheets
+- A huge thank you to my mentor [David Bowers](https://github.com/dnlbowers) for his encouragement to try implementing more Object Oriented Programming in the project, and for his guidance throughout the project.
+- The #peer-code-review channel on Slack for their feedback on the project.
+- My friends and family for their patience in testing the project and creating many, many test accounts. 
+
