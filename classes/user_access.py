@@ -40,16 +40,16 @@ class UserAccess():
                               "1. Tester     2. Real User\n")
 
             if user_type == "1":
-                print("Welcome to the test version of the app - feel free "
+                print("\nWelcome to the test version of the app - feel free "
                       "to play around and make some connections with "
-                      "imaginary people.")
+                      "imaginary people.\n")
 
                 Worksheet.set_worksheet("test_users")
                 break
 
             if user_type == "2":
-                print(f"Welcome to the real version of the app - "
-                      f"{Fore.RED}let's make some connections!")
+                print(f"\nWelcome to the real version of the app - "
+                      f"{Fore.RED}let's make some connections!\n")
 
                 Worksheet.set_worksheet("real_users")
                 break
@@ -78,7 +78,7 @@ class UserAccess():
 
         ClearTerminalMixin.clear_terminal()
 
-        print(f"{Fore.GREEN}\nGreat! We've got your usercode, password"
+        print(f"{Fore.GREEN}\nGreat! We've got your usercode, password "
               "and alias!\n")
 
         auth_check = Authentication.prompt_for_security_questions()

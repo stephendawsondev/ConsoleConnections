@@ -418,7 +418,7 @@ class Matcher():
             print(f"{Fore.YELLOW}\nThis user has not yet allowed "
                   "you to contact them.\n")
 
-            ClearTerminalMixin.clear_terminal(2)
+            ClearTerminalMixin.clear_terminal(3)
             return self.present_matches_options(matches_list)
         else:
             message = Message(self.user, self.callback)
