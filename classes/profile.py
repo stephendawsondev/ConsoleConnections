@@ -195,11 +195,10 @@ class Profile():
         """
 
         finsihed_editing = False
-
+        ClearTerminalMixin.clear_terminal()
         while finsihed_editing is False:
-            print("{Fore.YELLOW}Edit profile\n")
+            print(f"{Fore.YELLOW}Edit profile\n")
 
-            ClearTerminalMixin.clear_terminal()
             print(f"\nHere is your current profile information:\n"
                   f"\n{Fore.RED}Uneditable:{Fore.WHITE}\n"
                   f"Usercode: {self.user.usercode}\n"
@@ -223,16 +222,21 @@ class Profile():
                 authentication = Authentication("", self.present_edit_profile)
                 self.user.password = authentication.prompt_for_password(
                     "updating")
+                ClearTerminalMixin.clear_terminal(2)
             elif edit_profile_option == "2":
                 auth_check = Authentication.prompt_for_security_questions()
                 self.user.security_questions_and_answers = auth_check
+                ClearTerminalMixin.clear_terminal(2)
             elif edit_profile_option == "3":
                 self.user.bio = input("\nPlease enter your bio:\n")
+                ClearTerminalMixin.clear_terminal()
             elif edit_profile_option == "4":
                 self.user.age_range_seeking = self.set_age_range_seeking()
+                ClearTerminalMixin.clear_terminal()
             elif edit_profile_option == "5":
                 self.user.genders_seeking = self.set_genders_seeking(
                     self.user)
+                ClearTerminalMixin.clear_terminal(2)
             elif edit_profile_option == "6":
                 print(f"{Fore.YELLOW}\nSaving changes...\n")
 
@@ -258,3 +262,4 @@ class Profile():
                 return self.callback(self.user)
             else:
                 print(f"{Fore.RED}\nPlease enter a number between 1 and 6")
+                ClearTerminalMixin.clear_terminal(2)
